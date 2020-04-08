@@ -63,7 +63,7 @@ def main():
         user_in = input("")
         if user_in.lower() == 'q': break
         elif user_in.lower() == 'n': 
-            if player.current.n_to:
+            if player.current['n_to']:
                 player.current = player.current.n_to
             else: print("\nThere is no room that way . . .")
         elif user_in.lower() == 's': 
