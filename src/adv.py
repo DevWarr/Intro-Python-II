@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 import time
+import os
 
 # Declare all the rooms
 
@@ -8,19 +9,13 @@ room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons"),
 
-    'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+    'foyer':    Room("Foyer", "Dim light filters in from the south. Dusty passages run north and east."),
 
-    'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
-into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+    'overlook': Room("Grand Overlook", "A steep cliff appears before you, falling into the darkness. Ahead to the north, a light flickers in the distance, but there is no way across the chasm."),
 
-    'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+    'narrow':   Room("Narrow Passage", "The narrow passage bends here from west to north. The smell of gold permeates the air."),
 
-    'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+    'treasure': Room("Treasure Chamber", "You've found the long-lost treasure chamber! Sadly, it has already been completely emptied by earlier adventurers. The only exit is to the south."),
 }
 
 
@@ -56,31 +51,38 @@ player = Player("name", room['outside'])
 def main():
     loop = True
     while loop:
+        # Clear the terminal
+        os.system('cls||clear')
         # print all the things
-        print("\n\nYou:")
+        print("\nYou:")
         print(player)
         print("\n[n] North   [s] South   [e] East   [w] West       [q] Quit")
-        user_in = input("")
-        if user_in.lower() == 'q': break
-        elif user_in.lower() == 'n': 
-            if player.current['n_to']:
-                player.current = player.current.n_to
-            else: print("\nThere is no room that way . . .")
-        elif user_in.lower() == 's': 
-            if player.current.s_to:
-                player.current = player.current.s_to
-            else: print("\nThere is no room that way . . .")
-        elif user_in.lower() == 'e': 
-            if player.current.e_to:
-                player.current = player.current.e_to
-            else: print("\nThere is no room that way . . .")
-        elif user_in.lower() == 'w': 
-            if player.current.w_to:
-                player.current = player.current.w_to
-            else: print("\nThere is no room that way . . .")
-        else: print("Invalid input. Please try again . . .")
+        user_in = input("").lower()
+
+        if user_in == 'q':
+            break
+        elif user_in == 'n' or 's' or 'e' or 'w':
+            if player.current[user_in]:
+                player.current = player.current[user_in]
+            else:
+                print("There is no room that way . . .")
+        else:
+            print("Invalid input. Please try again . . .")
         time.sleep(1)
 
 
 if __name__ == "__main__":
+    while True:
+        os.system('cls||clear')
+        print("\nThis adventure game requires a terminal 80 characters wide and 11 lines tall.")
+        print("[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n")
+        print("If you can't see all of this text, please resize your terminal.")
+        print(
+            "Once you're good to go, type [news] to begin. Or, type [q] to quit.")
+        user_in = input("").lower()
+
+        if user_in == 'q':
+            exit()
+        elif user_in == 'news':
+            break
     main()
