@@ -45,6 +45,7 @@
     -   1d array of rooms
     -   n/s/e/w traversal
 -   Can we save our game?
+    -   Not that important, very short game
 -   How many rooms will there be?
 -   Can rooms/games be procedurally generated?
 -   How to calculate Score?
