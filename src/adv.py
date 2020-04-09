@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 from utils.colors import color
 import time
 import os
@@ -10,7 +11,7 @@ room = {
     'outside':  Room(
         "Outside Cave Entrance",
         "North of you, the cave mount beckons",
-        ["stick"]),
+        [Item("stick")]),
     'foyer':    Room(
         "Foyer",
         "Dim light filters in from the south. Dusty passages run north and east.",
@@ -18,15 +19,15 @@ room = {
     'overlook': Room(
         "Grand Overlook",
         "A steep cliff appears before you, falling into the darkness. Ahead to the north, a light flickers in the distance, but there is no way across the chasm.",
-        ["staff"]),
+        [Item("staff")]),
     'narrow':   Room(
         "Narrow Passage", 
         "The narrow passage bends here from west to north. The smell of gold permeates the air.",
         []),
     'treasure': Room(
         "Treasure Chamber", 
-        "You've found the long-lost treasure chamber! Sadly, it has already been completely emptied by earlier adventurers. The only exit is to the south.",
-        ["treasure"]),
+        "You've found the long-lost treasure chamber! Sadly, it has already been completely emptied by earlier... Is that treasure?! The only exit is to the south.",
+        [Item("treasure")]),
 }
 
 
@@ -102,7 +103,7 @@ if __name__ == "__main__":
         elif user_in == 'q':
             break
         else: 
-            player = Player(user_in, room['outside'])
+            player = Player(user_in, room['outside'], [Item("pill")])
             print(color("~BStarting Game . . ."))
             time.sleep(1.7)
             break
