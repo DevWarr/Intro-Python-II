@@ -24,12 +24,21 @@ def color(msg):
     and outputs a string with ANSI color codes.
 
     Example input: "No color ~rRed Color ~eReset"
+
+    Backslashes currently will not escape tildes.
     """
     out = ""
     for i,v in enumerate(msg):
+        # If we have a tilde,
+        # the next letter is a color code.
+        # Get that color code from our dict,
+        # or return nothing if it cannot be found.
         if v == "~":
             color = msg[i+1]
             out +=  ansi_table.get(color, "")
+        # If the letter comes directly after a tilde,
+        # it is a color code. Skip it.
         elif msg[i-1] == "~": pass
+        # Otherwise, add the letters to the output.
         else: out += v
     return out + ansi_table["e"]
