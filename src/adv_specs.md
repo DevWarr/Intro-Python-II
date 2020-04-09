@@ -37,7 +37,7 @@
     -   description
     -   on_take (print message and any extra code)
     -   on_drop (print message and any extra code)
-    -   action (player uses item)
+    -   on_use (player uses item)
 
 ### Stretch Goals
 
