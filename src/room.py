@@ -1,7 +1,7 @@
 # Implement a class to hold room information. This should have name and
 # description attributes.
 from utils.colors import color
-
+from item import Item
 
 class Room:
 
@@ -10,7 +10,7 @@ class Room:
         self.description = description
         self.connecting = connecting if connecting else [
             None, None, None, None]
-        self.__inv = inventory if inventory else []
+        self.inv = inventory if inventory else []
 
     @property
     def n_to(self):
@@ -52,12 +52,23 @@ class Room:
     def show_inv(self):
         """Outputs all item names from the inventory as a string"""
         out = ""
-        if len(self.__inv) == 0:
+        if len(self.inv) == 0:
             out += color("~xempty")
         else:
-            item_names = [item.name for item in self.__inv]
+            item_names = [item.name for item in self.inv]
             out += ", ".join(item_names)
         return f"[ {out} ]"
+
+    def take_item(self, name):
+        for item in self.inv:
+            if item.name == name:
+                self.inv.remove(item)
+                return item
+        return None
+
+    def add_item(self, item):
+        if isinstance(item, Item):
+            self.inv.append(item)
 
     def __str__(self):
         return color(f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.show_inv()}")
