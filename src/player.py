@@ -15,13 +15,13 @@ class Player:
 
     @inv.setter
     def inv(self, array):
-        if len(array) < 3:
+        if len(array) <= 5:
             self.__inv = array
         else:
             print("Inventory too big.")
 
     def add_inv(self, item):
-        if len(self.__inv) > 2:
+        if len(self.__inv) > 5:
             return "You have too many items!"
         else:
             self.__inv.append(item)
