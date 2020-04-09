@@ -10,4 +10,4 @@ class Item:
         return color(f"~W{self.name}:~e\n{self.description}")
 
     def __str__(self):
-        return color(self.name)
+        return self.name
