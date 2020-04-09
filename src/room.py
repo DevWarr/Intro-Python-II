@@ -1,19 +1,16 @@
 # Implement a class to hold room information. This should have name and
 # description attributes.
+from utils.colors import color
 
 
 class Room:
 
-    def __init__(self, name, description, connecting=None):
+    def __init__(self, name, description, inventory=None, connecting=None):
         self.name = name
         self.description = description
         self.connecting = connecting if connecting else [
             None, None, None, None]
-
-    def __getitem__(self, item):
-        directions = {'n': self.n_to, 's': self.s_to,
-                      'e': self.e_to, 'w': self.w_to}
-        return directions.get(item, None)
+        self.__inv = inventory if inventory else []
 
     @property
     def n_to(self):
@@ -47,5 +44,10 @@ class Room:
     def w_to(self, room):
         self.connecting[3] = room
 
+    def __getitem__(self, item):
+        directions = {'n': self.n_to, 's': self.s_to,
+                      'e': self.e_to, 'w': self.w_to}
+        return directions.get(item, None)
+
     def __str__(self):
-        return f"{self.name}\n{self.description}"
+        return color(f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.__inv}")
