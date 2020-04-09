@@ -129,14 +129,18 @@ if __name__ == "__main__":
             "Once you're good to go, ~Wtype a player name~e to begin. Or, type ~W[q]~e to quit."))
         user_in = input("").strip()
 
+        # No name? Reset the loop
         if len(user_in) == 0:
             continue
+        # Name too long? Sorry bub.
         elif len(user_in) > 15:
             print(
                 color("~RThat name is too long! Please have a name less than 15 characters."))
             time.sleep(1.1)
+        # q -> quit
         elif user_in == 'q':
             break
+        # Valid input? Use it as the name
         else:
             player = Player(user_in, room['outside'], [Item("pill")])
             print(color("~BStarting Game . . ."))

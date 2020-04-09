@@ -12,6 +12,13 @@ class Room:
             None, None, None, None]
         self.inv = inventory if inventory else []
 
+
+    # We have a list holding all of our connecting rooms.
+    # To access the correct room from our list,
+    # We use these property attributes.
+    #     room.n_to returns room.connecting[0]
+    #     room.s_to returns room.connecting[1]
+    #     and so on . . .
     @property
     def n_to(self):
         return self.connecting[0]
@@ -45,6 +52,14 @@ class Room:
         self.connecting[3] = room
 
     def __getitem__(self, item):
+        """
+        Allows us to use bracket notation to
+        Access our connecting rooms
+        
+        Ex: room['n'] -> room.n_to
+            room['s'] -> room.s_to
+            and so on . . .
+        """
         directions = {'n': self.n_to, 's': self.s_to,
                       'e': self.e_to, 'w': self.w_to}
         return directions.get(item, None)
@@ -59,7 +74,8 @@ class Room:
             out += ", ".join(item_names)
         return f"[ {out} ]"
 
-    def take_item(self, name):
+    def remove_item(self, name):
+        """If possible, removes item from room"""
         for item in self.inv:
             if item.name == name:
                 self.inv.remove(item)
@@ -67,6 +83,7 @@ class Room:
         return None
 
     def add_item(self, item):
+        """Adds item to room"""
         if isinstance(item, Item):
             self.inv.append(item)
 
