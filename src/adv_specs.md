@@ -23,14 +23,12 @@
     -   name
     -   description
     -   attached rooms
-        -   n_to
-        -   s_to
-        -   e_to
-        -   w_to
+        -   (now handled by map)
     -   inventory
 -   What does a Player need?
     -   name
     -   current room
+        -   (now held by map)
     -   inventory
 -   What does an Item need?
     -   name
@@ -42,7 +40,7 @@
 ### Stretch Goals
 
 -   Adventure map?
-    -   1d array of rooms
+    -   2d array of rooms
     -   n/s/e/w traversal
 -   Can we save our game?
     -   Not that important, very short game
@@ -58,3 +56,20 @@
 -   main loop
     -   Take in user input
     -   Traverse 
+
+-   Making the map
+    -   Map = 2d array
+    -   [+]      [ ][ ]
+        [ ][ ][*][ ][-]
+        [ ]   [ ]   [ ]
+        [ ][/]      [ ]
+        [ ][ ]   [A][ ]
+    -   Empty spaces -> Empty Rooms
+    -   Symbols -> Special rooms with monsters that drop items
+    -   No random generation
+    1.  Create 2d array with rooms
+        -   name
+        -   desc
+        -   monster, if any
+    2.  Link rooms together
+        -   n_to, s_to, etc
