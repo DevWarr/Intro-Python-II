@@ -49,5 +49,15 @@ class Room:
                       'e': self.e_to, 'w': self.w_to}
         return directions.get(item, None)
 
+    def show_inv(self):
+        """Outputs all item names from the inventory as a string"""
+        out = ""
+        if len(self.__inv) == 0:
+            out += color("~xempty")
+        else:
+            item_names = [item.name for item in self.__inv]
+            out += ", ".join(item_names)
+        return f"[ {out} ]"
+
     def __str__(self):
-        return color(f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.__inv}")
+        return color(f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.show_inv()}")
