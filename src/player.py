@@ -21,10 +21,11 @@ class Player:
             print("Inventory too big.")
 
     def add_inv(self, item):
-        if len(self.__inv) > 5:
-            return "You have too many items!"
+        if len(self.__inv) >= 5:
+            return False
         else:
             self.__inv.append(item)
+            return True
 
     def show_inv(self):
         """Outputs all item names from the inventory as a string"""
@@ -35,6 +36,32 @@ class Player:
             item_names = [item.name for item in self.__inv]
             out += ", ".join(item_names)
         return f"[ {out} ]"
+
+    def take_item(self, name):
+        """Takes an item from the current room if possible"""
+        item = self.current.take_item(name)
+        # If no Item, print message that item doesn't exist
+        if item == None:
+            return color(f"~C({name})~R is not in the room.")
+        else:
+            # If we can't add the item to our inventory,
+            #     (Inventory may be too large)
+            # Then return the item to the room
+            success = self.add_inv(item)
+            if not success:
+                self.current.add_item(item)
+                return color("~RYour inventory is full.")
+            else:
+                return color(f"You took ~C({item.name})~e.")
+
+    def drop_item(self, name):
+        for item in self.inv:
+            if item.name == name:
+                self.inv.remove(item)
+                self.current.add_item(item)
+                return color(f"You dropped ~C({item.name})~e.")
+        return color(f"~C({name})~R is not in your inventory.")
+
 
     def __str__(self):
         return color(f"~WName~e {self.name}\n~WInventory~e {self.show_inv()}\n\n{self.current}")
