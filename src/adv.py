@@ -2,45 +2,9 @@ from room import Room
 from player import Player
 from item import Item
 from utils.colors import color
+from game_map import Map
 import time
 import os
-
-# Declare all the rooms
-
-room = {
-    'outside':  Room(
-        "Outside Cave Entrance",
-        "North of you, the cave mount beckons",
-        [Item("stick")]),
-    'foyer':    Room(
-        "Foyer",
-        "Dim light filters in from the south. Dusty passages run north and east.",
-        []),
-    'overlook': Room(
-        "Grand Overlook",
-        "A steep cliff appears before you, falling into the darkness. Ahead to the north, a light flickers in the distance, but there is no way across the chasm.",
-        [Item("staff")]),
-    'narrow':   Room(
-        "Narrow Passage",
-        "The narrow passage bends here from west to north. The smell of gold permeates the air.",
-        []),
-    'treasure': Room(
-        "Treasure Chamber",
-        "You've found the long-lost treasure chamber! And... Is that treasure?! The only exit is to the south.",
-        [Item("treasure"), Item("more treasure"), Item("even more treasure")]),
-}
-
-
-# Link rooms together
-
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
 
 #
 # Main
@@ -64,49 +28,64 @@ def is_direction(val):
     return val == 'n' or val == 's' or val == 'e' or val == 'w'
 
 
-def main(player):
+def game(adv):
     loop = True
     controls = [
         color(
-            "\n~W[n] ~eNorth   ~W[s] ~eSouth   ~W[e] ~eEast   ~W[w] ~eWest   ~W[m] ~eMore controls       ~W[q] ~eQuit"),
+            "\n~W[n] ~eNorth   ~W[s] ~eSouth   ~W[e] ~eEast   ~W[w] ~eWest   ~Y[m] ~eMap   ~Y[o] ~eOptions     ~R[q] ~eQuit"),
         color(
-            "\n~W[take ~e~c(item)~W]~e from room   ~W[drop ~e~c(item)~W]~e from inventory   ~W[back]~e previous controls")
+            "\n~W[take ~e~c(item)~W]~e from room   ~W[drop ~e~c(item)~W]~e from inventory   ~Y[o]~e previous controls")
     ]
-    display = 0  # 0 -> simple  |  1 -> advanced
-    while loop:
-        # Print message to User
+    display = False  # False -> simple  |  True -> advanced
+    show_map = False
+
+    def display_msg(map_or_no):
+        """Display message to user"""
         os.system('cls||clear')
-        print("You:")
-        print(player)
+        print(adv.display_info(map_or_no))
         print(controls[display])
+
+    def display_load(total_time, extra_text=""):
+        """Displays a loading spinner underneath a message"""
+        spinner = "\|/-"
+        for i in range(0, total_time*10):
+            display_msg()
+            print(extra_text)
+            print(color(f"~X{spinner[i % 4]}"))
+            time.sleep(0.1)
+
+    while loop:
+        traveling = False
+        display_msg(show_map)
         user_in = input("").lower().strip().split(" ")
 
         # Quitting the Game
         if user_in[0] == 'q':
             break
-        # Showing advanced controls
+        # Toggle the map
         elif user_in[0] == 'm':
-            display = 1
-        # Showing simple controls
-        elif user_in[0] == 'back':
-            display = 0
+            show_map = not show_map
+        # Toggle controls
+        elif user_in[0] == 'o':
+            display = not display
         # Moving through the map
         elif is_direction(user_in[0]):
-            if player.current[user_in[0]]:
-                player.current = player.current[user_in[0]]
+            success = adv.move(user_in[0])
+            if success:
+                traveling = True
             else:
-                print("There is no room that way . . .")
+                print(color("~RThere is no room that way . . ."))
         # Taking an item
         elif user_in[0] == 'take':
             if len(user_in) > 1:
-                print(player.take_item(" ".join(user_in[1:])))
+                print(adv.take_item(" ".join(user_in[1:])))
             else:
                 print(
                     color("~RPlease type the ~e~c(name)~R of the item you wish to take."))
         # Dropping an item
         elif user_in[0] == 'drop':
             if len(user_in) > 1:
-                print(player.drop_item(" ".join(user_in[1:])))
+                print(adv.drop_item(" ".join(user_in[1:])))
             else:
                 print(
                     color("~RPlease type the ~e~c(name)~R of the item you wish to drop."))
@@ -116,17 +95,20 @@ def main(player):
         time.sleep(1)
 
 
-if __name__ == "__main__":
-    player = None
-    while True:
-        # Message to User
+def main():
+    def display_intro():
+        """Display intro message to user"""
         os.system('cls||clear')
         print(color(
-            "\n~WThis adventure game requires a terminal 80 characters wide and 13 lines tall."))
-        print("[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ][ ]\n")
-        print("If you can't see all of this text, please resize your terminal.")
+            "\n~WThis adventure game requires a terminal 80 characters wide and 15 lines tall. Yep."))
+        print("[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n")
+        print("\n\nIf you can't see all of this text, please resize your terminal.")
         print(color(
             "Once you're good to go, ~Wtype a player name~e to begin. Or, type ~W[q]~e to quit."))
+
+    player = None
+    while True:
+        display_intro()
         user_in = input("").strip()
 
         # No name? Reset the loop
@@ -142,9 +124,18 @@ if __name__ == "__main__":
             break
         # Valid input? Use it as the name
         else:
-            player = Player(user_in, room['outside'], [Item("pill")])
-            print(color("~BStarting Game . . ."))
-            time.sleep(1.7)
+            player = Player(user_in, [Item("pill")])
+
+            for i in range(0, 6):
+                display_intro()
+                print(color("~BStarting Game ." + " ."*(i % 3)))
+                time.sleep(0.5)
             break
     # If the player entered a name, start. If not, exit.
-    main(player) if player else exit()
+    if player:
+        adv = Map(player)
+        game(adv)
+
+
+if __name__ == "__main__":
+    main()
