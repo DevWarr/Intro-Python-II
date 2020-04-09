@@ -3,6 +3,7 @@ from player import Player
 from item import Item
 from utils.colors import color
 from game_map import Map
+from utils.music import Music
 import time
 import os
 
@@ -134,6 +135,7 @@ def main():
     # If the player entered a name, start. If not, exit.
     if player:
         adv = Map(player)
+        Music().playmain()
         game(adv)
 
 
