@@ -3,7 +3,7 @@ from player import Player
 from item import Item
 from utils.colors import color
 from game_map import Map
-from utils.music import Music
+from utils.music import MusicPlayer
 import time
 import os
 
@@ -24,12 +24,14 @@ import os
 #
 # If the user enters "q", quit the game.
 
+music_player = MusicPlayer()
 
 def is_direction(val):
     return val == 'n' or val == 's' or val == 'e' or val == 'w'
 
 
 def game(adv):
+    music_player.play_track()
     loop = True
     controls = [
         color(
@@ -62,6 +64,7 @@ def game(adv):
 
         # Quitting the Game
         if user_in[0] == 'q':
+            music_player.stop_track()
             break
         # Toggle the map
         elif user_in[0] == 'm':
@@ -94,15 +97,18 @@ def game(adv):
         else:
             print("Invalid input. Please try again . . .")
         time.sleep(1)
+    exit()
 
 
-def main():
+def intro():
+    music_player.play_track(1)
     def display_intro():
         """Display intro message to user"""
         os.system('cls||clear')
         print(color(
             "\n~WThis adventure game requires a terminal 80 characters wide and 15 lines tall. Yep."))
-        print("[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n")
+        print(
+            "[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n")
         print("\n\nIf you can't see all of this text, please resize your terminal.")
         print(color(
             "Once you're good to go, ~Wtype a player name~e to begin. Or, type ~W[q]~e to quit."))
@@ -122,11 +128,13 @@ def main():
             time.sleep(1.1)
         # q -> quit
         elif user_in == 'q':
+            music_player.stop_track()
             break
         # Valid input? Use it as the name
         else:
             player = Player(user_in, [Item("pill")])
 
+            music_player.stop_track()
             for i in range(0, 6):
                 display_intro()
                 print(color("~BStarting Game ." + " ."*(i % 3)))
@@ -135,9 +143,8 @@ def main():
     # If the player entered a name, start. If not, exit.
     if player:
         adv = Map(player)
-        Music().playmain()
         game(adv)
 
 
 if __name__ == "__main__":
-    main()
+    intro()
