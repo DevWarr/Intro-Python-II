@@ -73,3 +73,90 @@
         -   monster, if any
     2.  Link rooms together
         -   n_to, s_to, etc
+
+-   Winning the Game
+    -   Getting the Ancient Mathematical Artifact
+    -   Artifact its locked: needs other items
+
+-   Shrines
+    -   extends Room class
+    -   Contains a Guardian (or None if it's defeated)
+    -   Multip Shrine
+        -   Monster: Multip Guardian
+        -   Requires: Calculator
+        -   Item: Multip
+    -   Divid Shrine
+        -   Monster: Divid Guardian
+        -   Requires: Calculator
+        -   Item: Divid
+    -   Square Shrine
+        -   Monster: Square Guardian
+        -   Requires: Calculator, Multip
+        -   Item: Square
+    -   Root Shrine
+        -   Monster: Root Guardian
+        -   Requires: Calculator, Divid, Square
+        -   Item: Root
+    -   Artifact Shrine
+        -   Monster: Mathematical Guardian
+        -   Requires: Calculator, Multip, Divid, Square, Root
+        -   Item: Multip
+
+-   Guardians
+    -   extends Player class
+    -   quiz method
+        -   Asks five questions
+
+    -   Mutip Guardian:
+        -   add_question(x5)
+
+    -   Divid Guardian:
+        -   sub_question(x5)
+    
+    -   Square Guardian(Multip):
+        -   add_question(x2)
+        -   mult_question(x3)
+    
+    -   Root Guardian(Divid):
+        -   sub_question(x2)
+        -   squ_question(x1)
+        -   div_question(x2)
+    
+    -   Artifact Guarian(Square, Root):
+        -   mult_question(x1)
+        -   div_question(x1)
+        -   squ_question(x1)
+        -   root_question(x1)
+        -   final_question(x1)
+    -   1 Guardian for every Shrine
+    -   On quiz success -> Death
+    -   On death, drop all items
+
+-   Battles
+    -   Must have proper item(s) to fight
+    -   Guardian gives 5 questions
+        -   First two require calc
+        -   3rd (or onward) require second item
+        -   4th (or onward) require third item
+        -   5th (Artifact only) requires all items
+    -   Must enter required item to answer question
+    -   Examples:
+        -   "You need the calculator!"
+        -   "What is: 10 plus itself 5 times?"
+        -   '>> 50'
+        -   "Correct!"
+
+        -   "You need the Multip sign!"
+        -   "What is: 5 times itself twice?"
+        -   '>> 25'
+        -   "Correct!"
+
+        -   "You need the Root sign!"
+        -   "What is the square root of 49?"
+        -   '>> 7h'
+        -   "Not Quite. Try again!"
+        -   '>> 7'
+        -   "Correct!"
+    -   Can run away to previous location
+    -   Three wrong answers, and you're forced to run away!
+    -   Guess all correct, Guardian dies and drops sign in room
