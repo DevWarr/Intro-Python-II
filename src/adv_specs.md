@@ -93,16 +93,17 @@
         -   Monster: Square Guardian
         -   Requires: Calculator, Multip
         -   Item: Square
-    -   Root Shrine
-        -   Monster: Root Guardian
+    -   Radical Shrine
+        -   Monster: Radical Guardian
         -   Requires: Calculator, Divid, Square
-        -   Item: Root
+        -   Item: Radical
     -   Artifact Shrine
         -   Monster: Mathematical Guardian
-        -   Requires: Calculator, Multip, Divid, Square, Root
+        -   Requires: Calculator, Multip, Divid, Square, radical
         -   Item: Multip
 
 -   Guardians
+    -   
     -   extends Player class
     -   quiz method
         -   Asks five questions
@@ -117,16 +118,16 @@
         -   add_question(x2)
         -   mult_question(x3)
     
-    -   Root Guardian(Divid):
+    -   Radical Guardian(Divid):
         -   sub_question(x2)
         -   squ_question(x1)
         -   div_question(x2)
     
-    -   Artifact Guarian(Square, Root):
+    -   Artifact Guarian(Square, radical):
         -   mult_question(x1)
         -   div_question(x1)
         -   squ_question(x1)
-        -   root_question(x1)
+        -   rad_question(x1)
         -   final_question(x1)
     -   1 Guardian for every Shrine
     -   On quiz success -> Death
@@ -151,7 +152,7 @@
         -   '>> 25'
         -   "Correct!"
 
-        -   "You need the Root sign!"
+        -   "You need the Radical sign!"
         -   "What is the square root of 49?"
         -   '>> 7h'
         -   "Not Quite. Try again!"

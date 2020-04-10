@@ -8,7 +8,7 @@ from utils.colors import color
 # 2 -> Multip
 # 3 -> Divid
 # 4 -> Square
-# 5 -> multipl
+# 5 -> Radical
 # 6 -> Artifact
 room_template = [
     ["Entrance", "Return here once you have the mathematical artifact. Use it to escape this maze!"],
@@ -19,8 +19,8 @@ room_template = [
         Item("Divid")]],
     ["Square Shrine", "The Shrine of the Square sign, granting the power of squaring.", [
         Item("Square")]],
-    ["Root Shrine", "The Shrine of the Root sign, granting the power of square rooting.", [
-        Item("Root")]],
+    ["Radical Shrine", "The Shrine of the Radical sign, granting the power of square rooting.", [
+        Item("Radical")]],
     ["Artifact Shrine", "The Shrine of the Ancient Mathematical Artifact! Grab it, and get out of here!", [
         Item("Artifact")]]
 ]
@@ -63,7 +63,7 @@ class Map:
         # 2 -> Multip
         # 3 -> Divid
         # 4 -> Square
-        # 5 -> Root
+        # 5 -> Radical
         # 6 -> Artifact
         # 7 -> Entrance
         empty_array = [
