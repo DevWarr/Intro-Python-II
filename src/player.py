@@ -32,9 +32,9 @@ class Player:
         If possible, removes item from player inventory.
         Casing does not matter.
         """
-        for item in self.inv:
+        for item in self.__inv:
             if item.name.lower() == name:
-                self.inv.remove(item)
+                self.__inv.remove(item)
                 return item
         return None
 
