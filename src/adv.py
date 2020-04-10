@@ -7,6 +7,7 @@ from utils.music import MusicPlayer, SoundPlayer
 import random
 import time
 import os
+from sys import exc_info
 
 #
 # Main
@@ -168,4 +169,10 @@ def intro():
 
 
 if __name__ == "__main__":
-    intro()
+
+    try:
+        intro()
+    except Exception as e:
+        music_player.stop_track()
+        sound_player.stop_track()
+        raise e
