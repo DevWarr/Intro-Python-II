@@ -26,11 +26,11 @@ room_template = [
 room_sign = [
     "   ",
     "[ ]",
-    color("~W[+]"),
-    color("~W[-]"),
-    color("~W[/]"),
-    color("~W[*]"),
-    color("~W[A]")
+    "[+]",
+    "[-]",
+    "[/]",
+    "[*]",
+    "[A]"
 ]
 
 class Map:
@@ -158,7 +158,7 @@ class Map:
             return color(f"~C({name})~R is not in your inventory.")
         else:
             room = self.get_room()
-            room.add_inv(item)
+            room.add_item(item)
             return color(f"You dropped ~C({item.name})~e.")
 
     def display_map(self):
@@ -177,8 +177,8 @@ class Map:
                 elif room == self.get_room():
                     # Player is in the room? Yellow
                     temp += color(f"~Y{room_sign[room.sign]}")
-                elif room.sign > 1:
-                    # Sign shrine? Bold
+                elif len(room.inv) > 0:
+                    # Items in the room? Bold
                     temp += color(f"~W{room_sign[room.sign]}")
                 else:
                     temp += room_sign[room.sign]
