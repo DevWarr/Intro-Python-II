@@ -1,35 +1,33 @@
-from room import Room
-from item import Item
+from classes.room import Room
+from classes.item import Item
 from utils.colors import color
 
 # 0 -> Empty space
 # 1 -> Tunnel
-# 2 -> plus
-# 3 -> minus
-# 4 -> divide
-# 5 -> multiply
+# 2 -> Multip
+# 3 -> Divid
+# 4 -> Square
+# 5 -> multipl
 # 6 -> Artifact
 room_template = [
     [],
-    [1, "Tunnel", "Nothing extravagant. An Empty tunnel."],
-    [2, "Plus Shrine", "The Shrine of the plus sign, granting the power of addition.", [
-        Item("Plus")]],
-    [3, "Minus Shrine", "The Shrine of the minus sign, granting the power of subtraction.", [
-        Item("Minus")]],
-    [4, "Divide Shrine", "The Shrine of the divide sign, granting the power of division.", [
-        Item("Divide")]],
-    [5, "Multip Shrine", "The Shrine of the multip sign, granting the power of multiplication.", [
+    ["Tunnel", "Nothing extravagant. An Empty tunnel."],
+    ["Multip Shrine", "The Shrine of the Multip sign, granting the power of multiplication.", [
         Item("Multip")]],
-    [6, "Artifact Room", "The Shrine of the Ancient Mathematical Artifact! Grab it, and get out of here!", [
+    ["Divid Shrine", "The Shrine of the Divid sign, granting the power of division.", [
+        Item("Divid")]],
+    ["Square Shrine", "The Shrine of the Square sign, granting the power of squaring.", [
+        Item("Square")]],
+    ["Root Shrine", "The Shrine of the Root sign, granting the power of square rooting.", [
+        Item("Root")]],
+    ["Artifact Shrine", "The Shrine of the Ancient Mathematical Artifact! Grab it, and get out of here!", [
         Item("Artifact")]]
 ]
 room_sign = [
     "   ",
     "[ ]",
-    "[+]",
-    "[-]",
-    "[/]",
-    "[*]",
+    "[X]",
+    "[S]",
     "[A]"
 ]
 
@@ -39,6 +37,7 @@ class Map:
         self.player = player
         self.position = [4, 1]  # [y, x]
         self.map = self.create_map()
+        self.exit = self.map[4][1]
 
     @property
     def x(self):
@@ -51,18 +50,18 @@ class Map:
     def create_map(self):
         """
         Creates a map like this:
-        [+]      [ ][ ]
-        [ ][ ][ ][ ][-]
-        [ ]   [*]   [ ]
-        [ ][/]      [ ]
-        [ ][ ]   [A][ ]
+        [S]      [ ][ ]
+        [ ][ ][ ][ ][S]
+        [ ]   [S]   [ ]
+        [ ][S]      [ ]
+        [ ][X]   [A][ ]
         """
         # 0 -> Empty space
         # 1 -> Tunnel
-        # 2 -> plus
-        # 3 -> minus
-        # 4 -> divide
-        # 5 -> multiply
+        # 2 -> Multip
+        # 3 -> Divid
+        # 4 -> Square
+        # 5 -> Root
         # 6 -> Artifact
         empty_array = [
             [2, 0, 0, 1, 1],

@@ -1,9 +1,10 @@
-from room import Room
-from player import Player
-from item import Item
+from classes.room import Room
+from classes.player import Player
+from classes.item import Item
 from utils.colors import color
-from game_map import Map
-from utils.music import MusicPlayer
+from classes.game_map import Map
+from utils.music import MusicPlayer, SoundPlayer
+import random
 import time
 import os
 
@@ -25,9 +26,18 @@ import os
 # If the user enters "q", quit the game.
 
 music_player = MusicPlayer()
+sound_player = SoundPlayer()
+
 
 def is_direction(val):
     return val == 'n' or val == 's' or val == 'e' or val == 'w'
+
+
+def print_and_wait(msg):
+    print(msg)
+    word_count = len(msg.split(" "))
+    total_time = max(1, word_count/2.5 - 1)
+    time.sleep(total_time)
 
 
 def game(adv):
@@ -42,13 +52,13 @@ def game(adv):
     display = False  # False -> simple  |  True -> advanced
     show_map = False
 
-    def display_msg(map_or_no):
+    def display_msg():
         """Display message to user"""
         os.system('cls||clear')
-        print(adv.display_info(map_or_no))
+        print(adv.display_info(show_map))
         print(controls[display])
 
-    def display_load(total_time, extra_text=""):
+    def display_load(total_time=1, extra_text=""):
         """Displays a loading spinner underneath a message"""
         spinner = "\|/-"
         for i in range(0, total_time*10):
@@ -56,10 +66,11 @@ def game(adv):
             print(extra_text)
             print(color(f"~X{spinner[i % 4]}"))
             time.sleep(0.1)
+        return
 
     while loop:
         traveling = False
-        display_msg(show_map)
+        display_msg()
         user_in = input("").lower().strip().split(" ")
 
         # Quitting the Game
@@ -68,40 +79,50 @@ def game(adv):
             break
         # Toggle the map
         elif user_in[0] == 'm':
+            sound_player.play_track(5)
             show_map = not show_map
         # Toggle controls
         elif user_in[0] == 'o':
+            sound_player.play_track(5)
             display = not display
         # Moving through the map
         elif is_direction(user_in[0]):
             success = adv.move(user_in[0])
             if success:
+                time.sleep(0.3)
+                sound_player.play_track(5)
                 traveling = True
             else:
-                print(color("~RThere is no room that way . . ."))
+                sound_player.play_track(6)
+                print_and_wait(color("~RThere is no room that way . . ."))
         # Taking an item
         elif user_in[0] == 'take':
             if len(user_in) > 1:
-                print(adv.take_item(" ".join(user_in[1:])))
+                sound_player.play_track(5)
+                print_and_wait(adv.take_item(" ".join(user_in[1:])))
             else:
-                print(
+                sound_player.play_track(6)
+                print_and_wait(
                     color("~RPlease type the ~e~c(name)~R of the item you wish to take."))
         # Dropping an item
         elif user_in[0] == 'drop':
             if len(user_in) > 1:
-                print(adv.drop_item(" ".join(user_in[1:])))
+                sound_player.play_track(5)
+                print_and_wait(adv.drop_item(" ".join(user_in[1:])))
             else:
-                print(
+                sound_player.play_track(6)
+                print_and_wait(
                     color("~RPlease type the ~e~c(name)~R of the item you wish to drop."))
         # Invalid input
         else:
-            print("Invalid input. Please try again . . .")
-        time.sleep(1)
+            sound_player.play_track(6)
+            print_and_wait(color("~RInvalid input. Please try again . . ."))
     exit()
 
 
 def intro():
     music_player.play_track(1)
+
     def display_intro():
         """Display intro message to user"""
         os.system('cls||clear')
@@ -133,8 +154,8 @@ def intro():
         # Valid input? Use it as the name
         else:
             player = Player(user_in, [Item("pill")])
-
             music_player.stop_track()
+            sound_player.play_track(5)
             for i in range(0, 6):
                 display_intro()
                 print(color("~BStarting Game ." + " ."*(i % 3)))

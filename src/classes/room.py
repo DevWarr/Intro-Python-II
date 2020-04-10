@@ -1,13 +1,11 @@
 # Implement a class to hold room information. This should have name and
 # description attributes.
 from utils.colors import color
-from item import Item
 
 
 class Room:
 
-    def __init__(self, sign, name, description, inventory=None):
-        self.sign = sign
+    def __init__(self, name, description, inventory=None):
         self.name = name
         self.description = description
         self.inv = inventory if inventory else []
@@ -35,8 +33,7 @@ class Room:
 
     def add_item(self, item):
         """Adds item to room"""
-        if isinstance(item, Item):
-            self.inv.append(item)
+        self.inv.append(item)
 
     def __str__(self):
         return color(f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.show_inv()}")
