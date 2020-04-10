@@ -1,4 +1,5 @@
 from classes.room import Room
+from classes.shrine import Shrine
 from classes.item import Item
 from utils.colors import color
 
@@ -10,7 +11,7 @@ from utils.colors import color
 # 5 -> multipl
 # 6 -> Artifact
 room_template = [
-    [],
+    ["Entrance", "Return here once you have the mathematical artifact. Use it to escape this maze!"],
     ["Tunnel", "Nothing extravagant. An Empty tunnel."],
     ["Multip Shrine", "The Shrine of the Multip sign, granting the power of multiplication.", [
         Item("Multip")]],
@@ -23,13 +24,14 @@ room_template = [
     ["Artifact Shrine", "The Shrine of the Ancient Mathematical Artifact! Grab it, and get out of here!", [
         Item("Artifact")]]
 ]
-room_sign = [
-    "   ",
-    "[ ]",
-    "[X]",
-    "[S]",
-    "[A]"
-]
+room_sign = {
+    "empty":    "   ",
+    "tunnel":   "[ ]",
+    "entrance": "[X]",
+    "shrine":   "[S]",
+    "artifact": "[A]"
+}
+
 
 class Map:
 
@@ -37,7 +39,7 @@ class Map:
         self.player = player
         self.position = [4, 1]  # [y, x]
         self.map = self.create_map()
-        self.exit = self.map[4][1]
+        self.entrance = self.map[4][1]
 
     @property
     def x(self):
@@ -63,12 +65,13 @@ class Map:
         # 4 -> Square
         # 5 -> Root
         # 6 -> Artifact
+        # 7 -> Entrance
         empty_array = [
             [2, 0, 0, 1, 1],
-            [1, 1, 5, 1, 3],
+            [1, 1, 4, 1, 3],
             [1, 0, 1, 0, 1],
-            [1, 4, 0, 0, 1],
-            [1, 1, 0, 6, 1]
+            [1, 5, 0, 0, 1],
+            [1, 7, 0, 6, 1]
         ]
         return [self.create_rooms(arr) for arr in empty_array]
 
@@ -76,12 +79,19 @@ class Map:
         """Creates a room for each number value from the given array"""
         rooms = []
         for room_id in room_arr:
-            # If id is 0, no room
             if room_id == 0:
+                # If id is 0, no room
                 rooms.append(None)
+            elif room_id == 7:
+                # If id is 7, Entrance Room
+                rooms.append(Room(*room_template[0]))
+            elif room_id == 1:
+                # If id is 1, Tunnel
+                rooms.append(Room(*room_template[1]))
             else:
                 # Use the values from the room_template to create a new room
-                rooms.append(Room(*room_template[room_id]))
+                rooms.append(Shrine(*room_template[room_id]))
+        print(rooms)
         return rooms
 
     def confirm_direction(self, y, x):
@@ -170,18 +180,29 @@ class Map:
         for room_arr in self.map:
             temp = ""
             for room in room_arr:
+                room_str = ""
+                # print(room.name)
+                # First ifs to determine string
                 if room is None:
-                    # None -> empty space
-                    temp += room_sign[0]
-                elif room == self.get_room():
-                    # Player is in the room? Yellow
-                    temp += color(f"~Y{room_sign[room.sign]}")
-                elif len(room.inv) > 0:
-                    # Items in the room? Bold
-                    temp += color(f"~W{room_sign[room.sign]}")
+                    room_str = room_sign["empty"]
+                elif room.name[:8].lower() == "artifact":
+                    room_str = room_sign["artifact"]
+                elif isinstance(room, Shrine):
+                    room_str = room_sign["shrine"]
+                elif room == self.entrance:
+                    room_str = room_sign["entrance"]
                 else:
-                    temp += room_sign[room.sign]
-            output += temp +"\n"
+                    room_str = room_sign["tunnel"]
+
+                # Second ifs to determine color
+                if room == self.get_room():
+                    # Player is in the room? Yellow
+                    room_str = color(f"~Y{room_str}")
+                elif isinstance(room, Shrine):
+                    room_str = color(f"~W{room_str}")
+                temp += room_str
+
+            output += temp + "\n"
         return output
 
     def display_info(self, show_map=False):
