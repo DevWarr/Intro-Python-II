@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from classes.player import Player
 from utils.colors import color
+from assets.guardian_poses import multip_guardian
 from random import randint
 
 
@@ -100,6 +101,10 @@ class Guardian(Player, ABC):
 
 
 class MultipGuardian(Guardian):
+
+    def __init__(self, name, inv=None):
+        super().__init__(name, inv)
+        self.poses = multip_guardian()
 
     def addition(self, difficulty=0):
         """
