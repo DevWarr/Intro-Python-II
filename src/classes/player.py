@@ -27,9 +27,22 @@ class Player:
             self.__inv.append(item)
             return True
 
+    def get_item(self, name):
+        """
+        If possible, returns item from player inventory.
+        Else, returns None.
+        
+        Casing does not matter.
+        """
+        for item in self.__inv:
+            if item.name.lower() == name:
+                return item
+        return None
+
     def remove_item(self, name):
         """
         If possible, removes item from player inventory.
+        
         Casing does not matter.
         """
         for item in self.__inv:
