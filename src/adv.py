@@ -18,16 +18,27 @@ def is_direction(val):
     return val == 'n' or val == 's' or val == 'e' or val == 'w'
 
 
-def print_and_wait(msg):
+def print_and_wait(msg, wait=None):
     """Prints a message, and waits a short while before continuing"""
     print(msg)
     word_count = len(msg.split(" "))
-    total_time = max(1, word_count/2.5 - 1)
-    time.sleep(total_time)
+    if wait is None:
+        wait = max(1, word_count/2.5 - 1)
+    time.sleep(wait)
+
+
+def display_screen(all_text):
+    """Clears the screen and prints the all_text passed in."""
+    os.system('cls||clear')
+    print(all_text)
+
+
+def battle(battle):
+    pass
 
 
 def game(adv):
-    """Main Loop for teh adventure game"""
+    """Main Loop for the adventure game"""
     music_player.play_track()
     loop = True
     controls = [
@@ -39,12 +50,6 @@ def game(adv):
     display = False  # False -> simple  |  True -> advanced
     show_map = False
 
-    def display_msg():
-        """Display message to user"""
-        os.system('cls||clear')
-        print(adv.display_info(show_map))
-        print(controls[display])
-
     def display_load(total_time=1, text=""):
         """Displays a loading spinner underneath a message"""
         spinner = "\|/-"
@@ -55,7 +60,7 @@ def game(adv):
         return
 
     while loop:
-        display_msg()
+        display_screen(adv.display_info(show_map) + "\n" + controls[display])
         user_in = input("").lower().strip().split(" ")
 
         if user_in[0] == 'q':
@@ -78,7 +83,7 @@ def game(adv):
                 sound_player.play_track(5)
             else:
                 sound_player.play_track(6)
-                print_and_wait(color("~RThere is no room that way . . ."))
+                print_and_wait(color("~RThere is no room that way . . ."), 1)
         elif user_in[0] == 'take':
             # Taking an item
             if len(user_in) > 1:
@@ -100,7 +105,7 @@ def game(adv):
         else:
             # Invalid input
             sound_player.play_track(6)
-            print_and_wait(color("~RInvalid input. Please try again . . ."))
+            print_and_wait(color("~RInvalid input. Please try again . . ."), 1)
     exit()
 
 
@@ -108,22 +113,16 @@ def intro():
     """Intro before Game starts"""
     music_player.play_track(1)
 
-    def display_intro():
-        """Display intro message to user"""
-        os.system('cls||clear')
-        print(color(
-            "\n~WThis adventure game requires a terminal 80 characters wide and 15 lines tall. Yep."))
-        print(
-            "[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n")
-        print("\n\nIf you can't see all of this text, please resize your terminal.")
-        print(color(
-            "Once you're good to go, ~Wtype a player name~e to begin. Or, type ~W[q]~e to quit."))
+    intro_text = color("\n~WThis adventure game requires a terminal 80 characters wide and 15 lines tall. Yep.~e" + "\n" +
+                       "[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n" + "\n" +
+                       "\n\nIf you can't see all of this text, please resize your terminal." + "\n" +
+                       "Once you're good to go, ~Wtype a player name~e to begin. Or, type ~W[q]~e to quit.")
 
     player = None
     while True:
 
         # Display the intro and wait for input
-        display_intro()
+        display_screen(intro_text)
         user_in = input("").strip()
 
         if len(user_in) == 0:
@@ -144,7 +143,7 @@ def intro():
             music_player.stop_track()
             sound_player.play_track(5)
             for i in range(0, 6):
-                display_intro()
+                display_screen(intro_text)
                 print(color("~BStarting Game ." + " ."*(i % 3)))
                 time.sleep(0.5)
             break
