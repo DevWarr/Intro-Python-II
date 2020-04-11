@@ -103,7 +103,6 @@
         -   Item: Multip
 
 -   Guardians
-    -   
     -   extends Player class
     -   quiz method
         -   Asks five questions
@@ -161,3 +160,32 @@
     -   Can run away to previous location
     -   Three wrong answers, and you're forced to run away!
     -   Guess all correct, Guardian dies and drops sign in room
+
+-   Battle Setup
+    -   Player enters room
+    -   Map checks if Room is a Shrine and contains a guardian
+    -   If yes, Map returns the guardian
+    -   game() loop then creates a new Battle(player, guardian, map)
+    -   game() loop calls battle(new_battle)
+
+-   Battle Loop
+    -   prints battle info 
+    -   new_battle.check_victory()
+        -   If win, win()
+        -   If loss, lose()
+    -   new_battle.ask_question()
+        -   If there is a question, ask.
+        -   No question? Create question and ask:
+            -   self.item_request()
+            -   self.guardian.create_question()
+
+    -   user enters a number answer
+        -   new_battle.check_answer(answer)
+        -   Question correct? Next question!
+        -   Question incorrect? Try again.
+    -   user uses item
+        -   new_battle.check_item(name)
+        -   Question correct? Next question!
+        -   Question incorrect? Try again.
+    -   user runs away
+        -   new_battle.lose()
