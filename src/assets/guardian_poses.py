@@ -133,19 +133,19 @@ def radical_guardian():
           ^^^^      \n
     """
     stand = color("~C(~B√~C)~e  ^~B√√~e^      \n")
-    stand += color(" ~WY~e___|##|==()  \n")
+    stand += color(" ~WY~e___|~r##~e|==()  \n")
     stand += color(" ~W8~e===]//[‾‾97  \n")
     stand += color(" ~WI~e   |][|  ^^  \n")
     stand += color(" ~WI~e   ~y^^^^      \n")
 
     correct = color(" ~WY~e   ^~B√√~e^      \n")
-    correct += color(" ~W8~e‾=_|##|==()  \n")
+    correct += color(" ~W8~e‾=_|~r##~e|==()  \n")
     correct += color(" ~WI~e‾-=]//[‾‾97  \n")
     correct += color(" ~WI~e   |][|  ^^  \n")
     correct += color("     ~y^^^^      \n")
 
     incorrect = color(" ~RY~e   ^~B√√~e^      \n")
-    incorrect += color(" ~R8~e‾=_|##|==()  \n")
+    incorrect += color(" ~R8~e‾=_|~r##~e|==()  \n")
     incorrect += color(" ~WI~e‾-=]//[‾‾97  \n")
     incorrect += color(" ~WI~e   |][|  ^^  \n")
     incorrect += color("     ~y^^^^      \n")

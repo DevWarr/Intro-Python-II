@@ -9,32 +9,17 @@ import time
 import os
 from sys import exc_info
 
-#
-# Main
-#
-
-# Make a new player object that is currently in the 'outside' room.
-
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
-
 music_player = MusicPlayer()
 sound_player = SoundPlayer()
 
 
 def is_direction(val):
+    """Returns true if a cardinal direction"""
     return val == 'n' or val == 's' or val == 'e' or val == 'w'
 
 
 def print_and_wait(msg):
+    """Prints a message, and waits a short while before continuing"""
     print(msg)
     word_count = len(msg.split(" "))
     total_time = max(1, word_count/2.5 - 1)
@@ -42,6 +27,7 @@ def print_and_wait(msg):
 
 
 def game(adv):
+    """Main Loop for teh adventure game"""
     music_player.play_track()
     loop = True
     controls = [
@@ -59,45 +45,42 @@ def game(adv):
         print(adv.display_info(show_map))
         print(controls[display])
 
-    def display_load(total_time=1, extra_text=""):
+    def display_load(total_time=1, text=""):
         """Displays a loading spinner underneath a message"""
         spinner = "\|/-"
         for i in range(0, total_time*10):
-            display_msg()
-            print(extra_text)
+            print(text)
             print(color(f"~X{spinner[i % 4]}"))
             time.sleep(0.1)
         return
 
     while loop:
-        traveling = False
         display_msg()
         user_in = input("").lower().strip().split(" ")
 
-        # Quitting the Game
         if user_in[0] == 'q':
+            # Quitting the Game
             music_player.stop_track()
             break
-        # Toggle the map
         elif user_in[0] == 'm':
+            # Toggle the map
             sound_player.play_track(5)
             show_map = not show_map
-        # Toggle controls
         elif user_in[0] == 'o':
+            # Toggle controls
             sound_player.play_track(5)
             display = not display
-        # Moving through the map
         elif is_direction(user_in[0]):
+            # Moving through the map
             success = adv.move(user_in[0])
             if success:
                 time.sleep(0.3)
                 sound_player.play_track(5)
-                traveling = True
             else:
                 sound_player.play_track(6)
                 print_and_wait(color("~RThere is no room that way . . ."))
-        # Taking an item
         elif user_in[0] == 'take':
+            # Taking an item
             if len(user_in) > 1:
                 sound_player.play_track(5)
                 print_and_wait(adv.take_item(" ".join(user_in[1:])))
@@ -105,8 +88,8 @@ def game(adv):
                 sound_player.play_track(6)
                 print_and_wait(
                     color("~RPlease type the ~e~c(name)~R of the item you wish to take."))
-        # Dropping an item
         elif user_in[0] == 'drop':
+            # Dropping an item
             if len(user_in) > 1:
                 sound_player.play_track(5)
                 print_and_wait(adv.drop_item(" ".join(user_in[1:])))
@@ -114,14 +97,15 @@ def game(adv):
                 sound_player.play_track(6)
                 print_and_wait(
                     color("~RPlease type the ~e~c(name)~R of the item you wish to drop."))
-        # Invalid input
         else:
+            # Invalid input
             sound_player.play_track(6)
             print_and_wait(color("~RInvalid input. Please try again . . ."))
     exit()
 
 
 def intro():
+    """Intro before Game starts"""
     music_player.play_track(1)
 
     def display_intro():
@@ -137,23 +121,25 @@ def intro():
 
     player = None
     while True:
+
+        # Display the intro and wait for input
         display_intro()
         user_in = input("").strip()
 
-        # No name? Reset the loop
         if len(user_in) == 0:
+            # No name? Reset the loop
             continue
-        # Name too long? Sorry bub.
         elif len(user_in) > 15:
+            # Name too long? Sorry bub.
             print(
                 color("~RThat name is too long! Please have a name less than 15 characters."))
             time.sleep(1.1)
-        # q -> quit
         elif user_in == 'q':
+            # q -> quit
             music_player.stop_track()
             break
-        # Valid input? Use it as the name
         else:
+            # Valid input? Use it as the name
             player = Player(user_in, [Item("pill")])
             music_player.stop_track()
             sound_player.play_track(5)
@@ -162,14 +148,16 @@ def intro():
                 print(color("~BStarting Game ." + " ."*(i % 3)))
                 time.sleep(0.5)
             break
-    # If the player entered a name, start. If not, exit.
     if player:
+        # If the player entered a name, start. If not, exit.
         adv = Map(player)
         game(adv)
 
 
 if __name__ == "__main__":
 
+    # Wrap everything in a try/except, so if an error is thrown
+    #     we stop our players and exit peacefully
     try:
         intro()
     except Exception as e:
