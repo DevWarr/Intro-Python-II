@@ -38,6 +38,7 @@ class Map:
     def __init__(self, player):
         self.player = player
         self.position = [4, 1]  # [y, x]
+        self.prev = None
         self.map = self.create_map()
         self.entrance = self.map[4][1]
 
@@ -112,19 +113,23 @@ class Map:
     def move(self, direction):
         """
         Confirming each direction and making sure we stay in bounds,
-        Moves a direction.
+        Moves a direction, and stores previous location.
         Returns true if we moved, and false otherwise
         """
         if direction == 'n' and self.confirm_direction(self.y-1, self.x):
+            self.prev = self.position
             self.position[0] -= 1
             return True
         elif direction == 's' and self.confirm_direction(self.y+1, self.x):
+            self.prev = self.position
             self.position[0] += 1
             return True
         elif direction == 'w' and self.confirm_direction(self.y, self.x-1):
+            self.prev = self.position
             self.position[1] -= 1
             return True
         elif direction == 'e' and self.confirm_direction(self.y, self.x+1):
+            self.prev = self.position
             self.position[1] += 1
             return True
         else:
@@ -133,6 +138,14 @@ class Map:
     def get_room(self):
         """Returns the Room object the player is currently in"""
         return self.map[self.y][self.x]
+
+    def check_for_guardian(self):
+        """
+        Checks if a guardian is in the current room.
+
+        If there is a guardian, returns the guardian.
+        Else, returns None.
+        """
 
     def take_item(self, name):
         """
