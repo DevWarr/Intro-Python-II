@@ -1,84 +1,83 @@
 from utils.playsound_copy import playsound
 from assets.assets import *
 import time
-import threading
-
-
-class Track(threading.Thread):
-
-    def __init__(self, track):
-        super().__init__()
-        self.__play = track
-        self.__loop = False
-        self.__playing = False
-
-    @property
-    def playing(self):
-        return self.__playing
-
-    def run(self):
-        self.__playing = True
-        stop = None
-        while True:
-            # While we're looping, loop the track
-            sound_info = playsound(self.__play, False)
-            sleep_time = int(sound_info['duration'])
-            stop = sound_info['stop']
-            for i in range(0, sleep_time*100):
-                # While we're playing,
-                # sleep at small amounts continuously.
-                if self.__playing:
-                    time.sleep(0.01)
-                else:
-                    # If we stop playing,
-                    # Stop looping and break
-                    self.__loop = False
-                    stop()
-                    break
-            if not self.__loop:
-                if stop:
-                    stop()
-                return
-
-    def play_track(self, loop=True):
-        self.__loop = loop
-        self.start()
-
-    def stop_loop(self):
-        self.__loop = False
-
-    def stop_track(self):
-        self.__playing = False
+from multiprocessing import Process
 
 
 class Player:
+    """
+    A Music/Sound Player.
+
+    Initializes with an album to hold all
+    of the tracks the Player can play.
+    Can play tracks once, or loop.
+    """
 
     def __init__(self, album):
         self.album = album
-        self.playing = False
-        self.track = None
+        self.current_track = None
+        # Process of the current track, if we're looping
+        self.process = None
+        # stop() function to stop playback
+        self.stop = None
 
-    def play_track(self, num=0, loop=True):
+    def start(self, wait=False):
         """
-        Plays a track from the album.
+        Starts playing the current track.
 
-        num:
-        -   0 -> main
-        -   1 -> intro
-
-        loop: Determines whether the track will loop or not.
-
+        Sets the stop() function, and returns the track duration.
         """
-        if 0 <= num < len(self.album):
-            self.track = Track(self.album[num])
-            self.track.play_track(loop)
+        if self.current_track is None:
+            # no track? Return
+            return
+
+        sound_info = playsound(self.current_track, wait)
+        self.stop = sound_info["stop"]
+        return sound_info["duration"]
+
+    def loop_track(self):
+        """
+        Starts the track, 
+        waits the duration of the track,
+        and then replays.
+        """
+        while True:
+            duration = self.start()
+            time.sleep(duration)
+
+    def play_track(self, num, loop):
+        """
+        Plays the requested track.
+
+        If loop is set to true, creates a separate
+        process to auto loop the track in the background.
+        """
+        if not (0 <= num < len(self.album)):
+            # If our track number isn't in our album, return
+            return
+
+        self.current_track = self.album[num]
+        if loop:
+            self.process = Process(target=self.loop_track)
+            self.process.start()
+        else:
+            self.start()
 
     def stop_track(self):
-        """Stops track and joins thread to main."""
-        if self.track is not None:
-            self.track.stop_track()
-            self.track.join()
-            self.track = None
+        """
+        Stops playing track.
+
+        Calls stop() if exists.
+        Terminates the process if exists.
+        Sets current_track, stop, and process to None.
+        """
+        if self.stop is not None and callable(self.stop):
+            self.stop()
+
+        if isinstance(self.process, Process):
+            self.process.terminate()
+
+        self.stop, self.process, self.current_track = None, None, None
 
 
 class MusicPlayer(Player):
@@ -88,10 +87,17 @@ class MusicPlayer(Player):
 
     def play_track(self, num=0, loop=True):
         """
+        Plays the desired track.
+
+        If another track is playing,
+        stops current track before starting anew.
+
         Tracks:
         -   0 -> main_track
         -   1 -> intro_track
         """
+        if self.current_track is not None:
+            super().stop_track()
         return super().play_track(num=num, loop=loop)
 
 
