@@ -8,18 +8,18 @@ from utils.colors import color
 def divid_guardian():
     """
     Prints out an ASCII version of the 
-    Divid Guardian. \n
-     (/)  -//-  8)  \n
-      Y___|##|__9]  \n
-      8===]//[==97  \n
-      I‾‾‾|][|‾‾    \n
-      I __J/\\\__   \n
-       \n
-      Y   -//-  8)  \n
-      8‾=_|##|__9]  \n
-      I‾-=]//[==97  \n
-      I   |][|‾‾    \n
-        __J/\\\__   \n
+    Divid Guardian. 
+     (/)  -//-  8)  
+      Y___|##|__9]  
+      8===]//[==97  
+      I‾‾‾|][|‾‾    
+      I __J/\\\__   
+       
+      Y   -//-  8)  
+      8‾=_|##|__9]  
+      I‾-=]//[==97  
+      I   |][|‾‾    
+        __J/\\\__   
     """
     stand = color("~C(~B/~C)~e  -~B//~e-  8)  \n" +
                   " ~WY~e___|~r##~e|__9]  \n" +
@@ -45,18 +45,18 @@ def divid_guardian():
 def multip_guardian():
     """
     Prints out an ASCII version of the 
-    Multip Guardian. \n
-     (*)  +**+      \n
-      Y___|##|==9\  \n
-      8===]**[‾‾97  \n
-      I   |][|      \n
-      I   [][L      \n
-      \n
-      Y   +**+      \n
-      8‾=_|##|==9\  \n
-      I‾-=]**[‾‾97  \n
-      I   |][|      \n
-          [][L      \n
+    Multip Guardian. 
+     (*)  +**+      
+      Y___|##|==9\  
+      8===]**[‾‾97  
+      I   |][|      
+      I   [][L      
+      
+      Y   +**+      
+      8‾=_|##|==9\  
+      I‾-=]**[‾‾97  
+      I   |][|      
+          [][L      
     """
     stand = color("~C(~B*~C)~e  +~B**~e+      \n" +
                   " ~WY~e___|~r##~e|==9\  \n" +
@@ -82,18 +82,18 @@ def multip_guardian():
 def square_guardian():
     """
     Prints out an ASCII version of the 
-    Square Guardian. \n
-     (^)  *^^*  +*  \n
-      Y___|##|__()  \n
-      8===]^^[==97  \n
-      I   |][|      \n
-      I   [][]      \n
-      \n
-      Y   *^^*  +*  \n
-      8‾=_|##|__()  \n
-      I‾-=]^^[==97  \n
-      I   |][|      \n
-          [][]      \n
+    Square Guardian. 
+     (^)  *^^*  +*  
+      Y___|##|__()  
+      8===]^^[==97  
+      I   |][|      
+      I   [][]      
+      
+      Y   *^^*  +*  
+      8‾=_|##|__()  
+      I‾-=]^^[==97  
+      I   |][|      
+          [][]      
     """
     stand = color("~C(~B^~C)~e  *~B^^~e*  ~W+*~e  \n" +
                   " ~WY~e___|~r##~e|__()  \n" +
@@ -119,18 +119,18 @@ def square_guardian():
 def radical_guardian():
     """
     Prints out an ASCII version of the 
-    Root Guardian. \n
-     (√)  ^√√^      \n
-      Y___|##|==()  \n
-      8===]//[‾‾97  \n
-      I   |][|  ^^  \n
-      I   ^^^^      \n
-      \n
-      Y   ^√√^      \n
-      8‾=_|##|==()  \n
-      I‾-=]//[‾‾97  \n
-      I   |][|  ^^  \n
-          ^^^^      \n
+    Root Guardian. 
+     (√)  ^√√^      
+      Y___|##|==()  
+      8===]//[‾‾97  
+      I   |][|  ^^  
+      I   ^^^^      
+      
+      Y   ^√√^      
+      8‾=_|##|==()  
+      I‾-=]//[‾‾97  
+      I   |][|  ^^  
+          ^^^^      
     """
     stand = color("~C(~B√~C)~e  ^~B√√~e^      \n" +
                   " ~WY~e___|~r##~e|==()  \n" +
@@ -156,24 +156,24 @@ def radical_guardian():
 def artifact_guardian():
     """
     Prints out an ASCII version of the 
-    Artifact Guardian. \n
-      +A* *//*      \n
-      (8__|##|==9\  \n
-      (q==]--[‾‾97  \n
-          |][|  ^^  \n
-          ^^^^      \n
-          \n
-          *//*      \n
-      +A*_|##|==9\  \n
-      (R==]--[‾‾97  \n
-          |][|  ^^  \n
-          ^^^^      \n
-          \n
-      (8  *//*      \n
-       \=\|##|==9\  \n
-        `‾]--[‾‾97  \n
-          |][|  ^^  \n
-          ^^^^      \n
+    Artifact Guardian. 
+      +A* *//*      
+      (8__|##|==9\  
+      (q==]--[‾‾97  
+          |][|  ^^  
+          ^^^^      
+          
+          *//*      
+      +A*_|##|==9\  
+      (R==]--[‾‾97  
+          |][|  ^^  
+          ^^^^      
+          
+      (8  *//*      
+       \=\|##|==9\  
+        `‾]--[‾‾97  
+          |][|  ^^  
+          ^^^^      
     """
     stand = color(" ~C*~BA~C+~e *~B//~e*      \n" +
                   " ~W(8~X__~W|~e~r##~W|~X--~W9~e\  \n" +
