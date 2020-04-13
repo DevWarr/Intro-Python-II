@@ -11,12 +11,17 @@ def format_string_block(string_block, width, height):
     - len(array)    = height
     - len(array[i]) = width
     """
+    
     # Turn the string block into an array of strings
     str_array = string_block.strip().split("\n")
     if len(str_array) < height:
-        # If our array does not match our height,
+        # If our array isn't as long as our height,
         # add in extra lines of space so it does
         [str_array.append(" "*width) for i in range(len(str_array), height)]
+    elif len(str_array) > height:
+        # If our array is longer than our height... crop it.
+        str_array = str_array[:height]
+
     for i in range(0, len(str_array)):
         # Ensure that each line (not counting color codes)
         # is the desired width.
@@ -27,6 +32,7 @@ def format_string_block(string_block, width, height):
         elif line_length > width:
             # Too long? Sorry... crop it.
             str_array[i] = str_array[i][:width]
+
     return str_array
 
 
