@@ -1,7 +1,6 @@
 from classes.room import Room
 from classes.shrine import Shrine
 from classes.item import Item
-from utils.colors import color
 
 # 0 -> Empty space
 # 1 -> Tunnel
@@ -11,7 +10,7 @@ from utils.colors import color
 # 5 -> Radical
 # 6 -> Artifact
 room_template = [
-    ["Entrance", "Return here once you have the mathematical artifact. Use it to escape this maze!"],
+    ["Entrance", "Return here with the mathematical artifact. Use it to escape this maze!"],
     ["Tunnel", "Nothing extravagant. An Empty tunnel."],
     ["Multip Shrine", "The Shrine of the Multip sign, granting the power of multiplication.", [
         Item("Multip")]],
@@ -19,7 +18,7 @@ room_template = [
         Item("Divid")]],
     ["Square Shrine", "The Shrine of the Square sign, granting the power of squaring.", [
         Item("Square")]],
-    ["Radical Shrine", "The Shrine of the Radical sign, granting the power of square rooting.", [
+    ["Radical Shrine", "The Shrine of the Radical sign, granting the power of square and cube rooting.", [
         Item("Radical")]],
     ["Artifact Shrine", "The Shrine of the Ancient Mathematical Artifact! Grab it, and get out of here!", [
         Item("Artifact")]]
@@ -113,7 +112,8 @@ class Map:
     def move(self, direction):
         """
         Confirming each direction and making sure we stay in bounds,
-        Moves a direction, and stores previous location.
+        moves a direction and stores previous location.
+        
         Returns true if we moved, and false otherwise
         """
         if direction == 'n' and self.confirm_direction(self.y-1, self.x):
@@ -146,6 +146,7 @@ class Map:
         If there is a guardian, returns the guardian.
         Else, returns None.
         """
+        raise NotImplementedError
 
     def take_item(self, name):
         """
@@ -157,7 +158,7 @@ class Map:
         item = room.remove_item(name)
         # If no Item, print message that item doesn't exist
         if item == None:
-            return color(f"~C({name})~R is not in the room.")
+            return f"~C({name})~R is not in the room.~e"
         else:
             # If we can't add the item to our inventory,
             #     (Inventory may be too large)
@@ -165,9 +166,9 @@ class Map:
             success = self.player.add_inv(item)
             if not success:
                 room.add_item(item)
-                return color("~RYour inventory is full.")
+                return "~RYour inventory is full.~e"
             else:
-                return color(f"You took ~C({item.name})~e.")
+                return f"You took ~C({item.name})~e."
 
     def drop_item(self, name):
         """
@@ -177,11 +178,11 @@ class Map:
         """
         item = self.player.remove_item(name)
         if item is None:
-            return color(f"~C({name})~R is not in your inventory.")
+            return f"~C({name})~R is not in your inventory.~e"
         else:
             room = self.get_room()
             room.add_item(item)
-            return color(f"You dropped ~C({item.name})~e.")
+            return f"You dropped ~C({item.name})~e."
 
     def display_map(self):
         """
@@ -210,17 +211,29 @@ class Map:
                 # Second ifs to determine color
                 if room == self.get_room():
                     # Player is in the room? Yellow
-                    room_str = color(f"~Y{room_str}")
-                elif isinstance(room, Shrine):
-                    room_str = color(f"~W{room_str}")
+                    room_str = f"~Y{room_str}~e"
+                elif len(room.inv):
+                    # Room has any items in it? White
+                    room_str = f"~W{room_str}~e"
                 temp += room_str
 
             output += temp + "\n"
         return output
 
     def display_info(self, show_map=False):
-        """Displays Player info and Room info"""
-        if show_map:
-            return self.display_map() + "\n" + str(self.get_room())
-        else:
-            return "\n" + str(self.player) + "\n\n\n\n" + str(self.get_room())
+        """
+        Displays Player info and Room info,
+        formatted for the utils.display_screen function.
+
+        Returns an array containing:
+        - The map
+        - An empty string (No 'Info1' section)
+        - Player information
+        - Room information
+        """
+        return [
+            self.display_map(),
+            "",
+            str(self.player),
+            str(self.get_room())
+        ]

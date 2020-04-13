@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
 from classes.mixins import *
-from utils.colors import color
 from assets.guardian_poses import *
 from random import randint, choice
 
