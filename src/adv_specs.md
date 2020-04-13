@@ -170,6 +170,20 @@
 
 -   Battle Loop
     -   prints battle info 
+    -    ________________________________________________________________________________
+        |
+        |  (*)  +**+             Questions left: 5     Dankshlong's Inventory:             
+        |   Y___|##|==9\         Tries     left: 1       ( calculator )
+        |   8===]**[‾‾97                                 ( multip )
+        |   I   |][|                                     ( divid )
+        |   I   [][L
+        |
+        |  Multip Guardian
+        |  The Guardian of the Multip shrine.
+        |  Question: What is 2 + 17?
+        |
+        |  >> 
+        |
     -   new_battle.check_victory()
         -   If win, win()
         -   If loss, lose()
