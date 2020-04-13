@@ -27,23 +27,23 @@ def divid_guardian():
       I   |][|‾‾    
         __J/\\\__   
     """
-    stand = "~C(~B/~C)~e  -~B//~e-  8)  \n" +
-    " ~WY~e___|~r##~e|__9]  \n" +
-    " ~W8~e===]~B//~e[==97  \n" +
-    " ~WI~e‾‾‾|]~x[~e|‾‾    \n" +
-    " ~WI~e _~W_~e~wJ/~x\\~e\~W_~e_   \n"
+    stand = "~C(~B/~C)~e  -~B//~e-  8)  \n" + \
+        " ~WY~e___|~r##~e|__9]  \n" + \
+        " ~W8~e===]~B//~e[==97  \n" + \
+        " ~WI~e‾‾‾|]~x[~e|‾‾    \n" + \
+        " ~WI~e _~W_~e~wJ/~x\\~e\~W_~e_   \n"
 
-    correct = " ~WY~e   -~B//~e-  8)  \n" +
-    " ~W8~e‾=_|~r##~e|__9]  \n" +
-    " ~WI~e‾-=]~B//~e[==97  \n" +
-    " ~WI~e   |]~x[~e|‾‾    \n" +
-    "   _~W_~e~wJ/~x\\~e\~W_~e_   \n"
+    correct = " ~WY~e   -~B//~e-  8)  \n" + \
+        " ~W8~e‾=_|~r##~e|__9]  \n" + \
+        " ~WI~e‾-=]~B//~e[==97  \n" + \
+        " ~WI~e   |]~x[~e|‾‾    \n" + \
+        "   _~W_~e~wJ/~x\\~e\~W_~e_   \n"
 
-    incorrect = " ~RY~e   -~B//~e-  8)  \n" +
-    " ~R8~e‾=_|~r##~e|__9]  \n" +
-    " ~WI~e‾-=]~B//~e[==97  \n" +
-    " ~WI~e   |]~x[~e|‾‾    \n" +
-    "   _~W_~e~wJ/~x\\~e\~W_~e_   \n"
+    incorrect = " ~RY~e   -~B//~e-  8)  \n" + \
+        " ~R8~e‾=_|~r##~e|__9]  \n" + \
+        " ~WI~e‾-=]~B//~e[==97  \n" + \
+        " ~WI~e   |]~x[~e|‾‾    \n" + \
+        "   _~W_~e~wJ/~x\\~e\~W_~e_   \n"
 
     return {"stand": stand, "correct": correct, "incorrect": incorrect}
 
@@ -64,23 +64,23 @@ def multip_guardian():
       I   |][|      
           [][L      
     """
-    stand = "~C(~B*~C)~e  +~B**~e+      \n" +
-    " ~WY~e___|~r##~e|==9\  \n" +
-    " ~W8~e===]~B**~e[‾‾97  \n" +
-    " ~WI~e   |][|      \n" +
-    " ~WI~e   ~w[]~x[L~e      \n"
+    stand = "~C(~B*~C)~e  +~B**~e+      \n" + \
+        " ~WY~e___|~r##~e|==9\  \n" + \
+        " ~W8~e===]~B**~e[‾‾97  \n" + \
+        " ~WI~e   |][|      \n" + \
+        " ~WI~e   ~w[]~x[L~e      \n"
 
-    correct = " ~WY~e   +~B**~e+      \n" +
-    " ~W8~e‾=_|~r##~e|==9\  \n" +
-    " ~WI~e‾-=]~B**~e[‾‾97  \n" +
-    " ~WI~e   |][|      \n" +
-    "     ~w[]~x[L~e      \n"
+    correct = " ~WY~e   +~B**~e+      \n" + \
+        " ~W8~e‾=_|~r##~e|==9\  \n" + \
+        " ~WI~e‾-=]~B**~e[‾‾97  \n" + \
+        " ~WI~e   |][|      \n" + \
+        "     ~w[]~x[L~e      \n"
 
-    incorrect = " ~RY~e   +~B**~e+      \n" +
-    " ~R8~e‾=_|~r##~e|==9\  \n" +
-    " ~WI~e‾-=]~B**~e[‾‾97  \n" +
-    " ~WI~e   |][|      \n" +
-    "     ~w[]~x[L~e      \n"
+    incorrect = " ~RY~e   +~B**~e+      \n" + \
+        " ~R8~e‾=_|~r##~e|==9\  \n" + \
+        " ~WI~e‾-=]~B**~e[‾‾97  \n" + \
+        " ~WI~e   |][|      \n" + \
+        "     ~w[]~x[L~e      \n"
 
     return {"stand": stand, "correct": correct, "incorrect": incorrect}
 
@@ -101,23 +101,23 @@ def square_guardian():
       I   |][|      
           [][]      
     """
-    stand = "~C(~B^~C)~e  *~B^^~e*  ~W+*~e  \n" +
-    " ~WY~e___|~r##~e|__()  \n" +
-    " ~W8~e===]~B^^~e[==9~x7~e  \n" +
-    " ~WI~e   |][|      \n" +
-    " ~WI~e   ~w[]~x[]~e      \n"
+    stand = "~C(~B^~C)~e  *~B^^~e*  ~W+*~e  \n" + \
+        " ~WY~e___|~r##~e|__()  \n" + \
+        " ~W8~e===]~B^^~e[==9~x7~e  \n" + \
+        " ~WI~e   |][|      \n" + \
+        " ~WI~e   ~w[]~x[]~e      \n"
 
-    correct = " ~WY~e   *~B^^~e*  ~W+*~e  \n" +
-    " ~W8~e‾=_|~r##~e|__()  \n" +
-    " ~WI~e‾-=]~B^^~e[==9~x7~e  \n" +
-    " ~WI~e   |][|      \n" +
-    "     ~w[]~x[]~e      \n"
+    correct = " ~WY~e   *~B^^~e*  ~W+*~e  \n" + \
+        " ~W8~e‾=_|~r##~e|__()  \n" + \
+        " ~WI~e‾-=]~B^^~e[==9~x7~e  \n" + \
+        " ~WI~e   |][|      \n" + \
+        "     ~w[]~x[]~e      \n"
 
-    incorrect = " ~RY~e   *~B^^~e*  ~W+*~e  \n" +
-    " ~R8~e‾=_|~r##~e|__()  \n" +
-    " ~WI~e‾-=]~B^^~e[==9~x7~e  \n" +
-    " ~WI~e   |][|      \n" +
-    "     ~w[]~x[]~e      \n"
+    incorrect = " ~RY~e   *~B^^~e*  ~W+*~e  \n" + \
+        " ~R8~e‾=_|~r##~e|__()  \n" + \
+        " ~WI~e‾-=]~B^^~e[==9~x7~e  \n" + \
+        " ~WI~e   |][|      \n" + \
+        "     ~w[]~x[]~e      \n"
 
     return {"stand": stand, "correct": correct, "incorrect": incorrect}
 
@@ -138,23 +138,23 @@ def radical_guardian():
       I   |][|  ^^  
           ^^^^      
     """
-    stand = "~C(~B√~C)~e  ^~B√√~e^      \n" +
-    " ~WY~e___|~r##~e|==()  \n" +
-    " ~W8~e===]//[‾‾97  \n" +
-    " ~WI~e   |][|  ^^  \n" +
-    " ~WI~e   ~y^^^^~e      \n"
+    stand = "~C(~B√~C)~e  ^~B√√~e^      \n" + \
+        " ~WY~e___|~r##~e|==()  \n" + \
+        " ~W8~e===]//[‾‾97  \n" + \
+        " ~WI~e   |][|  ^^  \n" + \
+        " ~WI~e   ~y^^^^~e      \n"
 
-    correct = " ~WY~e   ^~B√√~e^      \n" +
-    " ~W8~e‾=_|~r##~e|==()  \n" +
-    " ~WI~e‾-=]//[‾‾97  \n" +
-    " ~WI~e   |][|  ^^  \n" +
-    "     ~y^^^^~e      \n"
+    correct = " ~WY~e   ^~B√√~e^      \n" + \
+        " ~W8~e‾=_|~r##~e|==()  \n" + \
+        " ~WI~e‾-=]//[‾‾97  \n" + \
+        " ~WI~e   |][|  ^^  \n" + \
+        "     ~y^^^^~e      \n"
 
-    incorrect = " ~RY~e   ^~B√√~e^      \n" +
-    " ~R8~e‾=_|~r##~e|==()  \n" +
-    " ~WI~e‾-=]//[‾‾97  \n" +
-    " ~WI~e   |][|  ^^  \n" +
-    "     ~y^^^^~e      \n"
+    incorrect = " ~RY~e   ^~B√√~e^      \n" + \
+        " ~R8~e‾=_|~r##~e|==()  \n" + \
+        " ~WI~e‾-=]//[‾‾97  \n" + \
+        " ~WI~e   |][|  ^^  \n" + \
+        "     ~y^^^^~e      \n"
 
     return {"stand": stand, "correct": correct, "incorrect": incorrect}
 
@@ -181,22 +181,22 @@ def artifact_guardian():
           |][|  ^^  
           ^^^^      
     """
-    stand = " ~C*~BA~C+~e *~B//~e*      \n" +
-    " ~W(8~X__~W|~e~r##~W|~X--~W9~e\  \n" +
-    " ~W(q~X==~W]~BAA~W[~X‾‾~W97~e  \n" +
-    "     ~W|]~X[|  ~Y^^~e  \n" +
-    "     ~Y^^^^~e      \n"
+    stand = " ~C*~BA~C+~e *~B//~e*      \n" + \
+        " ~W(8~X__~W|~e~r##~W|~X--~W9~e\  \n" + \
+        " ~W(q~X==~W]~BAA~W[~X‾‾~W97~e  \n" + \
+        "     ~W|]~X[|  ~Y^^~e  \n" + \
+        "     ~Y^^^^~e      \n"
 
-    correct = " ~W(8~e  *~B//~e*      \n" +
-    "  ~W\=~X\~W|~e~r##~W|~X--~W9~e\  \n" +
-    "   ~X`‾~W]~BAA~W[~X‾‾~W97~e  \n" +
-    "     ~W|]~X[|  ~Y^^~e  \n" +
-    "     ~Y^^^^~e      \n"
+    correct = " ~W(8~e  *~B//~e*      \n" + \
+        "  ~W\=~X\~W|~e~r##~W|~X--~W9~e\  \n" + \
+        "   ~X`‾~W]~BAA~W[~X‾‾~W97~e  \n" + \
+        "     ~W|]~X[|  ~Y^^~e  \n" + \
+        "     ~Y^^^^~e      \n"
 
-    incorrect = "     *~B//~e*      \n" +
-    " ~R*A+~e_~W|~e~r##~W|~X--~W9~e\  \n" +
-    "  ~WR~X==~W]~BAA~W[~X‾‾~W97~e  \n" +
-    "     ~W|]~X[|  ~Y^^~e  \n" +
-    "     ~Y^^^^      \n"
+    incorrect = "     *~B//~e*      \n" + \
+        " ~R*A+~e_~W|~e~r##~W|~X--~W9~e\  \n" + \
+        "  ~WR~X==~W]~BAA~W[~X‾‾~W97~e  \n" + \
+        "     ~W|]~X[|  ~Y^^~e  \n" + \
+        "     ~Y^^^^      \n"
 
     return {"stand": stand, "correct": correct, "incorrect": incorrect}
