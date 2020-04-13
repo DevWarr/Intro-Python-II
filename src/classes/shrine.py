@@ -6,6 +6,10 @@ class Shrine(Room):
     def __init__(self, name, description, inventory=None, guardian=None):
         super().__init__(name, description, inventory=inventory)
         self.__guardian = guardian
+        if self.__guardian is not None:
+            # If we initialize with a guardian,
+            # let the guardian know that this is its shrine
+            self.__guardian.shrine = self
 
     @property
     def guardian(self):
