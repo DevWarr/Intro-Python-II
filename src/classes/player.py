@@ -1,27 +1,39 @@
-# Write a class to hold player information, e.g. what room they are in
-# currently.
-from utils.colors import color
-
-
 class Player:
 
     def __init__(self, name, inv=None):
         self.name = name
         self.__inv = inv if inv else []
+        self.__max_inv = 4
 
     @property
     def inv(self): return [*self.__inv]
 
     @inv.setter
     def inv(self, array):
-        if len(array) <= 5:
+        """
+        Sets the player's entire inventory.
+
+        If the new inventory fits the max inventory 
+        size, assigns the inventory and returns True.
+
+        Else, returns False.
+        """
+        if len(array) <= self.__max_inv:
             self.__inv = array
+            return True
         else:
-            print("Inventory too big.")
+            return False
 
     def add_inv(self, item):
-        """If possible, Adds an item to the inventory"""
-        if len(self.__inv) >= 5:
+        """
+        Adds an item to the inventory.
+        
+        If the item would make the inventory too large,
+        returns False.
+        
+        Else, adds item and returns True.
+        """
+        if len(self.__inv) >= self.__max_inv:
             return False
         else:
             self.__inv.append(item)
@@ -29,10 +41,12 @@ class Player:
 
     def get_item(self, name):
         """
-        If possible, returns item from player inventory.
-        Else, returns None.
-        
+        If possible, retrieves item from player inventory.
         Casing does not matter.
+
+        If the item is found, returns the item.
+
+        Else, returns None.
         """
         for item in self.__inv:
             if item.name.lower() == name:
@@ -42,8 +56,12 @@ class Player:
     def remove_item(self, name):
         """
         If possible, removes item from player inventory.
-        
         Casing does not matter.
+
+        If the item is found, removes the item 
+        from the inventory and returns the item.
+
+        Else, returns None.
         """
         for item in self.__inv:
             if item.name.lower() == name:
@@ -52,14 +70,27 @@ class Player:
         return None
 
     def show_inv(self):
-        """Outputs all item names from the inventory as a string"""
+        """
+        Outputs all item names from the inventory as a string.
+        
+        Formats items with 2 space indentation like so:
+          Player's Inventory
+            ( item1 )
+            ( item2 )
+            ( Big butter sword )
+
+        If there are no items, returns "empty".
+        """
         out = ""
         if len(self.__inv) == 0:
-            out += color("~xempty")
+            out += "  ~xempty~e"
         else:
-            item_names = [str(item) for item in self.__inv]
-            out += ", ".join(item_names)
-        return f"[ {out} ]"
+            # Creates an array with
+            #   ↓↓ indent  spacing ↓↓
+            # ["  ~c( item1 )~e", "  ~c( item2 )~e"]
+            item_names = [f"  ~c( {str(item)} )~e" for item in self.__inv]
+            out += "\n".join(item_names)
+        return out
 
     def __str__(self):
-        return color(f"~WName~e {self.name}\n~WInventory~e {self.show_inv()}")
+        return f"~W{self.name}'s Inventory:~e\n{self.show_inv()}"
