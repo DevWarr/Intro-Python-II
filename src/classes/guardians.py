@@ -28,7 +28,7 @@ class Guardian():
         This includes decreasing the question_count,
         and setting a required_item if necessary.
         """
-        self.battle.question = None
+        raise NotImplementedError
 
     def win(self):
         """Resets the battle property to None."""
@@ -46,7 +46,7 @@ class MultipGuardian(CanAdd, Guardian):
     """Asks addition questions. Drops the Multip sign."""
 
     def __init__(self):
-        super().__init__("Multip Guardian", "Guardian of the Multip Shrine", multip_guardian())
+        super().__init__("Multip Guardian", "Guardian of the Multip Shrine. Keep your guard!", multip_guardian())
 
     def create_question(self):
         if self.battle.question_count > 3:
@@ -61,14 +61,13 @@ class MultipGuardian(CanAdd, Guardian):
         [self.battle.question, self.battle.answer] = problem
 
     def next_question_prep(self):
-        super().next_question_prep()
         self.battle.question_count -= 1
 
 
 class DividGuardian(CanSubtract, Guardian):
 
     def __init__(self):
-        super().__init__("Divid Guardian", "Guardian of the Divid Shrine", divid_guardian())
+        super().__init__("Divid Guardian", "Guardian of the Divid Shrine. Keep it sleek, slick.", divid_guardian())
 
     def create_question(self):
         if self.battle.question_count > 3:
@@ -83,5 +82,155 @@ class DividGuardian(CanSubtract, Guardian):
         [self.battle.question, self.battle.answer] = problem
 
     def next_question_prep(self):
-        super().next_question_prep()
         self.battle.question_count -= 1
+
+
+class SquareGuardian(CanAdd, CanMultiply, Guardian):
+
+    def __init__(self):
+        super().__init__("Square Guardian", "Guardian of the Square Shrine. Stay happy, stay civil!", square_guardian())
+
+    def create_question(self):
+        """
+        Creates a unique question for each question_count:
+        - 5 → addition(easy)
+        - 4 → addition(med)
+        - 3 → addition(hard)
+        - 2 → multiplication(easy)
+        - 1 → multiplication(hard)
+        """
+        if self.battle.question_count == 5:
+            problem = self.addition(0)
+        elif self.battle.question_count == 4:
+            problem = self.addition(1)
+        elif self.battle.question_count == 3:
+            problem = self.addition(2)
+        elif self.battle.question_count == 2:
+            problem = self.multiplication(0)
+        else:
+            problem = self.multiplication(1)
+
+        [self.battle.question, self.battle.answer] = problem
+
+    def next_question_prep(self):
+        self.battle.question_count -= 1
+        if self.battle.question_count == 2:
+            self.battle.required_item = "Multip"
+
+
+class RadicalGuardian(CanAdd, CanSubtract, CanSquare, CanDivide, Guardian):
+
+    def __init__(self):
+        super().__init__("Radical Guardian", "Guardian of the Radical Shrine. Radical!!!", radical_guardian())
+
+    def create_question(self):
+        """
+        Creates a unique question for each question_count:
+        - 5 → addition(med)
+        - 4 → subtraction(hard)
+        - 3 → square(hard)
+        - 2 → divide(med)
+        - 1 → divide(hard)
+        """
+        if self.battle.question_count == 5:
+            problem = self.addition(1)
+        elif self.battle.question_count == 4:
+            problem = self.subtraction(2)
+        elif self.battle.question_count == 3:
+            problem = self.square(2)
+        elif self.battle.question_count == 2:
+            problem = self.division(1)
+        else:
+            problem = self.division(2)
+
+        [self.battle.question, self.battle.answer] = problem
+
+    def next_question_prep(self):
+        self.battle.question_count -= 1
+        if self.battle.question_count == 3:
+            self.battle.required_item = "Square"
+
+        if self.battle.question_count == 2:
+            self.battle.required_item = "Divid"
+
+
+class ArtifactGuardian(CanMultiply, CanSquare, CanDivide, CanRoot, CanAdd, CanSubtract, Guardian):
+
+    def __init__(self):
+        super().__init__("Artifact Guardian", "The final challenge! If you ~Wrun away~e~g, your questions ~Gwon't~e~g get reset.", artifact_guardian())
+        # The artifact Guardian holds it's own questions and tries.
+        # You can run away and the question count won't go down.
+        self.question_count = 10
+        self.try_count = 3
+    
+    def prep_quiz(self):
+        """
+        Sets the battle's try count and question count
+        to the Guardian's saved values.
+
+        This allows the player to run away and come back
+        without resetting their questions. 
+        """
+        self.battle.try_count = self.try_count
+        self.battle.question_count = self.question_count + 1
+        # We set question_count + 1 because next_question_prep
+        # will decrease it by one automatically
+        self.next_question_prep()
+
+    def create_question(self):
+        """
+        Creates a unique question for each question_count:
+        - 10 → multiplication(hard)
+        - 9  → multiplication(hard)
+        - 8  → square(med)
+        - 7  → square(hard)
+        - 6  → division(hard)
+        - 5  → division(hard)
+        - 4  → root(med)
+        - 3  → root(hard)
+        - 2  → addition(hard)
+        - 1  → subtraction(hard)
+        """
+        if self.battle.question_count > 8:
+            problem = self.multiplication(2)
+
+        elif self.battle.question_count > 7:
+            problem = self.square(1)
+        elif self.battle.question_count > 6:
+            problem = self.square(2)
+
+        elif self.battle.question_count > 4:
+            problem = self.division(2)
+
+        elif self.battle.question_count > 3:
+            problem = self.root(1)
+        elif self.battle.question_count > 2:
+            problem = self.root(2)
+
+        elif self.battle.question_count > 1:
+            problem = self.addition(2)
+        else:
+            problem = self.subtraction(2)
+
+        [self.battle.question, self.battle.answer] = problem
+
+    def next_question_prep(self):
+        self.battle.question_count -= 1
+        if self.battle.question_count == 10:
+            self.battle.required_item = "Multip"
+
+        if self.battle.question_count == 8:
+            self.battle.required_item = "Square"
+
+        if self.battle.question_count == 6:
+            self.battle.required_item = "Divid"
+
+        if self.battle.question_count == 4:
+            self.battle.required_item = "Radical"
+
+        if self.battle.question_count == 2:
+            self.battle.required_item = "Calculator"
+
+    def win(self):
+        self.question_count = self.battle.question_count
+        super().win()

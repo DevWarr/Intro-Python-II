@@ -52,7 +52,8 @@ def battle(battle):
 
         if user_in[0] == "q":
             sound_player.play_track(5)
-            sure = input("Quit the Game. Are you sure? [Y/N]>> ").lower().strip()
+            sure = input(
+                "Quit the Game. Are you sure? [Y/N]>> ").lower().strip()
             if sure == "y":
                 music_player.stop_track()
                 sound_player.stop_track()
@@ -139,6 +140,9 @@ def battle(battle):
         # Winning the battle
         sound_player.play_track(1)
         print_and_wait(f"~YYou defeated the ~W{battle.guardian.name}~Y!", 2)
+        if battle.guardian.name[:8] == "Artifact":
+            # Stop music for dramatic moment
+            music_player.stop_track()
     else:
         # Losing the battle
         sound_player.play_track(0)
@@ -229,7 +233,8 @@ def game(adv):
                     break
                 else:
                     sound_player.play_track(6)
-                    print_and_wait(f"~RYou can't use ~e~c({success[1]}) ~Rhere.")
+                    print_and_wait(
+                        f"~RYou can't use ~e~c({success[1]}) ~Rhere.")
             else:
                 sound_player.play_track(6)
                 print_and_wait(
@@ -238,7 +243,7 @@ def game(adv):
             # Invalid input
             sound_player.play_track(6)
             print_and_wait("~RInvalid input. Please try again . . .", 1)
-    
+
     if credits_bool:
         # Clear the screen, cut the music
         display_screen("", "", "", "", "")
@@ -248,7 +253,8 @@ def game(adv):
         time.sleep(0.6)
 
         # Display credits with the correct jingle
-        display_screen("", "\n\n\n~WThanks for playing!~e\n  - Devin Warrick", "", "", "")
+        display_screen(
+            "", "\n\n\n~WThanks for playing!~e\n  - Devin Warrick", "", "", "")
         sound_player.play_track(2)
         time.sleep(3)
     exit()
@@ -289,7 +295,7 @@ def intro():
         else:
             # Valid input? Use it as the name
             player = Player(
-                user_in, [Item("Calculator", "Simple Calculator. Can add and subtract."), Item("Artifact")])
+                user_in, [Item("Calculator", "Simple Calculator. Can add and subtract.")])
             music_player.stop_track()
             sound_player.play_track(5)
             for i in range(0, 6):
