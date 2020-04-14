@@ -15,8 +15,10 @@ ansi_table = {
     'P': '\u001b[35;1m',
     'C': '\u001b[36;1m',
     'W': '\u001b[37;1m',
-    'e': '\u001b[0m'
+    'e': '\u001b[0m',
+    '‾': '\u203e'
 }
+
 
 def color(msg):
     """
@@ -28,20 +30,30 @@ def color(msg):
     Backslashes currently will not escape tildes.
     """
     out = ""
-    for i,v in enumerate(msg):
+    for i, v in enumerate(msg):
+
+        # Extra support: Turns the
+        # ‾ character into it's unicode
+        # equivalent for printing safety
+        if v == "‾":
+            out += ansi_table.get(v, "")
+
         # If we have a tilde,
         # the next letter is a color code.
         # Get that color code from our dict,
         # or return nothing if it cannot be found.
-        if v == "~":
+        elif v == "~":
             color = msg[i+1]
-            out +=  ansi_table.get(color, "")
+            out += ansi_table.get(color, "")
         # If the letter comes directly after a tilde,
         # it is a color code. Skip it.
-        elif msg[i-1] == "~": pass
+        elif msg[i-1] == "~":
+            pass
         # Otherwise, add the letters to the output.
-        else: out += v
+        else:
+            out += v
     return out + ansi_table["e"]
+
 
 def color_test():
     text = "Hello World!"
@@ -57,6 +69,6 @@ if __name__ == "__main__":
     while True:
         user_in = input("types some things!")
         if user_in == "quit":
-            break;
+            break
         print(user_in)
         sleep(1)
