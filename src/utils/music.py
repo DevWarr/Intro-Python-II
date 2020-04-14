@@ -116,5 +116,6 @@ class SoundPlayer(Player):
         -   4 -> monster spawn
         -   5 -> menu sound
         -   6 -> menu fail
+        -   7 -> run away
         """
         return super().play_track(num=num, loop=loop)

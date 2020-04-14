@@ -10,9 +10,10 @@ music_files = [
 sound_files = [
     os.path.join(FILEPATH, "Damage.wav"),        # 0
     os.path.join(FILEPATH, "MonsterDeath.wav"),  # 1
-    os.path.join(FILEPATH, "MonsterSpawn.wav"),  # 2
-    os.path.join(FILEPATH, "Correct.wav"),       # 3
-    os.path.join(FILEPATH, "Incorrect.wav"),     # 4
+    os.path.join(FILEPATH, "Correct.wav"),       # 2
+    os.path.join(FILEPATH, "Incorrect.wav"),     # 3
+    os.path.join(FILEPATH, "MonsterSpawn.wav"),  # 4
     os.path.join(FILEPATH, "MenuSound.wav"),     # 5
-    os.path.join(FILEPATH, "MenuFail.wav")      # 6
+    os.path.join(FILEPATH, "MenuFail.wav"),      # 6
+    os.path.join(FILEPATH, "RunAway.wav")        # 7
 ]
