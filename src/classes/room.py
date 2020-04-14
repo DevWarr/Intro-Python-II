@@ -1,8 +1,3 @@
-# Implement a class to hold room information. This should have name and
-# description attributes.
-from utils.colors import color
-
-
 class Room:
 
     def __init__(self, name, description, inventory=None):
@@ -11,12 +6,19 @@ class Room:
         self.inv = inventory if inventory else []
 
     def show_inv(self):
-        """Outputs all item names from the inventory as a string"""
+        """
+        Outputs all item names from the inventory as a string, formatted like so:
+
+            [ (item1), (item2), (Big butter sword) ]
+
+        If inventory is empty, returns 
+            [ empty ]
+        """
         out = ""
         if len(self.inv) == 0:
-            out += color("~xempty")
+            out += "~xempty~e"
         else:
-            item_names = [str(item) for item in self.inv]
+            item_names = [f"~c({str(item)})~e" for item in self.inv]
             out += ", ".join(item_names)
         return f"[ {out} ]"
 
@@ -24,6 +26,11 @@ class Room:
         """
         If possible, removes item from room.
         Casing does not matter.
+
+        If the item is found, removes the item 
+        from the inventory and returns the item.
+
+        Else, returns None.
         """
         for item in self.inv:
             if item.name.lower() == name:
@@ -32,8 +39,8 @@ class Room:
         return None
 
     def add_item(self, item):
-        """Adds item to room"""
+        """Adds item to room."""
         self.inv.append(item)
 
     def __str__(self):
-        return color(f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.show_inv()}")
+        return f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.show_inv()}"

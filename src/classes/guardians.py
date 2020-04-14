@@ -1,21 +1,21 @@
 from abc import ABCMeta, abstractmethod
 from classes.mixins import *
-from utils.colors import color
 from assets.guardian_poses import *
-from random import randint, choice
 
 
 class Guardian():
     """Parent Guardian Class. All Guardians derive from this class."""
 
-    def __init__(self, name, pose_creator):
+    def __init__(self, name, description, pose_dict):
         self.name = name
+        self.description = description
         self.shrine = None
         self.battle = None
-        self.poses = pose_creator()
+        self.poses = pose_dict
 
     def prep_quiz(self):
-        self.battle.required_item = "calculator"
+        """Sets the calculator as the initially required item."""
+        self.battle.required_item = "Calculator"
 
     def create_question(self):
         """Creates a new question to ask the player"""
@@ -28,7 +28,7 @@ class Guardian():
         This includes decreasing the question_count,
         and setting a required_item if necessary.
         """
-        raise NotImplementedError
+        self.battle.question = None
 
     def win(self):
         """Resets the battle property to None."""
@@ -38,12 +38,15 @@ class Guardian():
         """Detaches self from the shrine room."""
         self.shrine.guardian = None
 
+    def __str__(self):
+        return f"~W{self.name}\n~e~g{self.description}~e"
+
 
 class MultipGuardian(CanAdd, Guardian):
     """Asks addition questions. Drops the Multip sign."""
 
     def __init__(self):
-        super().__init__("Multip Guardian", multip_guardian())
+        super().__init__("Multip Guardian", "Guardian of the Multip Shrine", multip_guardian())
 
     def create_question(self):
         if self.battle.question_count > 3:
@@ -55,16 +58,17 @@ class MultipGuardian(CanAdd, Guardian):
         else:
             # Last two questions? Difficulty hard
             problem = self.addition(2)
-        [self.battle.answer, self.battle.question] = problem
+        [self.battle.question, self.battle.answer] = problem
 
     def next_question_prep(self):
+        super().next_question_prep()
         self.battle.question_count -= 1
 
 
 class DividGuardian(CanSubtract, Guardian):
 
     def __init__(self):
-        super().__init__("Divid Guardian", divid_guardian())
+        super().__init__("Divid Guardian", "Guardian of the Divid Shrine", divid_guardian())
 
     def create_question(self):
         if self.battle.question_count > 3:
@@ -76,7 +80,8 @@ class DividGuardian(CanSubtract, Guardian):
         else:
             # Last two questions? Difficulty hard
             problem = self.subtraction(2)
-        [self.battle.answer, self.battle.question] = problem
+        [self.battle.question, self.battle.answer] = problem
 
     def next_question_prep(self):
+        super().next_question_prep()
         self.battle.question_count -= 1

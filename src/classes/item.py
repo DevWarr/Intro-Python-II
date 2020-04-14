@@ -1,5 +1,3 @@
-from utils.colors import color
-
 class Item:
 
     def __init__(self, name, description=None):
@@ -7,7 +5,7 @@ class Item:
         self.description = description if description else ""
 
     def full_description(self):
-        return color(f"~W{self.name}:~e\n{self.description}")
+        return f"~C({self.name})~W:~e {self.description}"
 
     def __str__(self):
         return self.name

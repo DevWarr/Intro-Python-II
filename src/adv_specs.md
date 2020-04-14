@@ -167,9 +167,24 @@
     -   If yes, Map returns the guardian
     -   game() loop then creates a new Battle(player, guardian, map)
     -   game() loop calls battle(new_battle)
+    -   Prints a message to the user that they are entering battle
 
 -   Battle Loop
     -   prints battle info 
+    -    ________________________________________________________________________________
+        |
+        |  (*)  +**+             Questions left: 5     Dankshlong's Inventory:             
+        |   Y___|##|==9\         Tries     left: 1       ( calculator )
+        |   8===]**[‾‾97                                 ( multip )
+        |   I   |][|                                     ( divid )
+        |   I   [][L
+        |
+        |  Multip Guardian
+        |  The Guardian of the Multip shrine.
+        |  Question: What is 2 + 17?
+        |
+        |  >> 
+        |
     -   new_battle.check_victory()
         -   If win, win()
         -   If loss, lose()

@@ -1,3 +1,8 @@
+# Code initially from https://github.com/TaylorSMarks/playsound
+# Added functionality:
+#     when not blocking code, returns a dictionary
+#     with the duration of the track, and a stop function
+
 from platform import system
 
 
