@@ -8,6 +8,7 @@ from utils.music import MusicPlayer, SoundPlayer
 from utils.display_screen import display_screen, print_and_wait, fade_out
 from assets.guardian_poses import multip_guardian
 from os import terminal_size
+from multiprocessing import freeze_support
 import time
 
 music_player = MusicPlayer()
@@ -312,7 +313,8 @@ def intro():
 
 
 if __name__ == "__main__":
-
+    # A Windows fix to allow multiprocessing
+    freeze_support()
     # Wrap everything in a try/except, so if an error is thrown
     #     we stop our players and exit peacefully
     try:
