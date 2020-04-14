@@ -42,3 +42,21 @@ def color(msg):
         # Otherwise, add the letters to the output.
         else: out += v
     return out + ansi_table["e"]
+
+def color_test():
+    text = "Hello World!"
+    for key in ansi_table:
+        print(ansi_table[key] + text)
+
+
+if __name__ == "__main__":
+    from os import system
+    from time import sleep
+    system("cls||clear")
+    color_test()
+    while True:
+        user_in = input("types some things!")
+        if user_in == "quit":
+            break;
+        print(user_in)
+        sleep(1)
