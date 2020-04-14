@@ -1,6 +1,7 @@
 from utils.colors import color
-import re
 from os import system
+from time import sleep
+import re
 
 
 def format_string_block(string_block, width, height):
@@ -13,7 +14,7 @@ def format_string_block(string_block, width, height):
     """
     
     # Turn the string block into an array of strings
-    str_array = string_block.strip().split("\n")
+    str_array = string_block.split("\n")
     if len(str_array) < height:
         # If our array isn't as long as our height,
         # add in extra lines of space so it does
@@ -35,19 +36,18 @@ def format_string_block(string_block, width, height):
 
     return str_array
 
-
-def display_screen(img, info1, info2, text, controls):
+def prep_screen(img, info1, info2, text, controls):
     """
     Takes text blocks for different segments of the 
     terminal screen, and formats them all in the correct place.
 
     Blocks of space in the terminal (width 80 x height 14):
       ________________________________________________________________________________
-     |[                    ][                    ][                                  ]
-     |[                    ][                    ][                                  ]
-     |[       Image        ][        Info1       ][             Info2                ]
-     |[                    ][                    ][                                  ]
-     |[____________________][____________________][__________________________________]
+     |[                    ][                       ][                               ]
+     |[                    ][                       ][                               ]
+     |[       Image        ][        Info1          ][          Info2                ]
+     |[                    ][                       ][                               ]
+     |[____________________][_______________________][_______________________________]
      | ______________________________________________________________________________
      |[                                                                              ]
      |[       Text   -   -   -   -   -   -   -   -   -   -                           ]
@@ -63,8 +63,8 @@ def display_screen(img, info1, info2, text, controls):
     """
     # properly format each block
     img = format_string_block(img, 22, 5)
-    info1 = format_string_block(info1, 22, 5)
-    info2 = format_string_block(info2, 36, 5)
+    info1 = format_string_block(info1, 25, 5)
+    info2 = format_string_block(info2, 33, 5)
 
     text = format_string_block(text, 80, 3)
     controls = format_string_block(controls, 80, 1)
@@ -74,17 +74,39 @@ def display_screen(img, info1, info2, text, controls):
         # Add our three code blocks together, one by one
         output += img[i] + info1[i] + info2[i] + "\n"
 
-    ouput += "\n"
+    output += "\n"
     for i in range(0, 3):
         # Add our lower text information
-        output += text[i]
+        output += text[i] + "\n"
 
-    # Add our controls
-    output += "\n" + controls
+    # Add our controls and return
+    # controls have a height of 1, so we just need index [0] 
+    return output + "\n" + controls[0] + "\n"
 
+def display_screen(img, info1, info2, text, controls):
+    """prints the prep_screen's output to the screen."""
+
+    output = prep_screen(img, info1, info2, text, controls)
     # Clear the screen, and then print our output with the color function
     system('cls||clear')
+    string = color(output)
+    # print(string[290:300])
     print(color(output))
+
+def fade_out(img, info1, info2, text, controls):
+    """
+    Takes the prep_screen's output, 
+    and fades out the output line by line, 
+    from the top of the screen.
+    """
+    output_array = prep_screen(img, info1, info2, text, controls).split("\n")
+    for i in range(0, len(output_array)):
+        output_array[i] = ""
+        fading_output = "\n".join(output_array)
+        system('cls||clear')
+        print(color(fading_output))
+        sleep(0.05)
+    sleep(0.25)
 
 def print_and_wait(msg, sec_to_wait=None):
     """
@@ -94,15 +116,15 @@ def print_and_wait(msg, sec_to_wait=None):
     word_count = len(msg.split(" "))
     if sec_to_wait is None:
         sec_to_wait = max(1, word_count/2.5 - 1)
-    time.sleep(sec_to_wait)
+    sleep(sec_to_wait)
 
 
 # not functional ?
 def display_load(total_time=1, text=""):
-        """Displays a loading spinner underneath a message"""
-        spinner = "\|/-"
-        for i in range(0, total_time*10):
-            print(text)
-            print(color(f"~X{spinner[i % 4]}"))
-            time.sleep(0.1)
-        return
+    """Displays a loading spinner underneath a message"""
+    spinner = "\|/-"
+    for i in range(0, total_time*10):
+        print(text)
+        print(color(f"~X{spinner[i % 4]}"))
+        sleep(0.1)
+    return
