@@ -1,7 +1,7 @@
 from classes.room import Room
 from classes.shrine import Shrine
 from classes.item import Item
-from classes.guardians import MultipGuardian, DividGuardian
+from classes.guardians import *
 
 
 # 0 -> Empty space
@@ -19,11 +19,11 @@ room_template = [
     ["Divid Shrine", "The Shrine of the Divid sign, granting the power of division.", [
         Item("Divid")], DividGuardian()],
     ["Square Shrine", "The Shrine of the Square sign, granting the power of squaring.", [
-        Item("Square")]],
+        Item("Square")], SquareGuardian()],
     ["Radical Shrine", "The Shrine of the Radical sign, granting the power of square and cube rooting.", [
-        Item("Radical")]],
+        Item("Radical")], RadicalGuardian()],
     ["Artifact Shrine", "The Shrine of the Ancient Mathematical Artifact! Grab it, and get out of here!", [
-        Item("Artifact")]]
+        Item("Artifact")], ArtifactGuardian()]
 ]
 room_sign = {
     "empty":    "   ",
@@ -93,7 +93,6 @@ class Map:
             else:
                 # Use the values from the room_template to create a new room
                 rooms.append(Shrine(*room_template[room_id]))
-        print(rooms)
         return rooms
 
     def confirm_direction(self, y, x):
@@ -223,7 +222,7 @@ class Map:
                 # First ifs to determine string
                 if room is None:
                     room_str = room_sign["empty"]
-                elif room.name[:8].lower() == "artifact":
+                elif room.name[:8] == "Artifact":
                     room_str = room_sign["artifact"]
                 elif isinstance(room, Shrine):
                     room_str = room_sign["shrine"]
@@ -257,7 +256,7 @@ class Map:
         """
         return [
             self.display_map(),
-            "",
+            "[ ] Room\n[S] Shrine\n[A] Artifact Shrine\n~W[ ]~e Has Item\n~Y[ ]~e You are here",
             str(self.player),
             str(self.get_room())
         ]

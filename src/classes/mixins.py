@@ -68,7 +68,7 @@ class CanDivide:
         num2 = 0
         while True:
             if difficulty == 0:
-                num1 = randint(2, 20)
+                num1 = randint(6, 20)
                 num2 = randint(2, int(num1/2))
             elif difficulty == 1:
                 num1 = randint(15, 50)
@@ -96,11 +96,11 @@ class CanMultiply:
         num1 = 0
         num2 = 0
         if difficulty == 0:
-            num1 = randint(0, 5)
-            num2 = randint(0, 5)
+            num1 = randint(3, 9)
+            num2 = randint(3, 9)
         elif difficulty == 1:
-            num1 = randint(0, 10)
-            num2 = randint(0, 10)
+            num1 = randint(3, 14)
+            num2 = randint(3, 14)
         else:
             num1 = randint(4, 20)
             num2 = randint(4, 20)
@@ -166,9 +166,9 @@ class CanRoot:
 
         if is_square:
             root = "~Wsquare~e"
-            answer = int(num1 ** (1/2))
+            answer = int(num ** (1/2))
         else:
             root = "~Wcube~e"
-            answer = int(num1 ** (1/3))
-        question = f"What is the {root} root of ~W{num1}~e?"
+            answer = int(num ** (1/3))
+        question = f"What is the {root} root of ~W{num}~e?"
         return [question, answer]

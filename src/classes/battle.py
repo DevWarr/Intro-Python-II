@@ -40,7 +40,7 @@ class Battle:
             print(self.required_item)
             if self.required_item is not None:
                 # Required item? Create a question for it
-                self.question = f"~W{self.guardian.name}~e is requesting you use ~c({self.required_item})"
+                self.question = f"~W{self.guardian.name}~e is requesting you use ~c({self.required_item})~e"
 
             else:
                 # Otherwise, call create_question()
@@ -60,7 +60,7 @@ class Battle:
             return (None,)
         elif item.name == self.required_item:
             self.required_item = None
-            self.guardian.next_question_prep()
+            self.question = None
             return (True, item.name)
         else:
             self.try_count -= 1
@@ -79,6 +79,7 @@ class Battle:
         """
         if answer == self.answer:
             self.answer = None
+            self.question = None
             self.guardian.next_question_prep()
             return True
         else:
