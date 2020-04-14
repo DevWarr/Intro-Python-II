@@ -1,3 +1,5 @@
+from random import randint, choice
+
 
 class CanAdd:
     """Mixin to allow addition"""
@@ -19,7 +21,7 @@ class CanAdd:
         else:
             num1 = randint(15, 100)
             num2 = randint(15, 100)
-        answer = str(num1 + num2)
+        answer = num1 + num2
         question = f"What is ~W{num1}~e plus ~W{num2}~e?"
         return [question, answer]
 
@@ -48,7 +50,7 @@ class CanSubtract:
 
             if not num1 - num2 < 0:
                 break
-        answer = str(num1 - num2)
+        answer = num1 - num2
         question = f"What is ~W{num1}~e minus ~W{num2}~e?"
         return [question, answer]
 
@@ -77,7 +79,7 @@ class CanDivide:
 
             if num1 % num2 == 0:
                 break
-        answer = str(num1 / num2)
+        answer = num1 // num2
         question = f"What is ~W{num1}~e divided by ~W{num2}~e?"
         return [question, answer]
 
@@ -102,7 +104,7 @@ class CanMultiply:
         else:
             num1 = randint(4, 20)
             num2 = randint(4, 20)
-        answer = str(num1 * num2)
+        answer = num1 * num2
         question = f"What is ~W{num1}~e times ~W{num2}~e?"
         return [question, answer]
 
@@ -133,7 +135,7 @@ class CanSquare:
         else:
             second_half = "~Wcubed~e"
         question = f"What is ~W{num1}~e {second_half}?"
-        answer = str(num1 ** num2)
+        answer = num1 ** num2
         return [question, answer]
 
 
@@ -164,9 +166,9 @@ class CanRoot:
 
         if is_square:
             root = "~Wsquare~e"
-            answer = str(int(num1 ** (1/2)))
+            answer = int(num1 ** (1/2))
         else:
             root = "~Wcube~e"
-            answer = str(int(num1 ** (1/3)))
+            answer = int(num1 ** (1/3))
         question = f"What is the {root} root of ~W{num1}~e?"
         return [question, answer]
