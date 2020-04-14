@@ -93,7 +93,6 @@ class Map:
             else:
                 # Use the values from the room_template to create a new room
                 rooms.append(Shrine(*room_template[room_id]))
-        print(rooms)
         return rooms
 
     def confirm_direction(self, y, x):
