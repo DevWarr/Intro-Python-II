@@ -40,7 +40,7 @@ class Battle:
             print(self.required_item)
             if self.required_item is not None:
                 # Required item? Create a question for it
-                self.question = f"~W{self.guardian.name}~e is requesting you use ~c({self.required_item})"
+                self.question = f"~W{self.guardian.name}~e is requesting you use ~c({self.required_item})~e"
 
             else:
                 # Otherwise, call create_question()
