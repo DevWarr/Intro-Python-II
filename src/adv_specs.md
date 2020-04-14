@@ -167,6 +167,7 @@
     -   If yes, Map returns the guardian
     -   game() loop then creates a new Battle(player, guardian, map)
     -   game() loop calls battle(new_battle)
+    -   Prints a message to the user that they are entering battle
 
 -   Battle Loop
     -   prints battle info 
