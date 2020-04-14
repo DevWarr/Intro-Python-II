@@ -2,7 +2,7 @@
 
 You're an explorer, You see!
 
-We've come down to this quiet cave in search of the **Ancient Mathematiacl Artifact.** It's said to have mystical powers and intelligence beyond all current knowledge!
+We've come down to this quiet cave in search of the **Ancient Mathematical Artifact.** It's said to have mystical powers and intelligence beyond all current knowledge!
 
 Find the Artifact, and bring it back from the dungeon! But watch out: There are several guardians that have been said to protect the shrines of this mystical, mathematical, maze . . .
 
@@ -16,7 +16,11 @@ git clone https://github.com/DevWarr/Intro-Python-II.git
 ```
 
 navigate into the `src` directory:
-```cd src```
+```
+cd src
+```
 
 Use python to run the `adv.py` file:
-```python3 adv.py```
+```
+python3 adv.py
+```
