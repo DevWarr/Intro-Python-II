@@ -81,7 +81,7 @@ def prep_screen(img, info1, info2, text, controls):
 
     # Add our controls and return
     # controls have a height of 1, so we just need index [0] 
-    return output + "\n" + controls[0] + "\n"
+    return "\n" + output + "\n" + controls[0]
 
 def display_screen(img, info1, info2, text, controls):
     """prints the prep_screen's output to the screen."""
