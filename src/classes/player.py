@@ -94,3 +94,18 @@ class Player:
 
   def __str__(self):
     return f"~W{self.name}'s Inventory:~e\n{self.show_inv()}"
+
+
+class GamePlayer(Player):
+
+  def __init__(self, name):
+    super().__init__(
+        name, [Item("Calculator", "Simple Calculator. Can add and subtract.")])
+
+
+class DebugPlayer(Player):
+
+  def __init__(self, name):
+    super().__init__(
+        name, [Item("Calculator", "Simple Calculator. Can add and subtract."),
+               Item("Artifact", "Simple Calculator. Can add and subtract.")])
