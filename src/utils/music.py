@@ -14,12 +14,19 @@ class Player:
     """
 
     def __init__(self, album):
+        self.on = True
         self.album = album
         self.current_track = None
         # Process of the current track, if we're looping
         self.process = None
         # stop() function to stop playback
         self.stop = None
+
+    def turn_off(self):
+        self.on = False
+
+    def turn_on(self):
+        self.on = True
 
     def start(self, wait=False):
         """
@@ -52,6 +59,8 @@ class Player:
         If loop is set to true, creates a separate
         process to auto loop the track in the background.
         """
+        if not self.on:
+            return
         if not (0 <= num < len(self.album)):
             # If our track number isn't in our album, return
             return
