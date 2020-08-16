@@ -105,6 +105,8 @@ class MusicPlayer(Player):
     -   0 -> main_track
     -   1 -> intro_track
     """
+    if self.album[num] == self.current_track:
+      return
     if self.current_track is not None:
       super().stop_track()
     return super().play_track(num=num, loop=loop)
