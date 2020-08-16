@@ -6,6 +6,7 @@ from classes.battle import Battle
 from utils.colors import color
 from utils.music import MusicPlayer, SoundPlayer
 from utils.display_screen import display_screen, print_and_wait, fade_out
+from views.controls_view import Controls
 from assets.guardian_poses import multip_guardian
 from os import terminal_size
 from multiprocessing import freeze_support
@@ -14,6 +15,7 @@ import time
 music_player = MusicPlayer()
 sound_player = SoundPlayer()
 
+music_player.turn_off()
 
 def is_direction(val) -> bool:
     """Returns true if a cardinal direction"""
@@ -34,7 +36,7 @@ def battle(battle):
     # Tell the guardian to prep the quiz with the initially required item
     battle.guardian.prep_quiz()
 
-    controls = "Type the ~Wanswer~e to the question, ~Wuse ~e~c(item)~e, or ~Wrun away~e!"
+    control_enum = Controls.BATTLE
     win_or_lose = None
 
     while True:
@@ -48,7 +50,7 @@ def battle(battle):
         # Create a question
         battle.create_question()
         # Display battle info and wait for input
-        display_screen(*battle.display_info(), controls)
+        display_screen(*battle.display_info(), control_enum)
         user_in = input(">> ").lower().strip().split(" ")
 
         if user_in[0] == "q":
@@ -89,14 +91,14 @@ def battle(battle):
                     item_name = correct_item[1]
                     sound_player.play_track(2)
                     display_screen(*battle.display_info("correct"),
-                                   controls)
+                                   control_enum)
                     print_and_wait(f"~WYou used ~e~c({item_name})~W!", 1)
                 else:
                     # Incorrect item? Angry guardian!
                     item_name = correct_item[1]
                     sound_player.play_track(3)
                     display_screen(*battle.display_info("incorrect"),
-                                   controls)
+                                   control_enum)
                     print_and_wait(
                         f"~c({item_name}) ~Ris not the correct item!", 1)
 
@@ -117,13 +119,13 @@ def battle(battle):
                 # Correct answer? Make the guardian dance a little, and display text
                 sound_player.play_track(2)
                 display_screen(*battle.display_info("correct"),
-                               controls)
+                               control_enum)
                 print_and_wait(f"~Y{answer} ~Wis correct!", 1)
             else:
                 # Incorrect answer? Angry guardian!
                 sound_player.play_track(3)
                 display_screen(*battle.display_info("incorrect"),
-                               controls)
+                               control_enum)
                 print_and_wait(
                     f"~Y{answer} ~Ris not the correct answer!", 1)
 
@@ -154,7 +156,7 @@ def battle(battle):
         sound_player.play_track(0)
         time.sleep(0.8)
 
-    fade_out(*battle.display_info(), controls)
+    fade_out(*battle.display_info(), control_enum)
     return
 
 
@@ -162,11 +164,7 @@ def game(adv):
     """Main Loop for the adventure game"""
 
     music_player.play_track()
-    controls = [
-        "~W[n] ~eNorth   ~W[s] ~eSouth   ~W[e] ~eEast   ~W[w] ~eWest   ~Y[o] ~eMore controls     ~R[q] ~eQuit",
-        "~W[take ~e~c(item)~W]~e from room   ~W[drop ~e~c(item)~W]~e from inventory   ~Y[o]~e previous controls"
-    ]
-    display = False  # False -> simple  |  True -> advanced
+    control_enum = Controls.SIMPLE
     credits_bool = False
 
     while True:
@@ -176,11 +174,11 @@ def game(adv):
         if guardian is not None:
             # If there is a guardian, start battle
             sound_player.play_track(4)
-            fade_out(*adv.display_info(), controls[display])
+            fade_out(*adv.display_info(), control_enum)
             battle(Battle(adv.player, guardian, adv))
 
         # Display map screen and wait for input
-        display_screen(*adv.display_info(), controls[display])
+        display_screen(*adv.display_info(), control_enum)
         user_in = input(">> ").lower().strip().split(" ")
 
         if user_in[0] == 'q':
@@ -191,7 +189,7 @@ def game(adv):
         elif user_in[0] == 'o':
             # Toggle controls
             sound_player.play_track(5)
-            display = not display
+            control_enum = Controls.swap_controls(control_enum)
         elif is_direction(user_in[0]):
             # Moving through the map
             success = adv.move(user_in[0])
@@ -247,7 +245,7 @@ def game(adv):
 
     if credits_bool:
         # Clear the screen, cut the music
-        display_screen("", "", "", "", "")
+        display_screen("", "", "", "", Controls.EMPTY)
         sound_player.play_track(7)
         time.sleep(0.3)
         music_player.stop_track()
@@ -255,7 +253,7 @@ def game(adv):
 
         # Display credits with the correct jingle
         display_screen(
-            "", "\n\n\n~WThanks for playing!~e\n  - Devin Warrick", "", "", "")
+            "", "\n\n\n~WThanks for playing!~e\n  - Devin Warrick", "", "", Controls.EMPTY)
         sound_player.play_track(2)
         time.sleep(3)
     exit()
@@ -270,7 +268,7 @@ def intro():
         multip_guardian()["stand"],
         "~WPlayer's Inventory~e\n  ~c(item1)~e\n  ~c(item2)~e",
         "|——————————————————————————————————————————————————————————————————————————————|\n~WThis adventure game requires a terminal 80 characters wide and 15 lines tall.~e\nIf you can't see all of this text, please resize your terminal.",
-        "Once you're good to go, ~Wtype a player name~e to begin. Or, type ~W[q]~e to quit."
+        Controls.INTRO
     ]
 
     player = None

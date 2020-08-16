@@ -2,6 +2,7 @@ from utils.colors import color
 from os import system
 from time import sleep
 import re
+from views.controls_view import Controls, get_controls_text
 
 
 def format_string_block(string_block, width, height):
@@ -12,13 +13,13 @@ def format_string_block(string_block, width, height):
     - len(array)    = height
     - len(array[i]) = width
     """
-    
+
     # Turn the string block into an array of strings
     str_array = string_block.split("\n")
     if len(str_array) < height:
         # If our array isn't as long as our height,
         # add in extra lines of space so it does
-        [str_array.append(" "*width) for i in range(len(str_array), height)]
+        [str_array.append(" " * width) for i in range(len(str_array), height)]
     elif len(str_array) > height:
         # If our array is longer than our height... crop it.
         str_array = str_array[:height]
@@ -29,14 +30,15 @@ def format_string_block(string_block, width, height):
         line_length = len(re.sub(r"~\w", "", str_array[i]))
         if line_length < width:
             # Too short? Add extra space
-            str_array[i] += " " * (width-line_length)
+            str_array[i] += " " * (width - line_length)
         elif line_length > width:
             # Too long? Sorry... crop it.
             str_array[i] = str_array[i][:width]
 
     return str_array
 
-def prep_screen(img, info1, info2, text, controls):
+
+def prep_screen(img, info1, info2, text, control_enum):
     """
     Takes text blocks for different segments of the 
     terminal screen, and formats them all in the correct place.
@@ -67,6 +69,7 @@ def prep_screen(img, info1, info2, text, controls):
     info2 = format_string_block(info2, 33, 5)
 
     text = format_string_block(text, 80, 3)
+    controls = get_controls_text(control_enum)
     controls = format_string_block(controls, 80, 1)
 
     output = ""
@@ -80,8 +83,9 @@ def prep_screen(img, info1, info2, text, controls):
         output += text[i] + "\n"
 
     # Add our controls and return
-    # controls have a height of 1, so we just need index [0] 
+    # controls have a height of 1, so we just need index [0]
     return "\n" + output + "\n" + controls[0]
+
 
 def display_screen(img, info1, info2, text, controls):
     """prints the prep_screen's output to the screen."""
@@ -92,6 +96,7 @@ def display_screen(img, info1, info2, text, controls):
     string = color(output)
     # print(string[290:300])
     print(color(output))
+
 
 def fade_out(img, info1, info2, text, controls):
     """
@@ -108,6 +113,7 @@ def fade_out(img, info1, info2, text, controls):
         sleep(0.05)
     sleep(0.25)
 
+
 def print_and_wait(msg, sec_to_wait=None):
     """
     Prints a message, and waits a short while before continuing
@@ -115,7 +121,7 @@ def print_and_wait(msg, sec_to_wait=None):
     print(color(msg))
     word_count = len(msg.split(" "))
     if sec_to_wait is None:
-        sec_to_wait = max(1, word_count/2.5 - 1)
+        sec_to_wait = max(1, word_count / 2.5 - 1)
     sleep(sec_to_wait)
 
 
@@ -123,7 +129,7 @@ def print_and_wait(msg, sec_to_wait=None):
 def display_load(total_time=1, text=""):
     """Displays a loading spinner underneath a message"""
     spinner = "\|/-"
-    for i in range(0, total_time*10):
+    for i in range(0, total_time * 10):
         print(text)
         print(color(f"~X{spinner[i % 4]}"))
         sleep(0.1)
