@@ -1,17 +1,19 @@
 from enum import Enum
 
-class Controls(Enum):
-    SIMPLE       = 0
-    ADVANCED     = 1
-    BATTLE       = 2
-    INTRO        = 3
-    EMPTY        = 4
 
-    def swap_controls(enum):
-        if enum is Controls.SIMPLE:
-            return Controls.ADVANCED
-        else:
-            return Controls.SIMPLE
+class Controls(Enum):
+  SIMPLE       = 0
+  ADVANCED     = 1
+  BATTLE       = 2
+  INTRO        = 3
+  EMPTY        = 4
+
+  def swap_controls(enum):
+    if enum is Controls.SIMPLE:
+      return Controls.ADVANCED
+    else:
+      return Controls.SIMPLE
+
 
 control_text = [
     "~W[n] ~eNorth   ~W[s] ~eSouth   ~W[e] ~eEast   ~W[w] ~eWest   ~Y[o] ~eMore controls     ~R[q] ~eQuit",
@@ -21,5 +23,6 @@ control_text = [
     ""
 ]
 
+
 def get_controls_text(enum):
-    return control_text[enum.value]
+  return control_text[enum.value]

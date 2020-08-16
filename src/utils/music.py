@@ -5,126 +5,126 @@ from multiprocessing import Process
 
 
 class Player:
+  """
+  A Music/Sound Player.
+
+  Initializes with an album to hold all
+  of the tracks the Player can play.
+  Can play tracks once, or loop.
+  """
+
+  def __init__(self, album):
+    self.on = True
+    self.album = album
+    self.current_track = None
+    # Process of the current track, if we're looping
+    self.process = None
+    # stop() function to stop playback
+    self.stop = None
+
+  def turn_off(self):
+    self.on = False
+
+  def turn_on(self):
+    self.on = True
+
+  def start(self, wait=False):
     """
-    A Music/Sound Player.
+    Starts playing the current track.
 
-    Initializes with an album to hold all
-    of the tracks the Player can play.
-    Can play tracks once, or loop.
+    Sets the stop() function, and returns the track duration.
     """
+    if self.current_track is None:
+      # no track? Return
+      return
 
-    def __init__(self, album):
-        self.on = True
-        self.album = album
-        self.current_track = None
-        # Process of the current track, if we're looping
-        self.process = None
-        # stop() function to stop playback
-        self.stop = None
+    sound_info = playsound(self.current_track, wait)
+    self.stop = sound_info["stop"]
+    return sound_info["duration"]
 
-    def turn_off(self):
-        self.on = False
+  def loop_track(self):
+    """
+    Starts the track, 
+    waits the duration of the track,
+    and then replays.
+    """
+    while True:
+      duration = self.start()
+      time.sleep(duration)
 
-    def turn_on(self):
-        self.on = True
+  def play_track(self, num, loop):
+    """
+    Plays the requested track.
 
-    def start(self, wait=False):
-        """
-        Starts playing the current track.
+    If loop is set to true, creates a separate
+    process to auto loop the track in the background.
+    """
+    if not self.on:
+      return
+    if not (0 <= num < len(self.album)):
+      # If our track number isn't in our album, return
+      return
 
-        Sets the stop() function, and returns the track duration.
-        """
-        if self.current_track is None:
-            # no track? Return
-            return
+    self.current_track = self.album[num]
+    if loop:
+      self.process = Process(target=self.loop_track)
+      self.process.start()
+    else:
+      self.start()
 
-        sound_info = playsound(self.current_track, wait)
-        self.stop = sound_info["stop"]
-        return sound_info["duration"]
+  def stop_track(self):
+    """
+    Stops playing track.
 
-    def loop_track(self):
-        """
-        Starts the track, 
-        waits the duration of the track,
-        and then replays.
-        """
-        while True:
-            duration = self.start()
-            time.sleep(duration)
+    Calls stop() if exists.
+    Terminates the process if exists.
+    Sets current_track, stop, and process to None.
+    """
+    if self.stop is not None and callable(self.stop):
+      self.stop()
 
-    def play_track(self, num, loop):
-        """
-        Plays the requested track.
+    if isinstance(self.process, Process):
+      self.process.terminate()
 
-        If loop is set to true, creates a separate
-        process to auto loop the track in the background.
-        """
-        if not self.on:
-            return
-        if not (0 <= num < len(self.album)):
-            # If our track number isn't in our album, return
-            return
-
-        self.current_track = self.album[num]
-        if loop:
-            self.process = Process(target=self.loop_track)
-            self.process.start()
-        else:
-            self.start()
-
-    def stop_track(self):
-        """
-        Stops playing track.
-
-        Calls stop() if exists.
-        Terminates the process if exists.
-        Sets current_track, stop, and process to None.
-        """
-        if self.stop is not None and callable(self.stop):
-            self.stop()
-
-        if isinstance(self.process, Process):
-            self.process.terminate()
-
-        self.stop, self.process, self.current_track = None, None, None
+    self.stop, self.process, self.current_track = None, None, None
 
 
 class MusicPlayer(Player):
 
-    def __init__(self):
-        super().__init__(music_files)
+  def __init__(self):
+    super().__init__(music_files)
 
-    def play_track(self, num=0, loop=True):
-        """
-        Plays the desired track.
+  def play_track(self, num=0, loop=True):
+    """
+    Plays the desired track.
 
-        If another track is playing,
-        stops current track before starting anew.
+    If another track is playing,
+    stops current track before starting anew.
 
-        Tracks:
-        -   0 -> main_track
-        -   1 -> intro_track
-        """
-        if self.current_track is not None:
-            super().stop_track()
-        return super().play_track(num=num, loop=loop)
+    Tracks:
+    -   0 -> main_track
+    -   1 -> intro_track
+    """
+    if self.current_track is not None:
+      super().stop_track()
+    return super().play_track(num=num, loop=loop)
 
 
 class SoundPlayer(Player):
 
-    def __init__(self):
-        super().__init__(sound_files)
+  def __init__(self):
+    super().__init__(sound_files)
 
-    def play_track(self, num=0, loop=False):
-        """
-        Tracks:
-        -   0 -> damage
-        -   1 -> monster_death
-        -   2 -> correct answer
-        -   3 -> incorrect answer
-        -   4 -> monster spawn
-        -   5 -> menu sound
-        -   6 -> menu fail
-        -   7 -> run away
-        """
-        return super().play_track(num=num, loop=loop)
+  def play_track(self, num=0, loop=False):
+    """
+    Tracks:
+    -   0 -> damage
+    -   1 -> monster_death
+    -   2 -> correct answer
+    -   3 -> incorrect answer
+    -   4 -> monster spawn
+    -   5 -> menu sound
+    -   6 -> menu fail
+    -   7 -> run away
+    """
+    return super().play_track(num=num, loop=loop)
