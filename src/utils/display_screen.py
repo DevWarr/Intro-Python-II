@@ -3,6 +3,7 @@ from os import system
 from time import sleep
 import re
 from views.controls_view import Controls, get_controls_text
+from views import map_key, create_battle_info_view, create_player_inventory_view, create_wide_infopanel_view
 
 
 def format_string_block(string_block, width, height):
@@ -15,7 +16,10 @@ def format_string_block(string_block, width, height):
   """
 
   # Turn the string block into an array of strings
-  str_array = string_block.split("\n")
+  if isinstance(string_block, list):
+    str_array = string_block
+  else:
+    str_array = string_block.split("\n")
   if len(str_array) < height:
     # If our array isn't as long as our height,
     # add in extra lines of space so it does
@@ -45,11 +49,11 @@ def prep_screen(img, info1, info2, text, control_enum):
 
   Blocks of space in the terminal (width 80 x height 14):
     ________________________________________________________________________________
-   |[                    ][                       ][                               ]
-   |[                    ][                       ][                               ]
-   |[       Image        ][        Info1          ][          Info2                ]
-   |[                    ][                       ][                               ]
-   |[____________________][_______________________][_______________________________]
+   |[                      ][                         ][                           ]
+   |[                      ][                         ][                           ]
+   |[       Image          ][        Info1            ][        Inventory          ]
+   |[                      ][                         ][                           ]
+   |[______________________][_________________________][___________________________]
    | ______________________________________________________________________________
    |[                                                                              ]
    |[       Text   -   -   -   -   -   -   -   -   -   -                           ]
@@ -65,7 +69,11 @@ def prep_screen(img, info1, info2, text, control_enum):
   """
   # properly format each block
   img = format_string_block(img, 22, 5)
+
+  info1 = map_key if info1 is None else create_battle_info_view(*info1)
   info1 = format_string_block(info1, 25, 5)
+
+  info2 = create_player_inventory_view(info2)
   info2 = format_string_block(info2, 33, 5)
 
   text = format_string_block(text, 80, 3)

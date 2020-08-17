@@ -256,7 +256,7 @@ class Map:
     """
     return [
         self.display_map(),
-        "[ ] Room\n[S] Shrine\n[A] Artifact Shrine\n~W[ ]~e Has Item\n~Y[ ]~e You are here",
-        str(self.player),
+        None,
+        self.player,
         str(self.get_room())
     ]

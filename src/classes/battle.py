@@ -118,7 +118,7 @@ class Battle:
     """
     return [
         self.guardian.poses[pose],
-        f"Questions remaining: ~W{self.question_count}~e\n\nTries left: ~W{self.try_count}~e",
-        str(self.player),
+        (self.question_count, self.try_count),
+        self.player,
         str(self.guardian) + "\n" + str(self.question)
     ]

@@ -278,16 +278,15 @@ class IntroController:
   def __init__(self, adv):
     self.adv = adv
     self.intro_text = [
-        "[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]\n[ ][ ][ ][ ][ ]",
         multip_guardian()["stand"],
-        "~WPlayer's Inventory~e\n  ~c(item1)~e\n  ~c(item2)~e",
+        None,
+        DebugPlayer("Winner"),
         "|——————————————————————————————————————————————————————————————————————————————|\n~WThis adventure game requires a terminal 80 characters wide and 15 lines tall.~e\nIf you can't see all of this text, please resize your terminal.",
         Controls.INTRO
     ]
 
   def setup_player(self, user_in):
     player = GamePlayer(user_in)
-    debug_player = DebugPlayer(user_in)
     self.adv.game_map = Map(player)
 
     self.adv.music_player.stop_track()
@@ -308,7 +307,7 @@ class IntroController:
     if user_in == 'q':
       self.adv.playing_game = False
 
-    if len(user_in) == 0:
+    elif len(user_in) == 0:
       # No name? Reset the loop
       return
 
