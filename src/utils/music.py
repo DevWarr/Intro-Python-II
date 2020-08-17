@@ -1,7 +1,7 @@
 from utils.playsound_copy import playsound
 from assets.assets import *
-import time
 from multiprocessing import Process
+import time
 
 
 class Player:

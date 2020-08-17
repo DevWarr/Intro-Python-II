@@ -48,9 +48,11 @@ class Room:
   def __str__(self):
     return f"~W{self.name}\n~e~g{self.description}\n~eItems: {self.show_inv()}"
 
+
 class DebugRoom(Room):
   def __init__(self):
     name = "|——————————————————————————————————————————————————————————————————————————————|"
     desc = "This adventure game requires a terminal 80 characters wide and 15 lines tall."
-    inventory = [Item("Please resize"), Item("So you can see"), Item("This text")]
+    inventory = [Item("Please resize"), Item(
+        "So you can see"), Item("This text")]
     super().__init__(name, desc, inventory)

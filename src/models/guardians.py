@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from classes.mixins import *
+from .mixins import *
 from assets.guardian_poses import *
 
 

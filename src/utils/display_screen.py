@@ -1,7 +1,7 @@
-from utils.colors import color
+import re
 from os import system
 from time import sleep
-import re
+from utils.colors import color
 from views.controls_view import Controls, get_controls_text
 from views import map_key, create_battle_info_view, create_player_inventory_view, create_wide_infopanel_view
 

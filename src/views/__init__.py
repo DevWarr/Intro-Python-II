@@ -1,5 +1,5 @@
-from classes.guardians import Guardian, ArtifactGuardian
-from classes.room import Room
+from models.guardians import Guardian, ArtifactGuardian
+from models.room import Room
 from assets.guardian_poses import *
 
 map_key = [

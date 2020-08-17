@@ -1,7 +1,7 @@
-from classes.room import Room
-from classes.shrine import Shrine
-from classes.item import Item
-from classes.guardians import *
+from .room import Room
+from .shrine import Shrine
+from .item import Item
+from .guardians import *
 
 
 # 0 -> Empty space

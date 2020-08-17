@@ -1,6 +1,6 @@
 from .game_state import GameState
 from views.controls_view import Controls
-from classes.battle import Battle
+from models.battle import Battle
 from utils.display_screen import display_screen, fade_out, print_and_wait
 import time
 

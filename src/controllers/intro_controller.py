@@ -1,6 +1,6 @@
-from classes.room import DebugRoom
-from classes.player import DebugPlayer, GamePlayer
-from classes.game_map import Map
+from models.room import DebugRoom
+from models.player import DebugPlayer, GamePlayer
+from models.game_map import Map
 from utils.display_screen import display_screen, fade_out, print_and_wait
 from utils.colors import color
 from assets.guardian_poses import multip_guardian

@@ -1,4 +1,4 @@
-from classes.room import Room
+from .room import Room
 
 
 class Shrine(Room):
