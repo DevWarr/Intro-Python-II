@@ -4,18 +4,17 @@ from utils.colors import color
 class Battle:
 
   def __init__(self, player, guardian, game_map):
-    self.map = game_map
-    self.player = player
+    self.map             = game_map
+    self.player          = player
 
     # Guardian set up for the battle
-    self.guardian = guardian
+    self.guardian        = guardian
     self.guardian.battle = self
 
-    self.try_count = 3
-    self.question_count = 5
-    self.question = None
-    self.answer = None
-    self.required_item = None
+    self.try_count       = 3
+    self.question_count  = 5
+    self.answer          = None
+    self.required_item   = None
 
   def check_victory(self):
     """
@@ -35,12 +34,12 @@ class Battle:
     """
     Creates a question if one does not already exist.
     """
-    if self.question is None:
+    if self.guardian.question is None:
       # If there's no question, create one
       print(self.required_item)
       if self.required_item is not None:
         # Required item? Create a question for it
-        self.question = f"~W{self.guardian.name}~e is requesting you use ~c({self.required_item})~e"
+        self.guardian.question = f"~W{self.guardian.name}~e is requesting you use ~c({self.required_item})~e"
 
       else:
         # Otherwise, call create_question()
@@ -60,7 +59,7 @@ class Battle:
       return (None,)
     elif item.name == self.required_item:
       self.required_item = None
-      self.question = None
+      self.guardian.question = None
       return (True, item.name)
     else:
       self.try_count -= 1
@@ -79,7 +78,7 @@ class Battle:
     """
     if answer == self.answer:
       self.answer = None
-      self.question = None
+      self.guardian.question = None
       self.guardian.next_question_prep()
       return True
     else:
@@ -120,5 +119,5 @@ class Battle:
         self.guardian.poses[pose],
         (self.question_count, self.try_count),
         self.player,
-        str(self.guardian) + "\n" + str(self.question)
+        self.guardian
     ]

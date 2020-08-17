@@ -7,11 +7,12 @@ class Guardian():
   """Parent Guardian Class. All Guardians derive from this class."""
 
   def __init__(self, name, description, pose_dict):
-    self.name = name
+    self.name        = name
     self.description = description
-    self.shrine = None
-    self.battle = None
-    self.poses = pose_dict
+    self.shrine      = None
+    self.battle      = None
+    self.question    = None
+    self.poses       = pose_dict
 
   def prep_quiz(self):
     """Sets the calculator as the initially required item."""
@@ -59,7 +60,7 @@ class MultipGuardian(CanAdd, Guardian):
     else:
       # Last two questions? Difficulty hard
       problem = self.addition(2)
-    [self.battle.question, self.battle.answer] = problem
+    [self.question, self.battle.answer] = problem
 
   def next_question_prep(self):
     self.battle.question_count -= 1
@@ -81,7 +82,7 @@ class DividGuardian(CanSubtract, Guardian):
     else:
       # Last two questions? Difficulty hard
       problem = self.subtraction(2)
-    [self.battle.question, self.battle.answer] = problem
+    [self.question, self.battle.answer] = problem
 
   def next_question_prep(self):
     self.battle.question_count -= 1
@@ -113,7 +114,7 @@ class SquareGuardian(CanAdd, CanMultiply, Guardian):
     else:
       problem = self.multiplication(1)
 
-    [self.battle.question, self.battle.answer] = problem
+    [self.question, self.battle.answer] = problem
 
   def next_question_prep(self):
     self.battle.question_count -= 1
@@ -147,7 +148,7 @@ class RadicalGuardian(CanAdd, CanSubtract, CanSquare, CanDivide, Guardian):
     else:
       problem = self.division(2)
 
-    [self.battle.question, self.battle.answer] = problem
+    [self.question, self.battle.answer] = problem
 
   def next_question_prep(self):
     self.battle.question_count -= 1
@@ -162,7 +163,7 @@ class ArtifactGuardian(CanMultiply, CanSquare, CanDivide, CanRoot, CanAdd, CanSu
 
   def __init__(self):
     super().__init__("Artifact Guardian",
-                     "The final challenge! If you ~Wrun away~e~g, your questions ~Gwon't~e~g get reset.", artifact_guardian())
+                     "The final challenge! If you run away, your questions won't get reset.", artifact_guardian())
     # The artifact Guardian holds it's own questions and tries.
     # You can run away and the question count won't go down.
     self.question_count = 10
@@ -217,7 +218,7 @@ class ArtifactGuardian(CanMultiply, CanSquare, CanDivide, CanRoot, CanAdd, CanSu
     else:
       problem = self.subtraction(2)
 
-    [self.battle.question, self.battle.answer] = problem
+    [self.question, self.battle.answer] = problem
 
   def next_question_prep(self):
     self.battle.question_count -= 1

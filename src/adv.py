@@ -1,4 +1,4 @@
-from classes.room import Room
+from classes.room import Room, DebugRoom
 from classes.player import GamePlayer, DebugPlayer
 from classes.item import Item
 from classes.game_map import Map
@@ -281,7 +281,7 @@ class IntroController:
         multip_guardian()["stand"],
         None,
         DebugPlayer("Winner"),
-        "|——————————————————————————————————————————————————————————————————————————————|\n~WThis adventure game requires a terminal 80 characters wide and 15 lines tall.~e\nIf you can't see all of this text, please resize your terminal.",
+        DebugRoom(),
         Controls.INTRO
     ]
 

@@ -42,7 +42,7 @@ def format_string_block(string_block, width, height):
   return str_array
 
 
-def prep_screen(img, info1, info2, text, control_enum):
+def prep_screen(img, info1, info2, info3, control_enum):
   """
   Takes text blocks for different segments of the 
   terminal screen, and formats them all in the correct place.
@@ -56,7 +56,7 @@ def prep_screen(img, info1, info2, text, control_enum):
    |[______________________][_________________________][___________________________]
    | ______________________________________________________________________________
    |[                                                                              ]
-   |[       Text   -   -   -   -   -   -   -   -   -   -                           ]
+   |[       Info3   -   -   -   -   -   -   -   -   -   -                          ]
    |[______________________________________________________________________________]
    | ______________________________________________________________________________
    |[_____Controls_________________________________________________________________]
@@ -68,17 +68,16 @@ def prep_screen(img, info1, info2, text, control_enum):
   in order for this function to properly check the length of each strings block.
   """
   # properly format each block
-  img = format_string_block(img, 22, 5)
+  img = format_string_block(img, 23, 5)
 
   info1 = map_key if info1 is None else create_battle_info_view(*info1)
-  info1 = format_string_block(info1, 25, 5)
+  info1 = format_string_block(info1, 24, 5)
 
   info2 = create_player_inventory_view(info2)
   info2 = format_string_block(info2, 33, 5)
 
-  text = format_string_block(text, 80, 3)
+  text = create_wide_infopanel_view(info3)
   controls = get_controls_text(control_enum)
-  controls = format_string_block(controls, 80, 1)
 
   output = ""
   for i in range(0, 5):
@@ -92,13 +91,13 @@ def prep_screen(img, info1, info2, text, control_enum):
 
   # Add our controls and return
   # controls have a height of 1, so we just need index [0]
-  return "\n" + output + "\n" + controls[0]
+  return "\n" + output + "\n" + controls
 
 
-def display_screen(img, info1, info2, text, controls):
+def display_screen(img, info1, info2, info3, controls):
   """prints the prep_screen's output to the screen."""
 
-  output = prep_screen(img, info1, info2, text, controls)
+  output = prep_screen(img, info1, info2, info3, controls)
   # Clear the screen, and then print our output with the color function
   system('cls||clear')
   string = color(output)

@@ -258,5 +258,5 @@ class Map:
         self.display_map(),
         None,
         self.player,
-        str(self.get_room())
+        self.get_room()
     ]
