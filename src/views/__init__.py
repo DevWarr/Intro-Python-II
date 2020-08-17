@@ -48,9 +48,13 @@ def create_wide_infopanel_view(guardian_or_room):
       # If we fight the Artifact Guardian,
       # there are a few style changes to add to the description
       description = description.replace("run away", "~Wrun away~e~g")
-      description = description.replace("won't", "~Gwon't~e~g")
+      description = description.replace("won't", "~Wwon't")
+      description += "~e"
 
-    info_list = guardian.question.split(" ")
+    if guardian.question is None:
+      info_list = ["None", " "]
+    else:
+      info_list = guardian.question.split(" ")
     if info_list[0] + " " + info_list[1] == guardian.name:
       # If we're asking for an item, ↑↑↑
       # add style changes to the guardian's name, and the item
