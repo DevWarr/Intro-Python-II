@@ -69,6 +69,7 @@ def create_wide_infopanel_view(guardian_or_room):
   if isinstance(guardian_or_room, Room):
     room = guardian_or_room
     item_names = [f"~c({str(item)})~e" for item in room.inv]
-    info = f"Items: [ {' '.join(item_names)} ]"
+    item_string = ' '.join(item_names) if len(item_names) else "~xempty~e"
+    info = f"Items: [ {item_string} ]"
 
   return [name, description, info]
