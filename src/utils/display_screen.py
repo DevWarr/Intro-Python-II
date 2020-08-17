@@ -71,10 +71,10 @@ def prep_screen(img, info1, info2, info3, control_enum):
   img = format_string_block(img, 23, 5)
 
   info1 = map_key if info1 is None else create_battle_info_view(*info1)
-  info1 = format_string_block(info1, 24, 5)
+  info1 = format_string_block(info1, 29, 5)
 
   info2 = create_player_inventory_view(info2)
-  info2 = format_string_block(info2, 33, 5)
+  info2 = format_string_block(info2, 27, 5)
 
   text = create_wide_infopanel_view(info3)
   controls = get_controls_text(control_enum)
