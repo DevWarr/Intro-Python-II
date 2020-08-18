@@ -22,7 +22,7 @@ class CanAdd:
       num1 = randint(15, 100)
       num2 = randint(15, 100)
     answer = num1 + num2
-    question = f"What is {num1} plus {num2}?"
+    question = f"What is {num1} plus {num2} ?"
     return [question, answer]
 
 
@@ -51,7 +51,7 @@ class CanSubtract:
       if not num1 - num2 < 0:
         break
     answer = num1 - num2
-    question = f"What is {num1} minus {num2}?"
+    question = f"What is {num1} minus {num2} ?"
     return [question, answer]
 
 
@@ -80,7 +80,7 @@ class CanDivide:
       if num1 % num2 == 0:
         break
     answer = num1 // num2
-    question = f"What is {num1} divided by {num2}?"
+    question = f"What is {num1} divided by {num2} ?"
     return [question, answer]
 
 
@@ -105,7 +105,7 @@ class CanMultiply:
       num1 = randint(4, 20)
       num2 = randint(4, 20)
     answer = num1 * num2
-    question = f"What is {num1} times {num2}?"
+    question = f"What is {num1} times {num2} ?"
     return [question, answer]
 
 
@@ -134,7 +134,7 @@ class CanSquare:
       second_half = "squared"
     else:
       second_half = "cubed"
-    question = f"What is {num1} {second_half}?"
+    question = f"What is {num1} {second_half} ?"
     answer = num1 ** num2
     return [question, answer]
 
@@ -174,7 +174,7 @@ class CanRoot:
     else:
       root = "cube"
       answer = self.__perfect_cube(num)
-    question = f"What is the {root} root of {num}"
+    question = f"What is the {root} root of {num} ?"
     return [question, answer]
 
 
