@@ -7,11 +7,12 @@ from models.guardians import Guardian, ArtifactGuardian
 from models.room import Room, DebugRoom
 from models.shrine import Shrine
 from utils.colors import color
-from utils.display_screen import format_string_block, is_white_substring, is_item_substring
+from utils.string_utilities import format_string_block, is_white_substring, is_item_substring
 from assets.guardian_poses import all_poses
 from os import system, terminal_size
 from random import choice
 from time import sleep
+
 
 map_key = [
     "~Y[ ]~e You are here",

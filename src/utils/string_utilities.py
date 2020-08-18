@@ -49,15 +49,3 @@ def is_item_substring(msg, i):
     return msg[i:i + 4] == "({})"
   else:
     return False
-
-# # not functional ?
-# from time import sleep
-# from utils.colors import color
-# def display_load(total_time=1, text=""):
-#   """Displays a loading spinner underneath a message"""
-#   spinner = "\|/-"
-#   for i in range(0, total_time * 10):
-#     print(text)
-#     print(color(f"~X{spinner[i % 4]}"))
-#     sleep(0.1)
-#   return
