@@ -50,7 +50,7 @@ class Guardian():
       return
 
     if self.required_item is not None:
-      self.question = f"~W{self.name}~e is requesting you use ~c({self.required_item})~e"
+      self.question = f"{self.name} is requesting you use ({self.required_item})"
     else:
       self.math_question()
 
@@ -125,9 +125,6 @@ class Guardian():
       return True
     else:
       return None
-
-  def __str__(self):
-    return f"~W{self.name}\n~e~g{self.description}~e"
 
 
 class MultipGuardian(CanAdd, Guardian):

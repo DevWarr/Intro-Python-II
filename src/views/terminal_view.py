@@ -90,6 +90,7 @@ class TerminalView:
       info_list = [" "]
     else:
       info_list = guardian.question.split(" ")
+
     if len(info_list) > 1 and f"{info_list[0]} {info_list[1]}" == guardian.name:
       # If we're asking for an item, ↑↑↑
       # add style changes to the guardian's name, and the item
@@ -103,7 +104,7 @@ class TerminalView:
         word = info_list[i]
         if word.isdigit() or "square" in word or "cube" in word:
           info_list[i] = "~W" + word + "~e"
-      info = " ".join(info_list)
+    info = " ".join(info_list)
 
     self.wide_info = [name, description, info]
 

@@ -200,32 +200,6 @@ class Player:
     if isinstance(self.current_room, Shrine):
       return self.current_room.guardian
 
-  def __str__(self):
-    return f"~W{self.name}'s Inventory:~e\n{self.show_inv()}"
-
-  def depricated_show_inv(self):
-    """
-    Outputs all item names from the inventory as a string.
-
-    Formats items with 2 space indentation like so:
-      Player's Inventory
-        ( item1 )
-        ( item2 )
-        ( Big butter sword )
-
-    If there are no items, returns "empty".
-    """
-    out = ""
-    if len(self.__inv) == 0:
-      out += "  ~xempty~e"
-    else:
-      # Creates an array with
-      #   ↓↓ indent  spacing ↓↓
-      # ["  ~c( item1 )~e", "  ~c( item2 )~e"]
-      item_names = [f"  ~c( {str(item)} )~e" for item in self.__inv]
-      out += "\n".join(item_names)
-    return out
-
 
 class GamePlayer(Player):
 

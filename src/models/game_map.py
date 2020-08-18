@@ -76,21 +76,3 @@ class GameMap:
         # Use the values from the room_template to create a new room
         rooms.append(Shrine(*room_template[room_id]))
     return rooms
-
-  def deprecated_display_info(self):
-    """
-    Displays Player info and Room info,
-    formatted for the utils.display_screen function.
-
-    Returns an array containing:
-    - The map
-    - An empty string (No 'Info1' section)
-    - Player information
-    - Room information
-    """
-    return [
-        self.display_map(),
-        None,
-        self.player,
-        self.get_room()
-    ]
