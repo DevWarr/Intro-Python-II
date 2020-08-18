@@ -95,23 +95,19 @@ class TravelController:
   def use_item(self, user_in):
     if len(user_in) > 1:
       item_name = " ".join(user_in[1:])
-      success = self.adv.player.use_item(item_name)
-      if success[0] is None:
-        self.adv.sound_player.play_track(6)
-        self.adv.display.print_and_wait(
-            f"~c({name})~R is not in your inventory.")
-      elif success[0]:
+      success, item_name = self.adv.player.use_item(item_name)
+      if success:
         self.play_credits()
         self.adv.playing_game = False
         return
+      elif success is None:
+        error_str = f"~c({item_name})~R is not in your inventory."
       else:
-        self.adv.sound_player.play_track(6)
-        self.adv.display.print_and_wait(
-            f"~RYou can't use ~e~c({success[1]}) ~Rhere.")
+        error_str = f"~RYou can't use ~e~c({item_name}) ~Rhere."
     else:
-      self.adv.sound_player.play_track(6)
-      self.adv.display.print_and_wait(
-          "~RPlease type the ~e~c(name)~R of the item you wish to use.")
+      error_str = "~RPlease type the ~e~c(name)~R of the item you wish to use."
+    self.adv.sound_player.play_track(6)
+    self.adv.display.print_and_wait(error_str)
 
   def invalid_input(self, user_in):
     self.adv.sound_player.play_track(6)
