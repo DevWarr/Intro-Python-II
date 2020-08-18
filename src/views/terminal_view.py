@@ -10,6 +10,7 @@ from utils.colors import color
 from utils.display_screen import format_string_block
 from assets.guardian_poses import all_poses
 from os import system, terminal_size
+from random import choice
 from time import sleep
 
 map_key = [
@@ -38,10 +39,11 @@ room_sign = {
 
 class TerminalView:
 
-  def __init__(self, adv):
+  def __init__(self, adv, game_map):
     self.adv           = adv
-    self.map           = None
     self.map_key       = map_key
+    self.map           = None
+    self.build_map_display(game_map.map)
     self.player_inv    = None
 
     self.guardian_pose = None
@@ -115,7 +117,7 @@ class TerminalView:
 
     self.wide_info = [name, description, info]
 
-  def build_map_display(self, map_array, player_room):
+  def build_map_display(self, map_array, player_room=None):
     """
     Displays Game Map.
 
@@ -142,7 +144,7 @@ class TerminalView:
           room_str = room_sign["tunnel"]
 
         # Second ifs to determine color
-        if room is player_room:
+        if player_room and room is player_room:
           # Player is in the room? Yellow
           room_str = f"~Y{room_str}~e"
         elif room is not None and len(room.inv) > 0:
@@ -196,7 +198,7 @@ class TerminalView:
   def prep_screen(self):
     controller = self.adv.controller
     if isinstance(controller, IntroController):
-      left  = self.guardian_pose
+      left  = choice([self.guardian_pose, self.map])
       mid   = self.map_key
       right = self.player_inv
     elif isinstance(controller, TravelController):

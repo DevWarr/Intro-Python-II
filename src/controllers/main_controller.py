@@ -11,7 +11,7 @@ class AdventureGame:
     self.game_map     = GameMap()
     self.player       = None  # Waits until player is created
 
-    self.display      = TerminalView(self)
+    self.display      = TerminalView(self, self.game_map)
     self.controller   = None
 
     self.music_player = MusicPlayer()
