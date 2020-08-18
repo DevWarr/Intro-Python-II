@@ -7,7 +7,7 @@ from models.guardians import Guardian, ArtifactGuardian
 from models.room import Room, DebugRoom
 from models.shrine import Shrine
 from utils.colors import color
-from utils.display_screen import format_string_block
+from utils.display_screen import format_string_block, is_white_substring, is_item_substring
 from assets.guardian_poses import all_poses
 from os import system, terminal_size
 from random import choice
@@ -258,6 +258,29 @@ class TerminalView:
     if sec_to_wait is None:
       sec_to_wait = max(1, word_count / 2.5 - 1)
     sleep(sec_to_wait)
+
+  def send_response(self, response_type, msg, *values, sec_to_wait=None):
+
+    if response_type == "error":
+      color = "~R"
+    elif response_type == "battle":
+      color = "~Y"
+    else:
+      color = "~e"
+
+    i = 0
+    while i < len(msg):
+      if is_item_substring(msg, i):
+        end_of_string = msg[i + 4:] if i + 4 < len(msg) else ""
+        msg = msg[:i] + "~e~c" + msg[i:i + 4] + color + end_of_string
+        i += 8
+      if is_white_substring(msg, i):
+        end_of_string = msg[i + 3:] if i + 3 < len(msg) else ""
+        msg = msg[:i] + "~W" + msg[i:i + 3] + color + end_of_string
+        i += 4
+      i += 1
+    msg = color + msg + "~e"
+    self.print_and_wait(msg.format(*values), sec_to_wait=sec_to_wait)
 
   def black_out(self):
     system("cls||clear")

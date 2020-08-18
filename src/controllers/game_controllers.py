@@ -22,7 +22,8 @@ class TravelController:
     display_info = [
         self.adv.game_map,
         self.adv.player,
-        self.adv.player.current_room
+        self.adv.player.current_room,
+        self.control_enum
     ]
     self.adv.display.update(*display_info)
 
@@ -51,26 +52,32 @@ class TravelController:
       self.look_for_fight()
     else:
       self.adv.sound_player.play_track(6)
-      self.adv.display.print_and_wait("~RThere is no room that way . . .", 1)
+      error_str = "There is no room that way . . ."
+      self.adv.display.send_response("error", error_str, sec_to_wait=1)
 
   def take_item(self, user_in):
     if len(user_in) > 1:
       item_name = " ".join(user_in[1:])
       success, item_name = self.adv.player.take_item(item_name)
       if success is True:
-        success_str = f"You took ~c({item_name})~e."
+        success_str = "You took ({})."
         self.adv.sound_player.play_track(5)
         self.adv.display.update(self.adv.player, self.adv.player.current_room)
-        self.adv.display.print_and_wait(success_str)
+        self.adv.display.send_response("info", success_str, item_name)
         return
       elif success is False:
-        error_str = "~RYour inventory is full.~e"
+        error_str = "Your inventory is full."
+        self.adv.sound_player.play_track(6)
+        self.adv.display.send_response("error", error_str)
+        return
       else:
-        error_str = f"~c({item_name})~R is not in the room.~e"
+        error_str = "({}) is not in the room."
+        error_val = item_name
     else:
-      error_str = "~RPlease type the ~e~c(name)~R of the item you wish to take."
+      error_str = "Please type the ({}) of the item you wish to take."
+      error_val = "name"
     self.adv.sound_player.play_track(6)
-    self.adv.display.print_and_wait(error_str)
+    self.adv.display.send_response("error", error_str, error_val)
 
   def drop_item(self, user_in):
     if len(user_in) > 1:
@@ -78,19 +85,21 @@ class TravelController:
       success, item_name = self.adv.player.drop_item(item_name)
       if success:
         # Item dropped successfully
-        success_str = f"You dropped ~c({item_name})~e."
+        success_str = "You dropped ({})."
         self.adv.sound_player.play_track(5)
         self.adv.display.update(self.adv.player, self.adv.player.current_room)
-        self.adv.display.print_and_wait(success_str)
+        self.adv.display.send_response("info", success_str, item_name)
         return
       else:
         # Item not in room
-        error_str = f"~c({item_name})~R is not in your inventory.~e"
+        error_str = "({}) is not in your inventory."
+        error_val = item_name
     else:
       # User did not specify an item
-      error_str = "~RPlease type the ~e~c(name)~R of the item you wish to drop."
+      error_str = "Please type the ({}) of the item you wish to drop."
+      error_val = "name"
     self.adv.sound_player.play_track(6)
-    self.adv.display.print_and_wait(error_str)
+    self.adv.display.send_response("error", error_str, error_val)
 
   def use_item(self, user_in):
     if len(user_in) > 1:
@@ -101,18 +110,21 @@ class TravelController:
         self.adv.playing_game = False
         return
       elif success is None:
-        error_str = f"~c({item_name})~R is not in your inventory."
+        error_str = "({}) is not in your inventory."
+        error_val = item_name
       else:
-        error_str = f"~RYou can't use ~e~c({item_name}) ~Rhere."
+        error_str = "You can't use ({}) here."
+        error_val = item_name
     else:
-      error_str = "~RPlease type the ~e~c(name)~R of the item you wish to use."
+      error_str = "Please type the ({}) of the item you wish to use."
+      error_val = "name"
     self.adv.sound_player.play_track(6)
-    self.adv.display.print_and_wait(error_str)
+    self.adv.display.send_response("error", error_str, error_val)
 
   def invalid_input(self, user_in):
     self.adv.sound_player.play_track(6)
-    self.adv.display.print_and_wait(
-        "~RInvalid input. Please try again . . .", 1)
+    error_str = "Invalid input. Please try again . . ."
+    self.adv.display.send_response("error", error_str, sec_to_wait=1)
 
   def play_credits(self):
     # Clear the screen, cut the music
@@ -142,7 +154,7 @@ class BattleController:
     # Tell the guardian to prep the quiz with the initially required item
     self.guardian.prep_quiz(self.adv.player)
     self.guardian.create_question()
-    self.adv.display.update(self.guardian)
+    self.adv.display.update(self.guardian, self.control_enum)
 
   def is_answering_math(self, user_in):
     """Returns true if user is answering a math problem during battle"""
@@ -166,8 +178,8 @@ class BattleController:
     if len(user_in) < 2:
       # User didn't actually type an item to use? Error message 'em
       self.adv.sound_player.play_track(6)
-      self.adv.display.print_and_wait(
-          "~RPlease type the ~e~c(name)~R of the item you wish to use.")
+      error_str = "Please type the ({}) of the item you wish to use."
+      self.adv.display.send_response("error", error_str, "name")
       return
 
     item_name = " ".join(user_in[1:])
@@ -175,8 +187,8 @@ class BattleController:
 
     if used_item[0] is None:
       # No item? Display error message
-      self.adv.display.print_and_wait(
-          f"~RYou do not have ~e~c({item_name})~R!")
+      error_str = "You do not have ({})!"
+      self.adv.display.send_response("error", error_str, item_name)
       return
 
     item_name = used_item[1]
@@ -185,13 +197,14 @@ class BattleController:
       # Correct item? Make the guardian dance a little, and display text
       self.adv.sound_player.play_track(2)
       self.adv.display.update(self.guardian)
-      self.adv.display.print_and_wait(f"~WYou used ~e~c({item_name})~W!", 1)
+      self.adv.display.send_response(
+          "battle", "You used ({})!", item_name, sec_to_wait=1)
     else:
       # Incorrect item? Angry guardian!
       self.adv.sound_player.play_track(3)
       self.adv.display.update(self.guardian)
-      self.adv.display.print_and_wait(
-          f"~c({item_name}) ~Ris not the correct item!", 1)
+      self.adv.display.send_response(
+          "error", "({}) is not the correct item!", item_name, sec_to_wait=1)
 
   def answer_question(self, user_in):
     if user_in[0] == "answer":
@@ -206,13 +219,14 @@ class BattleController:
       # Correct answer? Make the guardian dance a little, and display text
       self.adv.sound_player.play_track(2)
       self.adv.display.update(self.guardian)
-      self.adv.display.print_and_wait(f"~Y{answer} ~Wis correct!", 1)
+      self.adv.display.send_response(
+          "battle", "{} is correct!", answer, sec_to_wait=1)
     else:
       # Incorrect answer? Angry guardian!
       self.adv.sound_player.play_track(3)
       self.adv.display.update(self.guardian)
-      self.adv.display.print_and_wait(
-          f"~Y{answer} ~Ris not the correct answer!", 1)
+      self.adv.display.send_response(
+          "error", "{} is not the correct answer!", answer, sec_to_wait=1)
 
   def end_of_battle(self, win_or_lose):
 
@@ -220,13 +234,14 @@ class BattleController:
       # Running away
       self.adv.sound_player.play_track(7)
       self.adv.player.run_away()
-      self.adv.display.print_and_wait("~YYou ran away!", 1.3)
+      self.adv.display.send_response(
+          "battle", "You ran away!", sec_to_wait=1.3)
 
     elif win_or_lose is True:
       # Winning the battle
       self.adv.sound_player.play_track(1)
-      self.adv.display.print_and_wait(
-          f"~YYou defeated the ~W{self.guardian.name}~Y!", 2)
+      self.adv.display.send_response(
+          "battle", "You defeated the {}!", self.guardian.name, sec_to_wait=2)
       if self.guardian.name[:8] == "Artifact":
         # Stop music for dramatic moment
         self.adv.music_player.stop_track()
@@ -236,8 +251,8 @@ class BattleController:
       # Losing the battle
       self.adv.player.run_away()
       self.adv.sound_player.play_track(0)
-      self.adv.display.print_and_wait(
-          "~YYou lost the battle! You have to run away!", 0.1)
+      self.adv.display.send_response(
+          "battle", "You lost the battle! You have to run away!", sec_to_wait=0.1)
       time.sleep(0.5)
       self.adv.sound_player.play_track(0)
       time.sleep(0.6)
@@ -261,8 +276,9 @@ class BattleController:
     elif self.is_answering_math(user_in):
       self.answer_question(user_in)
     else:  # Not a proper input? Display help message
-      self.adv.display.print_and_wait(
-          "~RYou must ~Wuse ~e~c(item)~R, ~Wanswer~R the math problem, or ~Wrun away~R!")
+      error_str = "You must {} ({}), {} the math problem, or {}!"
+      error_vals = ["use", "item", "answer", "run away"]
+      self.adv.display.send_response("error", error_str, *error_vals)
 
     # Check if we've won or lost
     # If we have, break the loop

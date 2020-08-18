@@ -42,8 +42,9 @@ class IntroController:
 
     elif len(user_in) > 15:
       # Name too long? Sorry bub.
-      error_str = "~RThat name is too long! Please have a name less than 15 characters."
-      self.adv.display.print_and_wait(error_str)
+      error_str = "That name is too long! Please {} with fewer than 15 characters."
+      error_val = "type a name"
+      self.adv.display.send_response("error", error_str, error_val)
 
     else:
       # Valid input? Use it as the name
