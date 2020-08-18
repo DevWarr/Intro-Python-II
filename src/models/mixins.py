@@ -22,7 +22,7 @@ class CanAdd:
       num1 = randint(15, 100)
       num2 = randint(15, 100)
     answer = num1 + num2
-    question = f"What is ~W{num1}~e plus ~W{num2}~e?"
+    question = f"What is {num1} plus {num2}?"
     return [question, answer]
 
 
@@ -51,7 +51,7 @@ class CanSubtract:
       if not num1 - num2 < 0:
         break
     answer = num1 - num2
-    question = f"What is ~W{num1}~e minus ~W{num2}~e?"
+    question = f"What is {num1} minus {num2}?"
     return [question, answer]
 
 
@@ -80,7 +80,7 @@ class CanDivide:
       if num1 % num2 == 0:
         break
     answer = num1 // num2
-    question = f"What is ~W{num1}~e divided by ~W{num2}~e?"
+    question = f"What is {num1} divided by {num2}?"
     return [question, answer]
 
 
@@ -105,7 +105,7 @@ class CanMultiply:
       num1 = randint(4, 20)
       num2 = randint(4, 20)
     answer = num1 * num2
-    question = f"What is ~W{num1}~e times ~W{num2}~e?"
+    question = f"What is {num1} times {num2}?"
     return [question, answer]
 
 
@@ -131,16 +131,20 @@ class CanSquare:
       num2 = randint(2, 3)
 
     if num2 == 2:
-      second_half = "~Wsquared~e"
+      second_half = "squared"
     else:
-      second_half = "~Wcubed~e"
-    question = f"What is ~W{num1}~e {second_half}?"
+      second_half = "cubed"
+    question = f"What is {num1} {second_half}?"
     answer = num1 ** num2
     return [question, answer]
 
 
 class CanRoot:
   """Mixin to allow radical division"""
+
+  def __perfect_cube(self, num):
+    cube_root = num ** (1 / 3)
+    return int(cube_root+0.1)
 
   def root(self, difficulty=0):
     """
@@ -165,10 +169,15 @@ class CanRoot:
       is_square = False
 
     if is_square:
-      root = "~Wsquare~e"
+      root = "square"
       answer = int(num ** (1 / 2))
     else:
-      root = "~Wcube~e"
-      answer = int(num ** (1 / 3))
-    question = f"What is the {root} root of ~W{num}~e?"
+      root = "cube"
+      answer = self.__perfect_cube(num)
+    question = f"What is the {root} root of {num}"
     return [question, answer]
+
+
+if __name__ == "__main__":
+  r = CanRoot()
+  print(r.root(3))
