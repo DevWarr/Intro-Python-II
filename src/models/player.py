@@ -99,7 +99,7 @@ class Player:
     item = room.remove_from_inv(name)
     # If no Item, print message that item doesn't exist
     if item == None:
-      return f"~c({name})~R is not in the room.~e"
+      return (None, name)
     else:
       # If we can't add the item to our inventory,
       #     (Inventory may be too large)
@@ -107,9 +107,9 @@ class Player:
       success = self.add_to_inv(item)
       if not success:
         room.add_to_inv(item)
-        return "~RYour inventory is full.~e"
+        return (False, item.name)
       else:
-        return f"You took ~c({item.name})~e."
+        return (True, item.name)
 
   def drop_item(self, name):
     """
@@ -119,11 +119,11 @@ class Player:
     """
     item = self.remove_from_inv(name)
     if item is None:
-      return f"~c({name})~R is not in your inventory.~e"
+      return (None, name)
     else:
       room = self.current_room
       room.add_to_inv(item)
-      return f"You dropped ~c({item.name})~e."
+      return (True, item.name)
 
   def use_item(self, name):
     """

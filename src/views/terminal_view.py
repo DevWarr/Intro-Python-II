@@ -253,3 +253,16 @@ class TerminalView:
     if sec_to_wait is None:
       sec_to_wait = max(1, word_count / 2.5 - 1)
     sleep(sec_to_wait)
+
+  def black_out(self):
+    system("cls||clear")
+    print()
+
+  def show_credits(self):
+    self.map = ""
+    self.map_key = "\n\n\n~WThanks for playing!~e\n  - Devin Warrick"
+    self.player_inv = ""
+    self.wide_info = ""
+    self.controls = ""
+    self.display_screen()
+    sleep(3)
