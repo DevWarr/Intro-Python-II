@@ -38,6 +38,18 @@ def format_string_block(string_block, width, height):
   return str_array
 
 
+def is_white_substring(msg, i):
+  """Checks if the string at the current index is `'{}'`"""
+  return msg[i] == "{" and (i - 1 < 0 or (msg[i - 1] != "(" and msg[i - 1] != "W")) and (i + 1 < len(msg) and msg[i + 1] == "}")
+
+
+def is_item_substring(msg, i):
+  """Checks if the string at the current index is `'({})'`"""
+  if msg[i] == "(" and i + 4 <= len(msg):
+    return msg[i:i + 4] == "({})"
+  else:
+    return False
+
 # # not functional ?
 # from time import sleep
 # from utils.colors import color
