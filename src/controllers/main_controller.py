@@ -1,6 +1,4 @@
 from .intro_controller import IntroController
-from .travel_controller import TravelController
-from .battle_controller import BattleController
 from models.game_map import GameMap
 from utils.music import MusicPlayer, SoundPlayer
 
@@ -23,7 +21,7 @@ class AdventureGame:
     self.music_player.stop_track()
     self.sound_player.stop_track()
 
-  def change_controller(new_controller):
+  def change_controller(self, new_controller):
     self.controller = new_controller
 
   def main(self):

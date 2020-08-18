@@ -1,8 +1,9 @@
 from abc import ABCMeta, abstractmethod
+from enum import Enum
 from .mixins import *
 
 
-class GuadrianPose(Enum):
+class GuardianPose(Enum):
   STAND     = "stand"
   CORRECT   = "correct"
   INCORRECT = "incorrect"
@@ -15,7 +16,7 @@ class Guardian():
     self.name           = name
     self.description    = description
     self.shrine         = None
-    self.pose           = GuadrianPose.STAND
+    self.pose           = GuardianPose.STAND
 
     self.try_count      = 3
     self.question_count = 5
@@ -43,7 +44,7 @@ class Guardian():
     If there is a required item, asks for item.
     All else, creates and asks a new math question.
     """
-    self.pose = GuadrianPose.STAND
+    self.pose = GuardianPose.STAND
     if self.question is not None:
       return
 
@@ -75,10 +76,10 @@ class Guardian():
     if name == self.required_item:
       self.required_item = None
       self.question = "Correct!"
-      self.pose = GuadrianPose.CORRECT
+      self.pose = GuardianPose.CORRECT
       return True
     else:
-      self.pose = GuadrianPose.INCORRECT
+      self.pose = GuardianPose.INCORRECT
       self.try_count -= 1
       return False
 
@@ -96,11 +97,11 @@ class Guardian():
     if answer == self.answer:
       self.answer = None
       self.question = "Correct!"
-      self.pose = GuadrianPose.CORRECT
+      self.pose = GuardianPose.CORRECT
       self.next_question_prep()
       return True
     else:
-      self.pose = GuadrianPose.INCORRECT
+      self.pose = GuardianPose.INCORRECT
       self.try_count -= 1
       return False
 
@@ -119,8 +120,8 @@ class Guardian():
     if self.try_count == 0:
       return True
     elif self.question_count == 0:
-    self.shrine.guardian = None
-    return False
+      self.shrine.guardian = None
+      return False
     else:
       return None
 

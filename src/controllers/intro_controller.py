@@ -1,4 +1,4 @@
-from .travel_controller import TravelController
+from .game_controllers import TravelController
 from models.room import DebugRoom
 from models.player import DebugPlayer, GamePlayer
 from models.game_map import GameMap
@@ -29,12 +29,11 @@ class IntroController:
     self.adv.sound_player.play_track(5)
     for i in range(0, 6):
       display_screen(*self.intro_text)
-      print("\n")
       print(color("~BStarting Game ." + " ." * (i % 3)))
       sleep(0.1)
     fade_out(*self.intro_text)
     self.adv.change_controller(TravelController(self.adv))
-    self.music_player.play_track(0)
+    self.adv.music_player.play_track(0)
 
 
   def main(self):
