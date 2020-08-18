@@ -16,7 +16,7 @@ class AdventureGame:
 
     self.music_player = MusicPlayer()
     self.sound_player = SoundPlayer()
-    self.music_player.turn_off()
+    # self.music_player.turn_off()
 
   def quit_game(self):
     """Stop the music/sound players before quitting the game."""
@@ -33,7 +33,7 @@ class AdventureGame:
     while self.playing_game:
       # Display the intro and wait for input
       self.display.display_screen()
-      user_in = input(">> ").strip()
+      user_in = self.display.get_input(">> ")
       self.controller.main(user_in)
 
     self.quit_game()

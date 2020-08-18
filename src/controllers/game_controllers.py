@@ -131,7 +131,7 @@ class TravelController:
     self.adv.display.show_credits()
 
   def main(self, user_in):
-    user_in = user_in.split(" ")
+    user_in = user_in.lower().split(" ")
     function = self.branch_table.get(user_in[0], self.invalid_input)
     function(user_in)
 
@@ -145,6 +145,8 @@ class BattleController:
     self.guardian     = guardian
     # Tell the guardian to prep the quiz with the initially required item
     self.guardian.prep_quiz(self.adv.player)
+    self.guardian.create_question()
+    self.adv.display.update(self.guardian)
 
   def is_answering_math(self, user_in):
     """Returns true if user is answering a math problem during battle"""
@@ -155,8 +157,8 @@ class BattleController:
 
   def quit_game(self, user_in):
     self.adv.sound_player.play_track(5)
-    sure = input(
-        "Quit the Game. Are you sure? [Y/N]>> ").lower().strip()
+    sure = self.adv.display.get_input(
+        "Quit the Game. Are you sure? [Y/N]>> ").lower()
     if sure == "y":
       self.adv.playing_game = False
 
@@ -186,13 +188,12 @@ class BattleController:
     if correct_item:
       # Correct item? Make the guardian dance a little, and display text
       self.adv.sound_player.play_track(2)
-      display_screen(*self.guardian.display_info("correct"), self.control_enum)
+      self.adv.display.update(self.guardian)
       self.adv.display.print_and_wait(f"~WYou used ~e~c({item_name})~W!", 1)
     else:
       # Incorrect item? Angry guardian!
       self.adv.sound_player.play_track(3)
-      all_info = self.guardian.display_info("incorrect")
-      display_screen(*all_info, self.control_enum)
+      self.adv.display.update(self.guardian)
       self.adv.display.print_and_wait(
           f"~c({item_name}) ~Ris not the correct item!", 1)
 
@@ -208,13 +209,12 @@ class BattleController:
     if correct_answer:
       # Correct answer? Make the guardian dance a little, and display text
       self.adv.sound_player.play_track(2)
-      display_screen(*self.guardian.display_info("correct"), self.control_enum)
+      self.adv.display.update(self.guardian)
       self.adv.display.print_and_wait(f"~Y{answer} ~Wis correct!", 1)
     else:
       # Incorrect answer? Angry guardian!
       self.adv.sound_player.play_track(3)
-      display_screen(*self.guardian.display_info("incorrect"),
-                     self.control_enum)
+      self.adv.display.update(self.guardian)
       self.adv.display.print_and_wait(
           f"~Y{answer} ~Ris not the correct answer!", 1)
 
@@ -240,23 +240,19 @@ class BattleController:
       # Losing the battle
       self.adv.player.run_away()
       self.adv.sound_player.play_track(0)
-      print(color("~YYou lost the battle! You have to run away!"))
-      time.sleep(0.6)
+      self.adv.display.print_and_wait(
+          "~YYou lost the battle! You have to run away!", 0.1)
+      time.sleep(0.5)
       self.adv.sound_player.play_track(0)
       time.sleep(0.6)
       self.adv.sound_player.play_track(0)
       time.sleep(0.8)
 
-    fade_out(*self.guardian.display_info(), self.control_enum)
+    self.adv.display.fade_out()
     self.adv.change_controller(TravelController(self.adv))
 
-  def main(self):
-    # Create a question
-    self.guardian.create_question()
-    # Display battle info and wait for input
-    display_screen(*self.guardian.display_info(), self.control_enum)
-    user_in = input(">> ").lower().strip().split(" ")
-
+  def main(self, user_in):
+    user_in = user_in.lower().split(" ")
     if user_in[0] == "q":
       self.quit_game(user_in)
       return
@@ -277,3 +273,6 @@ class BattleController:
     win_or_lose = self.guardian.check_victory()
     if win_or_lose is not None:
       self.end_of_battle(win_or_lose)
+      return
+    self.guardian.create_question()
+    self.adv.display.update(self.guardian)

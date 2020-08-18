@@ -57,9 +57,9 @@ class TerminalView:
 
   def build_fight_info(self, questions, tries):
     info = [
-        f"{battle_info_template[0]}~W{questions}",
+        f"{battle_info_template[0]}~W{questions}~e",
         "",
-        f"{battle_info_template[1]}~W{tries}",
+        f"{battle_info_template[1]}~W{tries}~e",
         "",
         ""
     ]
@@ -85,10 +85,10 @@ class TerminalView:
       description += "~e"
 
     if guardian.question is None:
-      info_list = ["None", " "]
+      info_list = [" "]
     else:
       info_list = guardian.question.split(" ")
-    if info_list[0] + " " + info_list[1] == guardian.name:
+    if len(info_list) > 1 and f"{info_list[0]} {info_list[1]}" == guardian.name:
       # If we're asking for an item, ↑↑↑
       # add style changes to the guardian's name, and the item
       info_list[0] = "~W" + info_list[0]
@@ -266,3 +266,6 @@ class TerminalView:
     self.controls = ""
     self.display_screen()
     sleep(3)
+
+  def get_input(self, msg):
+    return input(msg).strip()
