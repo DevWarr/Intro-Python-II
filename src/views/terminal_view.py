@@ -231,10 +231,12 @@ class TerminalView:
     print(color(output))
 
   def start_game(self):
+    output = self.prep_screen()
     for i in range(0, 6):
-      self.display_screen()
+      system('cls||clear')
+      print(color(output))
       print(color("~BStarting Game ." + " ." * (i % 3)))
-      sleep(0.1)
+      sleep(0.3)
 
   def fade_out(self):
     output_list = self.prep_screen().split("\n")
