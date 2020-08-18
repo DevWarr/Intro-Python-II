@@ -39,7 +39,7 @@ class TravelController:
       self.adv.battle.initialize_battle(new_battle)
       self.adv.game_state = GameState.BATTLE
       display_info = [
-          self.adv.game_map.display_map(),
+          self.adv.game_map,
           None,
           self.adv.player,
           self.adv.player.current_room
@@ -116,7 +116,7 @@ class TravelController:
 
     # Display map screen and wait for input
     display_info = [
-        self.adv.game_map.display_map(),
+        self.adv.game_map,
         None,
         self.adv.player,
         self.adv.player.current_room

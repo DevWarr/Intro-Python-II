@@ -1,9 +1,10 @@
 import re
 from os import system
 from time import sleep
+from models.game_map import GameMap
 from utils.colors import color
 from views.controls_view import Controls, get_controls_text
-from views import map_key, create_battle_info_view, create_player_inventory_view, create_wide_infopanel_view
+from views import map_key, create_map_display, create_battle_info_view, create_player_inventory_view, create_wide_infopanel_view
 
 
 def format_string_block(string_block, width, height):
@@ -42,7 +43,7 @@ def format_string_block(string_block, width, height):
   return str_array
 
 
-def prep_screen(img, info1, info2, info3, control_enum):
+def prep_screen(map_or_img, info1, info2, info3, control_enum):
   """
   Takes text blocks for different segments of the 
   terminal screen, and formats them all in the correct place.
@@ -68,7 +69,10 @@ def prep_screen(img, info1, info2, info3, control_enum):
   in order for this function to properly check the length of each strings block.
   """
   # properly format each block
-  img = format_string_block(img, 23, 5)
+  if isinstance(map_or_img, GameMap):
+    map_info = (map_or_img.map, map_or_img.entrance, info2.current_room)
+    map_or_img = create_map_display(*map_info)
+  img = format_string_block(map_or_img, 23, 5)
 
   info1 = map_key if info1 is None else create_battle_info_view(*info1)
   info1 = format_string_block(info1, 29, 5)

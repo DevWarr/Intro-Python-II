@@ -1,6 +1,7 @@
 from models.guardians import Guardian, ArtifactGuardian
 from models.room import Room
-from assets.guardian_poses import *
+from models.shrine import Shrine
+from assets.guardian_poses import all_poses
 
 map_key = [
     "~Y[ ]~e You are here",
@@ -16,6 +17,14 @@ battle_info_template = [
 ]
 
 inventory_header_template = " Inventory:"
+
+room_sign = {
+    "empty": "   ",
+    "tunnel": "[ ]",
+    "entrance": "[X]",
+    "shrine": "[S]",
+    "artifact": "[A]"
+}
 
 
 def create_battle_info_view(questions, tries):
@@ -77,3 +86,43 @@ def create_wide_infopanel_view(guardian_or_room):
     info = f"Items: [ {item_string} ]"
 
   return [name, description, info]
+
+
+def create_map_display(map_array, entrance_room, player_room):
+  """
+  Displays Game Map.
+
+  Rooms with items are bold, and the player position is yellow.
+  """
+  output = ""
+  for room_arr in map_array:
+    temp = ""
+    for room in room_arr:
+      room_str = ""
+      # print(room.name)
+      # First ifs to determine string
+      if room is None:
+        room_str = room_sign["empty"]
+      elif room.name[:8] == "Artifact":
+        room_str = room_sign["artifact"]
+      elif isinstance(room, Shrine):
+        room_str = room_sign["shrine"]
+      elif room is entrance_room:
+        room_str = room_sign["entrance"]
+      else:
+        room_str = room_sign["tunnel"]
+
+      # Second ifs to determine color
+      if room is player_room:
+        # Player is in the room? Yellow
+        room_str = f"~Y{room_str}~e"
+      elif room is not None and len(room.inv) > 0:
+        # Room has any items in it? White
+        room_str = f"~W{room_str}~e"
+      temp += room_str
+
+    output += temp + "\n"
+  return output
+
+def create_guardian_display(guardian, pose):
+  return all_poses[guardian.name][pose]

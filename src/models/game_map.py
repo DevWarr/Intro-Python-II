@@ -25,13 +25,6 @@ room_template = [
     ["Artifact Shrine", "The Shrine of the Ancient Mathematical Artifact! Grab it, and get out of here!", [
         Item("Artifact")], ArtifactGuardian()]
 ]
-room_sign = {
-    "empty": "   ",
-    "tunnel": "[ ]",
-    "entrance": "[X]",
-    "shrine": "[S]",
-    "artifact": "[A]"
-}
 
 
 class GameMap:
@@ -84,43 +77,7 @@ class GameMap:
         rooms.append(Shrine(*room_template[room_id]))
     return rooms
 
-  def display_map(self):
-    """
-    Displays Game Map.
-
-    Sign shrines are bold, and the player position is yellow.
-    """
-    output = ""
-    for room_arr in self.map:
-      temp = ""
-      for room in room_arr:
-        room_str = ""
-        # print(room.name)
-        # First ifs to determine string
-        if room is None:
-          room_str = room_sign["empty"]
-        elif room.name[:8] == "Artifact":
-          room_str = room_sign["artifact"]
-        elif isinstance(room, Shrine):
-          room_str = room_sign["shrine"]
-        elif room == self.entrance:
-          room_str = room_sign["entrance"]
-        else:
-          room_str = room_sign["tunnel"]
-
-        # Second ifs to determine color
-        if room == [4, 1]:
-          # Player is in the room? Yellow
-          room_str = f"~Y{room_str}~e"
-        elif room is not None and len(room.inv) > 0:
-          # Room has any items in it? White
-          room_str = f"~W{room_str}~e"
-        temp += room_str
-
-      output += temp + "\n"
-    return output
-
-  def display_info(self):
+  def deprecated_display_info(self):
     """
     Displays Player info and Room info,
     formatted for the utils.display_screen function.
