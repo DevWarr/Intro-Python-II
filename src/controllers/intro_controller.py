@@ -1,10 +1,10 @@
+from .travel_controller import TravelController
 from models.room import DebugRoom
 from models.player import DebugPlayer, GamePlayer
 from models.game_map import GameMap
 from utils.display_screen import display_screen, fade_out, print_and_wait
 from utils.colors import color
 from assets.guardian_poses import multip_guardian
-from .game_state import GameState
 from views.controls_view import Controls
 from time import sleep
 
@@ -33,6 +33,9 @@ class IntroController:
       print(color("~BStarting Game ." + " ." * (i % 3)))
       sleep(0.1)
     fade_out(*self.intro_text)
+    self.adv.change_controller(TravelController(self.adv))
+    self.music_player.play_track(0)
+
 
   def main(self):
     # Display the intro and wait for input
@@ -54,5 +57,4 @@ class IntroController:
     else:
       # Valid input? Use it as the name
       self.setup_player(user_in)
-      self.adv.game_state = GameState.TRAVEL
       return

@@ -1,6 +1,5 @@
-from .game_state import GameState
+from .battle_controller import BattleController
 from views.controls_view import Controls
-from models.battle import Battle
 from utils.display_screen import display_screen, fade_out, print_and_wait
 import time
 
@@ -35,9 +34,7 @@ class TravelController:
     if guardian is not None:
       # If there is a guardian, start battle
       self.adv.sound_player.play_track(4)
-      new_battle = Battle(self.adv.player, guardian)
-      self.adv.battle.initialize_battle(new_battle)
-      self.adv.game_state = GameState.BATTLE
+      self.adv.change_controller(BattleController(self.adv, guardian))
       display_info = [
           self.adv.game_map,
           None,

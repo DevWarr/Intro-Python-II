@@ -187,6 +187,9 @@ class Player:
     else:
       return False
 
+  def run_away(self):
+    self.position = [*self.prev]
+
   def check_for_guardian(self):
     """
     Checks if a guardian is in the current room.

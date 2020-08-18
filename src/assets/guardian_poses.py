@@ -200,3 +200,11 @@ def artifact_guardian():
       "     ~Y^^^^      \n"
 
   return {"stand": stand, "correct": correct, "incorrect": incorrect}
+
+all_poses = {
+    "Multip Guardian": multip_guardian(),
+    "Divid Guardian": divid_guardian(),
+    "Square Guardian": square_guardian(),
+    "Radical Guardian": radical_guardian(),
+    "Artifact Guardian": artifact_guardian(),
+}

@@ -124,5 +124,6 @@ def create_map_display(map_array, entrance_room, player_room):
     output += temp + "\n"
   return output
 
-def create_guardian_display(guardian, pose):
+def create_guardian_display(guardian):
+  pose = guardian.pose.value
   return all_poses[guardian.name][pose]
