@@ -40,11 +40,11 @@ room_sign = {
 
 class TerminalView:
 
-  def __init__(self, adv, game_map):
+  def __init__(self, adv):
     self.adv           = adv
     self.map_key       = map_key
     self.map           = None
-    self.build_map_display(game_map.map)
+    self.build_map_display(self.adv.game_map.map)
     self.player_inv    = None
 
     self.guardian_pose = None
