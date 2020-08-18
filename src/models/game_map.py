@@ -34,22 +34,11 @@ room_sign = {
 }
 
 
-class Map:
+class GameMap:
 
-  def __init__(self, player):
-    self.player = player
-    self.position = [4, 1]  # [y, x]
-    self.prev = None
+  def __init__(self):
     self.map = self.create_map()
     self.entrance = self.map[4][1]
-
-  @property
-  def x(self):
-    return self.position[1]
-
-  @property
-  def y(self):
-    return self.position[0]
 
   def create_map(self):
     """
@@ -95,121 +84,9 @@ class Map:
         rooms.append(Shrine(*room_template[room_id]))
     return rooms
 
-  def confirm_direction(self, y, x):
-    """
-    Confirms that our new direction is both
-        -   in range
-        -   A valid room
-    This could be done all in one if statement,
-    But the y, x, and valid room checks are
-        separated for readability.
-    """
-    if 0 <= y and y < len(self.map):
-      if 0 <= x and x < len(self.map[0]):
-        if self.map[y][x] is not None:
-          return True
-    return False
-
-  def move(self, direction):
-    """
-    Confirming each direction and making sure we stay in bounds,
-    moves a direction and stores previous location.
-
-    Returns true if we moved, and false otherwise
-    """
-    if direction == 'n' and self.confirm_direction(self.y - 1, self.x):
-      self.prev = [*self.position]
-      self.position[0] -= 1
-      return True
-    elif direction == 's' and self.confirm_direction(self.y + 1, self.x):
-      self.prev = [*self.position]
-      self.position[0] += 1
-      return True
-    elif direction == 'w' and self.confirm_direction(self.y, self.x - 1):
-      self.prev = [*self.position]
-      self.position[1] -= 1
-      return True
-    elif direction == 'e' and self.confirm_direction(self.y, self.x + 1):
-      self.prev = [*self.position]
-      self.position[1] += 1
-      return True
-    else:
-      return False
-
-  def get_room(self):
-    """Returns the Room object the player is currently in"""
-    return self.map[self.y][self.x]
-
-  def check_for_guardian(self):
-    """
-    Checks if a guardian is in the current room.
-
-    If there is a guardian, returns the guardian.
-    Else, returns None.
-    """
-    if isinstance(self.get_room(), Shrine):
-      return self.get_room().guardian
-
-  def take_item(self, name):
-    """
-    If possible, 
-    Takes an item from the current room
-    And adds to the player inventory
-    """
-    room = self.get_room()
-    item = room.remove_item(name)
-    # If no Item, print message that item doesn't exist
-    if item == None:
-      return f"~c({name})~R is not in the room.~e"
-    else:
-      # If we can't add the item to our inventory,
-      #     (Inventory may be too large)
-      # Then return the item to the room
-      success = self.player.add_inv(item)
-      if not success:
-        room.add_item(item)
-        return "~RYour inventory is full.~e"
-      else:
-        return f"You took ~c({item.name})~e."
-
-  def drop_item(self, name):
-    """
-    If possible,
-    Removes item from player inventory
-    And adds to current room.
-    """
-    item = self.player.remove_item(name)
-    if item is None:
-      return f"~c({name})~R is not in your inventory.~e"
-    else:
-      room = self.get_room()
-      room.add_item(item)
-      return f"You dropped ~c({item.name})~e."
-
-  def use_item(self, name):
-    """
-    Uses an item in the Player's inventory.
-
-    Only used to end the game.
-    The item must be the Artifact,
-    and the player must be in the Entrance Room.
-
-    If:
-    - Player doesn't have item → (None, name)
-    - Above conditions are met → (True, item.name).
-    - Else                     → (False, item.name).
-    """
-    item = self.player.get_item(name)
-    if item is None:
-      return (None, name)
-    if item.name == "Artifact" and [self.y, self.x] == [4, 1]:
-      return (True, item.name)
-    else:
-      return (False, item.name)
-
   def display_map(self):
     """
-    Displays Map.
+    Displays Game Map.
 
     Sign shrines are bold, and the player position is yellow.
     """
@@ -232,7 +109,7 @@ class Map:
           room_str = room_sign["tunnel"]
 
         # Second ifs to determine color
-        if room == self.get_room():
+        if room == [4, 1]:
           # Player is in the room? Yellow
           room_str = f"~Y{room_str}~e"
         elif room is not None and len(room.inv) > 0:

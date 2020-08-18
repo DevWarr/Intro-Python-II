@@ -1,6 +1,6 @@
 from models.room import DebugRoom
 from models.player import DebugPlayer, GamePlayer
-from models.game_map import Map
+from models.game_map import GameMap
 from utils.display_screen import display_screen, fade_out, print_and_wait
 from utils.colors import color
 from assets.guardian_poses import multip_guardian
@@ -23,8 +23,7 @@ class IntroController:
     ]
 
   def setup_player(self, user_in):
-    player = GamePlayer(user_in)
-    self.adv.game_map = Map(player)
+    self.adv.player = GamePlayer(user_in, self.adv.game_map)
 
     self.adv.music_player.stop_track()
     self.adv.sound_player.play_track(5)
@@ -38,7 +37,6 @@ class IntroController:
   def main(self):
     # Display the intro and wait for input
     display_screen(*self.intro_text)
-    print("\n")
     user_in = input(">> ").strip()
 
     if user_in == 'q':

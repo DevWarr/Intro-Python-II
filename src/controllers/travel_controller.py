@@ -4,6 +4,7 @@ from models.battle import Battle
 from utils.display_screen import display_screen, fade_out, print_and_wait
 import time
 
+
 class TravelController:
   """Travel Loop for the adventure game"""
 
@@ -30,18 +31,23 @@ class TravelController:
     self.control_enum = Controls.swap_controls(self.control_enum)
 
   def look_for_fight(self):
-    guardian = self.adv.game_map.check_for_guardian()
+    guardian = self.adv.player.check_for_guardian()
     if guardian is not None:
       # If there is a guardian, start battle
       self.adv.sound_player.play_track(4)
-      new_battle = Battle(self.adv.game_map.player,
-                          guardian, self.adv.game_map)
+      new_battle = Battle(self.adv.player, guardian)
       self.adv.battle.initialize_battle(new_battle)
       self.adv.game_state = GameState.BATTLE
-      fade_out(*self.adv.game_map.display_info(), self.control_enum)
+      display_info = [
+          self.adv.game_map.display_map(),
+          None,
+          self.adv.player,
+          self.adv.player.current_room
+      ]
+      fade_out(*display_info, self.control_enum)
 
   def move(self, user_in):
-    success = self.adv.game_map.move(user_in[0])
+    success = self.adv.player.move(user_in[0])
     if success:
       self.adv.sound_player.play_track(5)
       self.look_for_fight()
@@ -53,7 +59,7 @@ class TravelController:
     if len(user_in) > 1:
       self.adv.sound_player.play_track(5)
       item_name = " ".join(user_in[1:])
-      print_and_wait(self.adv.game_map.take_item(item_name))
+      print_and_wait(self.adv.player.take_item(item_name))
     else:
       self.adv.sound_player.play_track(6)
       print_and_wait(
@@ -63,7 +69,7 @@ class TravelController:
     if len(user_in) > 1:
       self.adv.sound_player.play_track(5)
       item_name = " ".join(user_in[1:])
-      print_and_wait(self.adv.game_map.drop_item(item_name))
+      print_and_wait(self.adv.player.drop_item(item_name))
     else:
       self.adv.sound_player.play_track(6)
       print_and_wait(
@@ -72,7 +78,7 @@ class TravelController:
   def use_item(self, user_in):
     if len(user_in) > 1:
       item_name = " ".join(user_in[1:])
-      success = self.adv.game_map.use_item(item_name)
+      success = self.adv.player.use_item(item_name)
       if success[0] is None:
         self.adv.sound_player.play_track(6)
         print_and_wait(f"~c({name})~R is not in your inventory.")
@@ -109,7 +115,13 @@ class TravelController:
   def main(self):
 
     # Display map screen and wait for input
-    display_screen(*self.adv.game_map.display_info(), self.control_enum)
+    display_info = [
+        self.adv.game_map.display_map(),
+        None,
+        self.adv.player,
+        self.adv.player.current_room
+    ]
+    display_screen(*display_info, self.control_enum)
     user_in = input(">> ").lower().strip().split(" ")
 
     function = self.branch_table.get(user_in[0], self.invalid_input)

@@ -3,8 +3,7 @@ from utils.colors import color
 
 class Battle:
 
-  def __init__(self, player, guardian, game_map):
-    self.map             = game_map
+  def __init__(self, player, guardian):
     self.player          = player
 
     # Guardian set up for the battle
@@ -54,7 +53,7 @@ class Battle:
     - Item does not match required → (False, item.name)
     - Item matches required        → (True, item.nam)
     """
-    item = self.player.get_item(name)
+    item = self.player.get_from_inv(name)
     if item is None:
       return (None,)
     elif item.name == self.required_item:
@@ -90,7 +89,7 @@ class Battle:
     # If we lose, the guardian wins
     self.guardian.win()
     # Knock the player back to their previous location
-    self.map.position = [*self.map.prev]
+    self.player.position = [*self.player.prev]
     return False
 
   def win(self):
