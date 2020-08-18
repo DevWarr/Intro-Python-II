@@ -10,7 +10,6 @@ if __name__ == "__main__":
   #     we stop our players and exit peacefully
   try:
     adv = AdventureGame()
-    terminal_size((82, 16))
     adv.main()
   except Exception as e:
     adv.music_player.stop_track()

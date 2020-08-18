@@ -2,11 +2,8 @@ from .game_controllers import TravelController
 from models.room import DebugRoom
 from models.player import DebugPlayer, GamePlayer
 from models.game_map import GameMap
-from utils.display_screen import display_screen, fade_out, print_and_wait
-from utils.colors import color
-from assets.guardian_poses import multip_guardian
+from models.guardians import MultipGuardian
 from views.controls_view import Controls
-from time import sleep
 
 
 class IntroController:
@@ -14,32 +11,27 @@ class IntroController:
 
   def __init__(self, adv):
     self.adv = adv
-    self.intro_text = [
-        multip_guardian()["stand"],
-        None,
+    intro_text = [
+        MultipGuardian(),
         DebugPlayer("Winner"),
         DebugRoom(),
         Controls.INTRO
     ]
+    self.adv.display.update(*intro_text)
 
   def setup_player(self, user_in):
     self.adv.player = GamePlayer(user_in, self.adv.game_map)
 
     self.adv.music_player.stop_track()
     self.adv.sound_player.play_track(5)
-    for i in range(0, 6):
-      display_screen(*self.intro_text)
-      print(color("~BStarting Game ." + " ." * (i % 3)))
-      sleep(0.1)
-    fade_out(*self.intro_text)
-    self.adv.change_controller(TravelController(self.adv))
+    
+    self.adv.display.start_game()
+    self.adv.display.fade_out()
+    
     self.adv.music_player.play_track(0)
+    self.adv.change_controller(TravelController(self.adv))
 
-
-  def main(self):
-    # Display the intro and wait for input
-    display_screen(*self.intro_text)
-    user_in = input(">> ").strip()
+  def main(self, user_in):
 
     if user_in == 'q':
       self.adv.playing_game = False
@@ -50,8 +42,8 @@ class IntroController:
 
     elif len(user_in) > 15:
       # Name too long? Sorry bub.
-      print_and_wait(
-          "~RThat name is too long! Please have a name less than 15 characters.")
+      error_str = "~RThat name is too long! Please have a name less than 15 characters."
+      self.adv.display.print_and_wait(error_str)
 
     else:
       # Valid input? Use it as the name

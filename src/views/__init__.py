@@ -88,12 +88,14 @@ def create_wide_infopanel_view(guardian_or_room):
   return [name, description, info]
 
 
-def create_map_display(map_array, entrance_room, player_room):
+def create_map_display(map_array, player_room):
   """
   Displays Game Map.
 
   Rooms with items are bold, and the player position is yellow.
   """
+  entrance_room = map_array[4][1]
+  
   output = ""
   for room_arr in map_array:
     temp = ""

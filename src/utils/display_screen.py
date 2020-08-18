@@ -21,6 +21,7 @@ def format_string_block(string_block, width, height):
     str_array = string_block
   else:
     str_array = string_block.split("\n")
+    
   if len(str_array) < height:
     # If our array isn't as long as our height,
     # add in extra lines of space so it does
@@ -102,10 +103,7 @@ def display_screen(img, info1, info2, info3, controls):
   """prints the prep_screen's output to the screen."""
 
   output = prep_screen(img, info1, info2, info3, controls)
-  # Clear the screen, and then print our output with the color function
   system('cls||clear')
-  string = color(output)
-  # print(string[290:300])
   print(color(output))
 
 
