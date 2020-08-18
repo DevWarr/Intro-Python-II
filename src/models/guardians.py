@@ -34,6 +34,7 @@ class Guardian():
     self.player = player
     self.try_count = 3
     self.question_count = 5
+    self.question = None
     self.required_item  = "Calculator"
 
   def create_question(self):
@@ -75,7 +76,7 @@ class Guardian():
     """
     if name == self.required_item:
       self.required_item = None
-      self.question = "Correct!"
+      self.question = None
       self.pose = GuardianPose.CORRECT
       return True
     else:
@@ -96,7 +97,7 @@ class Guardian():
     """
     if answer == self.answer:
       self.answer = None
-      self.question = "Correct!"
+      self.question = None
       self.pose = GuardianPose.CORRECT
       self.next_question_prep()
       return True
@@ -118,10 +119,10 @@ class Guardian():
     Still battling? Return None
     """
     if self.try_count == 0:
-      return True
+      return False
     elif self.question_count == 0:
       self.shrine.guardian = None
-      return False
+      return True
     else:
       return None
 
@@ -269,8 +270,8 @@ class ArtifactGuardian(CanMultiply, CanSquare, CanDivide, CanRoot, CanAdd, CanSu
     # The artifact Guardian holds it's own questions and tries.
     # You can run away and the question count won't go down.
     self.question_count = 10
-    self.try_count = 3
-    self.required_item = "Multip"
+    self.try_count      = 3
+    self.required_item  = "Multip"
 
   def prep_quiz(self, player):
     """
@@ -280,7 +281,9 @@ class ArtifactGuardian(CanMultiply, CanSquare, CanDivide, CanRoot, CanAdd, CanSu
     This allows the player to run away and come back
     without resetting their questions. 
     """
-    self.player = player
+    self.player          = player
+    self.question        = None
+    self.try_count       = 3
     self.question_count += 1
     # We set question_count + 1 because next_question_prep
     # will decrease it by one automatically
