@@ -247,7 +247,7 @@ class TkinterView:
               style="Green.TLabel").grid(row=1, column=0, sticky="w")
     extra_frame.grid(row=2, column=0, sticky="w")
 
-    frame.grid(column=0, row=3, columnspan=3, rowspan=3, pady=25)
+    frame.grid(column=0, row=3, columnspan=3, rowspan=3, pady=25, sticky="w")
     return {
         "frame": frame,
         "name": name,
@@ -343,8 +343,8 @@ class TkinterView:
       # add style changes to the guardian's name, and the item
       item_name = info_list[-1]
       rest_of_text = " ".join(info_list[2:-1])
-      ttk.Label(ef, text=guardian.name, style="White.TLabel").pack(side=LEFT)
-      ttk.Label(ef, text=rest_of_text).pack(side=LEFT)
+      ttk.Label(ef, text=f"{guardian.name} ", style="White.TLabel").pack(side=LEFT)
+      ttk.Label(ef, text=f"{rest_of_text} ").pack(side=LEFT)
       ttk.Label(ef, text=item_name, style="Blue.TLabel").pack(side=LEFT)
     else:
       # If we're just asking a math question,
