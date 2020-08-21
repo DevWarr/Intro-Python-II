@@ -1,6 +1,7 @@
-from controllers.main_controller import AdventureGame
+from controllers.main_controller import TerminalController, TkinterController
 from multiprocessing import freeze_support
 from os import terminal_size
+from sys import argv
 
 
 if __name__ == "__main__":
@@ -8,10 +9,14 @@ if __name__ == "__main__":
   freeze_support()
   # Wrap everything in a try/except, so if an error is thrown
   #     we stop our players and exit peacefully
-  try:
-    adv = AdventureGame()
-    adv.main()
-  except Exception as e:
-    adv.music_player.stop_track()
-    adv.sound_player.stop_track()
-    raise e
+  if len(argv) > 1:
+    try:
+        adv = TerminalController()
+        adv.main()
+    except Exception as e:
+      adv.music_player.stop_track()
+      adv.sound_player.stop_track()
+      raise e
+  else:
+    adv = TkinterController()
+    adv.start_game()

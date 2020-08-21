@@ -77,7 +77,7 @@ class TerminalView:
     self.player_inv = [inventory_header, *inventory]
 
   def build_guardian_info(self, guardian):
-    name = guardian.name
+    name = f"~W{guardian.name}~e"
     description = "~g" + guardian.description + "~e"
 
     if isinstance(guardian, ArtifactGuardian):
@@ -110,7 +110,7 @@ class TerminalView:
     self.wide_info = [name, description, info]
 
   def build_room_info(self, room):
-    name = room.name
+    name = f"~W{room.name}~e"
     description = "~g" + room.description + "~e"
 
     item_names = [f"~c({str(item)})~e" for item in room.inv]
