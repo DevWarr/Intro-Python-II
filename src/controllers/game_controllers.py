@@ -28,7 +28,7 @@ class TravelController:
     self.adv.display.update(*display_info)
 
   def quit_game(self, user_in):
-    self.adv.playing_game = False
+    self.adv.quit_game()
 
   def toggle_options(self, user_in):
     self.adv.sound_player.play_track(5)
@@ -107,7 +107,7 @@ class TravelController:
       success, item_name = self.adv.player.use_item(item_name)
       if success:
         self.play_credits()
-        self.adv.playing_game = False
+        self.adv.quit_game()
         return
       elif success is None:
         error_str = "({}) is not in your inventory."
@@ -168,7 +168,7 @@ class BattleController:
     sure = self.adv.display.get_input(
         "Quit the Game. Are you sure? [Y/N]>> ").lower()
     if sure == "y":
-      self.adv.playing_game = False
+      self.adv.quit_game()
 
   def use_item(self, user_in):
     """

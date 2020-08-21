@@ -34,7 +34,7 @@ class IntroController:
   def main(self, user_in):
 
     if user_in == 'q':
-      self.adv.playing_game = False
+      self.adv.quit_game()
 
     elif len(user_in) == 0:
       # No name? Reset the loop

@@ -358,6 +358,8 @@ class TkinterView:
           ttk.Label(ef, text=f"{word} ", style="White.TLabel").pack(side=LEFT)
         else:
           text += f"{word} "
+      ttk.Label(ef, text=text).pack(side=LEFT)
+      
 
   def update_guardian(self, guardian):
     self.fight_info["question_count"].set(guardian.question_count)
@@ -501,18 +503,19 @@ class TkinterView:
         continue
 
       # Formatting found? Create the labels and place them in
-      item = f"({values[value_idx]})"
       text = msg[start:end]
       ttk.Label(frame, text=text, style=style).pack(side=LEFT)
-      value_idx += 1
 
       if is_item_substring(msg, end):
+        item = f"({values[value_idx]})"
         ttk.Label(frame, text=item, style="Blue.TLabel").pack(side=LEFT)
         end += 4
       if is_white_substring(msg, end):
+        item = f"{values[value_idx]}"
         ttk.Label(frame, text=item, style="White.TLabel").pack(side=LEFT)
         end += 2
 
+      value_idx += 1
       start = end
     if end > start:
       text = msg[start:end]
