@@ -94,19 +94,23 @@ class TkinterView:
 
     def resize_font(e):
       for font in self.fonts.values():
-        font["size"] = root.winfo_width() // 75
-        font["size"] = root.winfo_width() // 75
+        font["size"] = root.winfo_width() // 70
+        font["size"] = root.winfo_width() // 70
+      if self.main_frame and "padding" in self.main_frame:
+        self.main_frame["padding"]["width"] = root.winfo_width()
 
     root.bind("<Configure>", resize_font)
     root.protocol("WM_DELETE_WINDOW", self.adv.quit_game)
     return root
 
   def create_main_frame(self):
-    frame = ttk.Frame(self.root, width=500, height=500)
+    frame = ttk.Frame(self.root)
     frame.grid(column=0, row=0, sticky=(N, W, E, S))
+    padding = ttk.Frame(frame, width=1200)
+    padding.grid(row=0, column=0, columnspan=3)
     self.root.columnconfigure(0, weight=1)
     self.root.rowconfigure(0, weight=1)
-    return frame
+    return {"frame": frame, "padding": padding}
 
   def create_styles(self):
     style = ttk.Style()
@@ -138,7 +142,7 @@ class TkinterView:
     """
     entrance_room = map_array[4][1]
 
-    frame = ttk.Frame(self.main_frame)
+    frame = ttk.Frame(self.main_frame["frame"])
     map_display = []
     for _ in range(len(map_array)):
       map_display.append([None] * len(map_array[0]))
@@ -171,7 +175,7 @@ class TkinterView:
     return {"frame": frame, "map_display": map_display}
 
   def build_map_key(self):
-    frame = ttk.Frame(self.main_frame)
+    frame = ttk.Frame(self.main_frame["frame"])
 
     for i in range(len(map_key_template["images"])):
       image = map_key_template["images"][i]
@@ -192,7 +196,7 @@ class TkinterView:
     return {"frame": frame}
 
   def build_player_inventory(self):
-    frame = ttk.Frame(self.main_frame)
+    frame = ttk.Frame(self.main_frame["frame"])
 
     header = ttk.Frame(frame)
     header.grid(column=0, row=0)
@@ -212,13 +216,13 @@ class TkinterView:
     return [player_name] + inventory
 
   def build_guardian_pose(self):
-    frame = ttk.Frame(self.main_frame)
+    frame = ttk.Frame(self.main_frame["frame"])
     frame.grid(column=0, row=0, rowspan=3, pady=30)
     return {"frame": frame}
 
   def build_fight_info(self):
     frame = {
-        "frame": ttk.Frame(self.main_frame),
+        "frame": ttk.Frame(self.main_frame["frame"]),
         "question_count": StringVar(),
         "try_count": StringVar()
     }
@@ -239,7 +243,7 @@ class TkinterView:
     return frame
 
   def build_wide_info(self):
-    frame = ttk.Frame(self.main_frame)
+    frame = ttk.Frame(self.main_frame["frame"])
     name = StringVar()
     description = StringVar()
     extra_frame = ttk.Frame(frame)
@@ -261,7 +265,7 @@ class TkinterView:
 
   def build_controls(self):
     # Controls.SIMPLE
-    s = ttk.Frame(self.main_frame)
+    s = ttk.Frame(self.main_frame["frame"])
     ttk.Label(s, text="[n]", style="White.TLabel").pack(side=LEFT, padx=5)
     ttk.Label(s, text="North").pack(side=LEFT, padx=5)
     ttk.Label(s, text="[s]", style="White.TLabel").pack(side=LEFT, padx=5)
@@ -276,7 +280,7 @@ class TkinterView:
     ttk.Label(s, text="Quit").pack(side=LEFT, padx=5)
 
     # Controls.ADVANCED
-    a = ttk.Frame(self.main_frame)
+    a = ttk.Frame(self.main_frame["frame"])
     ttk.Label(a, text="[take ", style="White.TLabel").pack(side=LEFT)
     ttk.Label(a, text="(item)", style="Blue.TLabel").pack(side=LEFT)
     ttk.Label(a, text="]", style="White.TLabel").pack(side=LEFT)
@@ -289,7 +293,7 @@ class TkinterView:
     ttk.Label(a, text=" previous pontrols").pack(side=LEFT)
 
     # Controls.BATTLE
-    b = ttk.Frame(self.main_frame)
+    b = ttk.Frame(self.main_frame["frame"])
     ttk.Label(b, text="Type the ").pack(side=LEFT)
     ttk.Label(b, text="answer", style="White.TLabel").pack(side=LEFT)
     ttk.Label(b, text=" to the question, ").pack(side=LEFT)
@@ -300,7 +304,7 @@ class TkinterView:
     ttk.Label(b, text="!").pack(side=LEFT)
 
     # Controls.INTRO
-    i = ttk.Frame(self.main_frame)
+    i = ttk.Frame(self.main_frame["frame"])
     ttk.Label(i, text="Once you're good to go, ").pack(side=LEFT)
     ttk.Label(i, text="type a player name",
               style="White.TLabel").pack(side=LEFT)
@@ -309,14 +313,14 @@ class TkinterView:
     ttk.Label(i, text=" to quit.").pack(side=LEFT)
 
     # Controls.EMPTY
-    e = ttk.Frame(self.main_frame)
+    e = ttk.Frame(self.main_frame["frame"])
     ttk.Label(e, text="   ").pack(side=LEFT)
 
     i.grid(row=6, column=0, columnspan=3, sticky="w", pady=10)
     return [s, a, b, i, e]
 
   def build_input(self):
-    frame = ttk.Frame(self.main_frame)
+    frame = ttk.Frame(self.main_frame["frame"])
     input_str = StringVar()
     ttk.Label(frame, text=">>  ").pack(side=LEFT)
     ttk.Label(frame, textvariable=input_str).pack(side=LEFT)
@@ -325,7 +329,7 @@ class TkinterView:
     return {"frame": frame, "input": input_str}
 
   def build_response(self):
-    frame = ttk.Frame(self.main_frame)
+    frame = ttk.Frame(self.main_frame["frame"])
     frame.grid(row=8, column=0, columnspan=3, sticky="w")
     return {"frame": frame, "id": None}
 
