@@ -139,7 +139,9 @@ class TkinterView:
     entrance_room = map_array[4][1]
 
     frame = ttk.Frame(self.main_frame)
-    map_display = [[None] * len(map_array[0])] * len(map_array)
+    map_display = []
+    for _ in range(len(map_array)):
+      map_display.append([None] * len(map_array[0]))
 
     for row in range(len(map_array)):
       for column in range(len(map_array[0])):
@@ -150,7 +152,7 @@ class TkinterView:
 
         label = ttk.Label(frame)
         # First ifs to determine Label text
-        if room.name[:8] == "Artifact":
+        if room.name[: 8] == "Artifact":
           label["text"] = room_sign["artifact"]
         elif isinstance(room, Shrine):
           label["text"] = room_sign["shrine"]
@@ -197,7 +199,8 @@ class TkinterView:
     player_name = StringVar()
     ttk.Label(header, textvariable=player_name,
               style="White.TLabel").pack(side=LEFT)
-    ttk.Label(header, text="Inventory", style="White.TLabel").pack(side=RIGHT)
+    ttk.Label(header, text="Inventory",
+              style="White.TLabel").pack(side=RIGHT)
 
     inventory = [StringVar(), StringVar(), StringVar(), StringVar()]
     for i in range(len(inventory)):
@@ -343,7 +346,8 @@ class TkinterView:
       # add style changes to the guardian's name, and the item
       item_name = info_list[-1]
       rest_of_text = " ".join(info_list[2:-1])
-      ttk.Label(ef, text=f"{guardian.name} ", style="White.TLabel").pack(side=LEFT)
+      ttk.Label(ef, text=f"{guardian.name} ",
+                style="White.TLabel").pack(side=LEFT)
       ttk.Label(ef, text=f"{rest_of_text} ").pack(side=LEFT)
       ttk.Label(ef, text=item_name, style="Blue.TLabel").pack(side=LEFT)
     else:
@@ -359,7 +363,6 @@ class TkinterView:
         else:
           text += f"{word} "
       ttk.Label(ef, text=text).pack(side=LEFT)
-      
 
   def update_guardian(self, guardian):
     self.fight_info["question_count"].set(guardian.question_count)
@@ -377,7 +380,7 @@ class TkinterView:
     self.wide_info["name"].set(room.name)
     self.wide_info["description"].set(room.description)
 
-    ttk.Label(ef, text="[ ", style="White.TLabel").pack(side=LEFT)
+    ttk.Label(ef, text="Inventory: [ ", style="White.TLabel").pack(side=LEFT)
 
     if len(room.inv) > 0:
       # If we have items, create a label for each item name
@@ -389,14 +392,14 @@ class TkinterView:
     ttk.Label(ef, text="]", style="White.TLabel").pack(side=LEFT)
 
   def update_controls(self, control_enum):
-    [frame.forget_grid() for frame in self.controls if hasattr(frame, "forget_grid")]
+    [frame.grid_forget() for frame in self.controls if hasattr(frame, "grid_forget")]
     idx = control_enum.value
     self.controls[idx].grid(row=6, column=0, columnspan=3, sticky="w", pady=10)
 
   def update_player(self, player):
     player_name = self.player_info[0]
     if player_name.get() != player.name:
-      player_name.set(player.name)
+      player_name.set(f"{player.name}'s ")
 
     player_inv = player.inv
     for info_idx in range(1, 5):
@@ -445,24 +448,24 @@ class TkinterView:
 
   def update_controller(self):
     if isinstance(self.adv.controller, IntroController):
-      if hasattr(self.fight_info["frame"], "forget_grid"):
-        self.fight_info["frame"].forget_grid()
+      if hasattr(self.fight_info["frame"], "grid_forget"):
+        self.fight_info["frame"].grid_forget()
       self.map_key["frame"].grid(column=1, row=0, rowspan=3, pady=30)
 
     if isinstance(self.adv.controller, TravelController):
-      if hasattr(self.fight_info["frame"], "forget_grid"):
-        self.fight_info["frame"].forget_grid()
+      if hasattr(self.fight_info["frame"], "grid_forget"):
+        self.fight_info["frame"].grid_forget()
       self.map_key["frame"].grid(column=1, row=0, rowspan=3, pady=30)
-      if hasattr(self.guardian_pose["frame"], "forget_grid"):
-        self.guardian_pose["frame"].forget_grid()
+      if hasattr(self.guardian_pose["frame"], "grid_forget"):
+        self.guardian_pose["frame"].grid_forget()
       self.map["frame"].grid(column=0, row=0, rowspan=3, pady=30)
 
     if isinstance(self.adv.controller, BattleController):
-      if hasattr(self.map_key["frame"], "forget_grid"):
-        self.map_key["frame"].forget_grid()
+      if hasattr(self.map_key["frame"], "grid_forget"):
+        self.map_key["frame"].grid_forget()
       self.fight_info["frame"].grid(column=1, row=0, rowspan=3, pady=30)
-      if hasattr(self.map["frame"], "forget_grid"):
-        self.map["frame"].forget_grid()
+      if hasattr(self.map["frame"], "grid_forget"):
+        self.map["frame"].grid_forget()
       self.guardian_pose["frame"].grid(column=0, row=0, rowspan=3, pady=30)
 
   def setup_input_detection(self, event):
