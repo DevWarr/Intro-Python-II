@@ -322,12 +322,12 @@ class TkinterView:
     ttk.Label(frame, textvariable=input_str).pack(side=LEFT)
 
     frame.grid(row=7, column=0, columnspan=3, sticky="w")
-    return {"frame": frame, "input": input_str, "on": True}
+    return {"frame": frame, "input": input_str}
 
   def build_response(self):
     frame = ttk.Frame(self.main_frame)
     frame.grid(row=8, column=0, columnspan=3, sticky="w")
-    return {"frame": frame}
+    return {"frame": frame, "id": None}
 
   def update_guardian_info(self, guardian):
     ef = self.wide_info["extra_frame"]
@@ -469,8 +469,6 @@ class TkinterView:
       self.guardian_pose["frame"].grid(column=0, row=0, rowspan=3, pady=30)
 
   def setup_input_detection(self, event):
-    if not self.input["on"]:
-      return
     input_str = self.input["input"]
     if event.keysym == "Return":
       user_in = input_str.get()
@@ -484,6 +482,7 @@ class TkinterView:
 
   def send_response(self, response_type, msg, *values, sec_to_wait=None):
     frame = self.response["frame"]
+    [piece.destroy() for piece in frame.winfo_children()]
 
     word_count = len(msg.split(" "))
     if sec_to_wait is None:
@@ -524,12 +523,14 @@ class TkinterView:
       text = msg[start:end]
       ttk.Label(frame, text=text, style=style).pack(side=LEFT)
 
-    self.input["on"] = False
-    frame.after(int(sec_to_wait * 1000), self.erase_response)
+    unique_id = frame.winfo_children()[0]
+    self.response["id"] = unique_id
+    frame.after(int(sec_to_wait * 1000),
+                lambda: self.erase_response(unique_id))
 
-  def erase_response(self):
-    self.input["on"] = True
-    [piece.destroy() for piece in self.response["frame"].winfo_children()]
+  def erase_response(self, unique_id):
+    if unique_id == self.response["id"]:
+      [piece.destroy() for piece in self.response["frame"].winfo_children()]
 
   def start_game(self):
     return
