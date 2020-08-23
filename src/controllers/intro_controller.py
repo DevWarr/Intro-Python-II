@@ -21,6 +21,8 @@ class IntroController:
 
   def setup_player(self, user_in):
     self.adv.player = GamePlayer(user_in, self.adv.game_map)
+    # self.adv.player = DebugPlayer("Winner")
+    # self.adv.player.game_map = self.adv.game_map
 
     self.adv.music_player.stop_track()
     self.adv.sound_player.play_track(5)
