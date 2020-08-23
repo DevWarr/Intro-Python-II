@@ -291,7 +291,7 @@ class TerminalView:
     self.map = ""
     self.map_key = "\n\n\n~WThanks for playing!~e\n  - Devin Warrick"
     self.player_inv = ""
-    self.wide_info = ""
+    self.wide_info = ["","",""]
     self.controls = ""
     self.display_screen()
     sleep(3)
