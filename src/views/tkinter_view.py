@@ -110,7 +110,7 @@ class TkinterView:
         img_frame = self.guardian_pose["image"]
         info = self.guardian_pose["info"]
         img = gif_poses[info[0]][info[1]]
-        self.guardian_pose["image"] = self.attach_image(img, img_frame)
+        self.attach_image(img, img_frame)
 
     root.bind("<Configure>", resize_font)
     root.protocol("WM_DELETE_WINDOW", self.adv.quit_game)
@@ -149,12 +149,11 @@ class TkinterView:
 
   def attach_image(self, img, img_frame):
     """Resizes a given image, and attaches to the given frame."""
-    width = max(int(self.width * 0.25), 40)
+    width = max(int(self.width * 0.17), 40)
     new_img = img.resize((width, width))
     new_img = ImageTk.PhotoImage(new_img)
     img_frame["image"] = new_img
     img_frame.photo = new_img
-    return img_frame
 
   def build_map_display(self, map_array):
     """
@@ -242,7 +241,7 @@ class TkinterView:
 
     photo = gif_poses["Multip Guardian"]["stand"]
     image_label = ttk.Label(frame)
-    image_label = self.attach_image(photo, image_label)
+    self.attach_image(photo, image_label)
     image_label.pack()
     # frame.grid(column=0, row=0, rowspan=3, pady=30)
     return {"frame": frame, "image": image_label, "info": ["Multip Guardian", "stand"]}
@@ -395,10 +394,28 @@ class TkinterView:
           text += f"{word} "
       ttk.Label(ef, text=text).pack(side=LEFT)
 
+  def update_guardian_pose(self, new_pose, prev_pose=None):
+    img_frame = self.guardian_pose["image"]
+    if prev_pose and prev_pose is not img_frame.photo:
+      return
+    self.attach_image(new_pose, img_frame)
+
   def update_guardian(self, guardian):
     self.fight_info["question_count"].set(guardian.question_count)
     self.fight_info["try_count"].set(guardian.try_count)
     # TODO: Update Guardian image
+    name = guardian.name
+    pose = guardian.pose.value
+    info = self.guardian_pose["info"]
+    if info[0] != name or info[1] != pose:
+      new_pose = gif_poses[name][pose]
+      if info[0] == name and pose == "stand":
+        prev_pose = self.guardian_pose["image"].photo
+        self.guardian_pose["image"].after(1000, lambda: self.update_guardian_pose(new_pose, prev_pose))
+      else:
+        self.update_guardian_pose(new_pose)
+      info[0], info[1] = name, pose
+      
 
     # If our question changed, update the wide info
     if guardian.question != self.wide_info["guardian_question"]:
