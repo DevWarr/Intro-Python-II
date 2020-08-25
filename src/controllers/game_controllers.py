@@ -163,12 +163,12 @@ class BattleController:
     else:
       return user_in[0].isdigit()
 
-  def quit_game(self, user_in):
-    self.adv.sound_player.play_track(5)
-    sure = self.adv.display.get_input(
-        "Quit the Game. Are you sure? [Y/N]>> ").lower()
-    if sure == "y":
-      self.adv.quit_game()
+  def confirm_quit(self):
+    error_str = "If you are sure you want to quit the game, type {}."
+    self.adv.display.send_response("error", error_str, "quit")
+
+  def quit_game(self):
+    self.adv.quit_game()
 
   def use_item(self, user_in):
     """
@@ -262,23 +262,28 @@ class BattleController:
     self.adv.display.fade_out()
     self.adv.change_controller(TravelController(self.adv))
 
+  def invalid_input(self):
+    error_str = "You must {} ({}), {} the math problem, or {}!"
+    error_vals = ["use", "item", "answer", "run away"]
+    self.adv.display.send_response("error", error_str, *error_vals)
+
   def main(self, user_in):
     user_in = user_in.lower().split(" ")
     if user_in[0] == "q":
-      self.quit_game(user_in)
+      self.confirm_quit()
+      return
+    elif user_in[0] == "quit":
+      self.quit_game()
       return
     elif " ".join(user_in) == "run away":
       self.end_of_battle(None)
       return
-
     elif user_in[0] == "use":
       self.use_item(user_in)
     elif self.is_answering_math(user_in):
       self.answer_question(user_in)
-    else:  # Not a proper input? Display help message
-      error_str = "You must {} ({}), {} the math problem, or {}!"
-      error_vals = ["use", "item", "answer", "run away"]
-      self.adv.display.send_response("error", error_str, *error_vals)
+    else: 
+      self.invalid_input()
 
     # Check if we've won or lost
     # If we have, break the loop
