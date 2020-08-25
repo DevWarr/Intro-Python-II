@@ -1,5 +1,5 @@
 from utils.playsound_copy import playsound
-from assets.assets import *
+from assets import music_files, sound_files
 from multiprocessing import Process
 import time
 

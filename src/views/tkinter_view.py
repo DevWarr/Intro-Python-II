@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import font
 from time import sleep
+from assets import multip_stand
 from controllers.intro_controller import IntroController
 from controllers.game_controllers import TravelController, BattleController
 from models.game_map import GameMap
@@ -217,7 +218,11 @@ class TkinterView:
 
   def build_guardian_pose(self):
     frame = ttk.Frame(self.main_frame["frame"])
-    frame.grid(column=0, row=0, rowspan=3, pady=30)
+    photo = PhotoImage(file=multip_stand)
+    image = ttk.Label(frame, image=photo)
+    image.photo = photo
+    image.pack()
+    # frame.grid(column=0, row=0, rowspan=3, pady=30)
     return {"frame": frame}
 
   def build_fight_info(self):
