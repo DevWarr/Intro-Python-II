@@ -288,13 +288,20 @@ class TerminalView:
     print()
 
   def show_credits(self):
+    self.black_out()
+    self.adv.music_player.stop_track()
+    self.adv.sound_player.play_track(7)
+    sleep(0.9)
+    # Display credits with the correct jingle
     self.map = ""
     self.map_key = "\n\n\n~WThanks for playing!~e\n  - Devin Warrick"
     self.player_inv = ""
-    self.wide_info = ["","",""]
+    self.wide_info = ["", "", ""]
     self.controls = ""
+    self.adv.sound_player.play_track(2)
     self.display_screen()
     sleep(3)
+    self.adv.quit_game()
 
   def get_input(self, msg):
     return input(msg).strip()

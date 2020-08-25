@@ -107,7 +107,6 @@ class TravelController:
       success, item_name = self.adv.player.use_item(item_name)
       if success:
         self.play_credits()
-        self.adv.quit_game()
         return
       elif success is None:
         error_str = "({}) is not in your inventory."
@@ -128,14 +127,6 @@ class TravelController:
 
   def play_credits(self):
     # Clear the screen, cut the music
-    self.adv.display.black_out()
-    self.adv.sound_player.play_track(7)
-    time.sleep(0.3)
-    self.adv.music_player.stop_track()
-    time.sleep(0.6)
-
-    # Display credits with the correct jingle
-    self.adv.sound_player.play_track(2)
     self.adv.display.show_credits()
 
   def main(self, user_in):
