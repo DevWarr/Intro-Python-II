@@ -2,7 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import font
 from time import sleep
-from assets import multip_stand
+from PIL import ImageTk
+from assets.guardian_poses import gif_poses
 from controllers.intro_controller import IntroController
 from controllers.game_controllers import TravelController, BattleController
 from models.game_map import GameMap
@@ -66,6 +67,8 @@ class TkinterView:
 
   def __init__(self, adv):
     self.adv           = adv
+    self.width         = 0
+    self.height        = 0
     self.root          = self.create_window()
     self.fonts         = {
         "fixed_font": font.Font(family="Consolas", size=16),
@@ -94,11 +97,20 @@ class TkinterView:
     root.geometry("1200x600")
 
     def resize_font(e):
+      if root.winfo_width() == self.width:
+        return
+      self.width = root.winfo_width()
+      self.height = root.winfo_height()
       for font in self.fonts.values():
-        font["size"] = root.winfo_width() // 70
-        font["size"] = root.winfo_width() // 70
+        font["size"] = self.width // 70
+        font["size"] = self.width // 70
       if self.main_frame and "padding" in self.main_frame:
-        self.main_frame["padding"]["width"] = root.winfo_width()
+        self.main_frame["padding"]["width"] = self.width
+      if self.guardian_pose and "frame" in self.guardian_pose and "image" in self.guardian_pose and "info" in self.guardian_pose:
+        img_frame = self.guardian_pose["image"]
+        info = self.guardian_pose["info"]
+        img = gif_poses[info[0]][info[1]]
+        self.guardian_pose["image"] = self.attach_image(img, img_frame)
 
     root.bind("<Configure>", resize_font)
     root.protocol("WM_DELETE_WINDOW", self.adv.quit_game)
@@ -134,6 +146,15 @@ class TkinterView:
     style.configure(
         "Yellow.TLabel", font=self.fonts["fixed_font_bold"], foreground="yellow")
     return style
+
+  def attach_image(self, img, img_frame):
+    """Resizes a given image, and attaches to the given frame."""
+    width = max(int(self.width * 0.25), 40)
+    new_img = img.resize((width, width))
+    new_img = ImageTk.PhotoImage(new_img)
+    img_frame["image"] = new_img
+    img_frame.photo = new_img
+    return img_frame
 
   def build_map_display(self, map_array):
     """
@@ -218,12 +239,13 @@ class TkinterView:
 
   def build_guardian_pose(self):
     frame = ttk.Frame(self.main_frame["frame"])
-    photo = PhotoImage(file=multip_stand)
-    image = ttk.Label(frame, image=photo)
-    image.photo = photo
-    # image.pack()
+
+    photo = gif_poses["Multip Guardian"]["stand"]
+    image_label = ttk.Label(frame)
+    image_label = self.attach_image(photo, image_label)
+    image_label.pack()
     # frame.grid(column=0, row=0, rowspan=3, pady=30)
-    return {"frame": frame}
+    return {"frame": frame, "image": image_label, "info": ["Multip Guardian", "stand"]}
 
   def build_fight_info(self):
     frame = {
@@ -558,7 +580,7 @@ class TkinterView:
     else:
       black_out_frame.after(700, lambda: self.show_credits(black_out_frame))
     return black_out_frame
-  
+
   def show_credits(self, black_out_frame=None):
     if black_out_frame is None:
       self.adv.music_player.stop_track()

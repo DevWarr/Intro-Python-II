@@ -17,5 +17,3 @@ sound_files = [
     os.path.join(FILEPATH, "WAV/MenuFail.wav"),      # 6
     os.path.join(FILEPATH, "WAV/RunAway.wav")        # 7
 ]
-
-multip_stand = os.path.join(FILEPATH, "GIF/multip_stand.gif")
