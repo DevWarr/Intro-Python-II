@@ -221,7 +221,7 @@ class TkinterView:
     photo = PhotoImage(file=multip_stand)
     image = ttk.Label(frame, image=photo)
     image.photo = photo
-    image.pack()
+    # image.pack()
     # frame.grid(column=0, row=0, rowspan=3, pady=30)
     return {"frame": frame}
 
@@ -545,7 +545,29 @@ class TkinterView:
     return
 
   def fade_out(self):
-    self.black_out()
+    black_out_frame = self.black_out()
+    ttk.Label(black_out_frame, text="Loading . . .", style="White.TLabel").place(
+        relx=.3, rely=.3, anchor="center")
 
-  def black_out(self):
-    return
+  def black_out(self, loading_credits=False):
+    black_out_frame = ttk.Frame(self.root)
+    black_out_frame.grid(column=0, row=0, columnspan=3,
+                         rowspan=9, sticky=(N, S, E, W))
+    if not loading_credits:
+      black_out_frame.after(500, black_out_frame.destroy)
+    else:
+      black_out_frame.after(700, lambda: self.show_credits(black_out_frame))
+    return black_out_frame
+  
+  def show_credits(self, black_out_frame=None):
+    if black_out_frame is None:
+      self.adv.music_player.stop_track()
+      self.adv.sound_player.play_track(7)
+      self.black_out(loading_credits=True)
+    else:
+      self.adv.sound_player.play_track(2)
+      ttk.Label(black_out_frame, text="Thanks for playing!", style="White.TLabel").place(
+          relx=.3, rely=.3, anchor="center")
+      ttk.Label(black_out_frame, text=" - Devin Warrick").place(
+          relx=.3, rely=.4, anchor="center")
+      black_out_frame.after(1500, self.adv.quit_game)
