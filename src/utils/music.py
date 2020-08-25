@@ -1,8 +1,11 @@
-from utils.playsound_copy import playsound
 from assets import music_files, sound_files
 from multiprocessing import Process
 import time
 
+try:
+  from utils.playsound_copy import playsound
+except:
+  playsound = None
 
 class Player:
   """
@@ -59,7 +62,7 @@ class Player:
     If loop is set to true, creates a separate
     process to auto loop the track in the background.
     """
-    if not self.on:
+    if not self.on or playsound is None:
       return
     if not (0 <= num < len(self.album)):
       # If our track number isn't in our album, return
