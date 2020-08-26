@@ -189,13 +189,13 @@ class BattleController:
       self.adv.sound_player.play_track(2)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "battle", "You used ({})!", item_name, sec_to_wait=1)
+          "battle", "You used ({})!", item_name, sec_to_wait=1, cb=self.check_battle_condition)
     else:
       # Incorrect item? Angry guardian!
       self.adv.sound_player.play_track(3)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "error", "({}) is not the correct item!", item_name, sec_to_wait=1)
+          "error", "({}) is not the correct item!", item_name, sec_to_wait=1, cb=self.check_battle_condition)
 
   def answer_question(self, user_in):
     if user_in[0] == "answer":
@@ -211,13 +211,13 @@ class BattleController:
       self.adv.sound_player.play_track(2)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "battle", "{} is correct!", answer, sec_to_wait=1)
+          "battle", "{} is correct!", answer, sec_to_wait=1, cb=self.check_battle_condition)
     else:
       # Incorrect answer? Angry guardian!
       self.adv.sound_player.play_track(3)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "error", "{} is not the correct answer!", answer, sec_to_wait=1)
+          "error", "{} is not the correct answer!", answer, sec_to_wait=1, cb=self.check_battle_condition)
 
   def end_of_battle(self, win_or_lose):
 
@@ -258,6 +258,18 @@ class BattleController:
     error_vals = ["use", "item", "answer", "run away"]
     self.adv.display.send_response("error", error_str, *error_vals)
 
+  def check_battle_condition(self):
+    """
+    Check if the player has won or lost the battle.
+    If we have won or lost, break
+    """
+    win_or_lose = self.guardian.check_victory()
+    if win_or_lose is not None:
+      self.end_of_battle(win_or_lose)
+    else:
+      self.guardian.create_question()
+      self.adv.display.update(self.guardian)
+
   def main(self, user_in):
     user_in = user_in.lower().split(" ")
     if user_in[0] == "q":
@@ -273,14 +285,5 @@ class BattleController:
       self.use_item(user_in)
     elif self.is_answering_math(user_in):
       self.answer_question(user_in)
-    else: 
+    else:
       self.invalid_input()
-
-    # Check if we've won or lost
-    # If we have, break the loop
-    win_or_lose = self.guardian.check_victory()
-    if win_or_lose is not None:
-      self.end_of_battle(win_or_lose)
-      return
-    self.guardian.create_question()
-    self.adv.display.update(self.guardian)

@@ -260,7 +260,7 @@ class TerminalView:
       sec_to_wait = max(1, word_count / 2.5 - 1)
     sleep(sec_to_wait)
 
-  def send_response(self, response_type, msg, *values, sec_to_wait=None):
+  def send_response(self, response_type, msg, *values, sec_to_wait=None, cb=None):
 
     if response_type == "error":
       color = "~R"
@@ -282,6 +282,8 @@ class TerminalView:
       i += 1
     msg = color + msg + "~e"
     self.print_and_wait(msg.format(*values), sec_to_wait=sec_to_wait)
+    if cb is not None:
+      cb()
 
   def black_out(self):
     system("cls||clear")

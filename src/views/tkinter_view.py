@@ -89,6 +89,7 @@ class TkinterView:
 
     self.input         = self.build_input()
     self.response      = self.build_response()
+    self.cb             = None
     self.root.bind("<Key>", self.setup_input_detection)
 
   def create_window(self):
@@ -394,10 +395,8 @@ class TkinterView:
           text += f"{word} "
       ttk.Label(ef, text=text).pack(side=LEFT)
 
-  def update_guardian_pose(self, new_pose, prev_pose=None):
+  def update_guardian_pose(self, new_pose):
     img_frame = self.guardian_pose["image"]
-    if prev_pose and prev_pose is not img_frame.photo:
-      return
     self.attach_image(new_pose, img_frame)
 
   def update_guardian(self, guardian):
@@ -408,13 +407,9 @@ class TkinterView:
     pose = guardian.pose.value
     info = self.guardian_pose["info"]
     if info[0] != name or info[1] != pose:
-      new_pose = gif_poses[name][pose]
-      if info[0] == name and pose == "stand":
-        prev_pose = self.guardian_pose["image"].photo
-        self.guardian_pose["image"].after(1000, lambda: self.update_guardian_pose(new_pose, prev_pose))
-      else:
-        self.update_guardian_pose(new_pose)
       info[0], info[1] = name, pose
+      new_pose = gif_poses[name][pose]
+      self.update_guardian_pose(new_pose)
       
 
     # If our question changed, update the wide info
@@ -517,6 +512,8 @@ class TkinterView:
       self.guardian_pose["frame"].grid(column=0, row=0, rowspan=3, pady=30)
 
   def setup_input_detection(self, event):
+    if self.cb is not None:
+      return
     input_str = self.input["input"]
     if event.keysym == "Return":
       user_in = input_str.get()
@@ -528,7 +525,8 @@ class TkinterView:
       key = event.char
       input_str.set(f"{input_str.get()}{key}")
 
-  def send_response(self, response_type, msg, *values, sec_to_wait=None):
+  def send_response(self, response_type, msg, *values, sec_to_wait=None, cb=None):
+    self.cb = cb
     frame = self.response["frame"]
     [piece.destroy() for piece in frame.winfo_children()]
 
@@ -579,6 +577,10 @@ class TkinterView:
   def erase_response(self, unique_id):
     if unique_id == self.response["id"]:
       [piece.destroy() for piece in self.response["frame"].winfo_children()]
+    if self.cb is not None:
+      cb = self.cb
+      self.cb = None
+      cb()
 
   def start_game(self):
     return
