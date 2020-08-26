@@ -40,11 +40,11 @@ room_sign = {
 
 class TerminalView:
 
-  def __init__(self, adv, game_map):
+  def __init__(self, adv):
     self.adv           = adv
     self.map_key       = map_key
     self.map           = None
-    self.build_map_display(game_map.map)
+    self.build_map_display(self.adv.game_map.map)
     self.player_inv    = None
 
     self.guardian_pose = None
@@ -77,7 +77,7 @@ class TerminalView:
     self.player_inv = [inventory_header, *inventory]
 
   def build_guardian_info(self, guardian):
-    name = guardian.name
+    name = f"~W{guardian.name}~e"
     description = "~g" + guardian.description + "~e"
 
     if isinstance(guardian, ArtifactGuardian):
@@ -110,7 +110,7 @@ class TerminalView:
     self.wide_info = [name, description, info]
 
   def build_room_info(self, room):
-    name = room.name
+    name = f"~W{room.name}~e"
     description = "~g" + room.description + "~e"
 
     item_names = [f"~c({str(item)})~e" for item in room.inv]
@@ -260,7 +260,7 @@ class TerminalView:
       sec_to_wait = max(1, word_count / 2.5 - 1)
     sleep(sec_to_wait)
 
-  def send_response(self, response_type, msg, *values, sec_to_wait=None):
+  def send_response(self, response_type, msg, *values, sec_to_wait=None, cb=None):
 
     if response_type == "error":
       color = "~R"
@@ -282,19 +282,39 @@ class TerminalView:
       i += 1
     msg = color + msg + "~e"
     self.print_and_wait(msg.format(*values), sec_to_wait=sec_to_wait)
+    if cb is not None:
+      cb()
+
+  def lose_battle(self, cb=None):
+    self.send_response(
+        "battle", "You lost the battle! You have to run away!", sec_to_wait=0.1)
+    self.adv.sound_player.play_track(0)
+    sleep(0.5)
+    self.adv.sound_player.play_track(0)
+    sleep(0.6)
+    self.adv.sound_player.play_track(0)
+    sleep(0.8)
+    cb()
 
   def black_out(self):
     system("cls||clear")
     print()
 
   def show_credits(self):
+    self.black_out()
+    self.adv.music_player.stop_track()
+    self.adv.sound_player.play_track(7)
+    sleep(0.9)
+    # Display credits with the correct jingle
     self.map = ""
     self.map_key = "\n\n\n~WThanks for playing!~e\n  - Devin Warrick"
     self.player_inv = ""
-    self.wide_info = ""
+    self.wide_info = ["", "", ""]
     self.controls = ""
+    self.adv.sound_player.play_track(2)
     self.display_screen()
     sleep(3)
+    self.adv.quit_game()
 
   def get_input(self, msg):
     return input(msg).strip()

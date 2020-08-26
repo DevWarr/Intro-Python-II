@@ -208,3 +208,5 @@ all_poses = {
     "Radical Guardian": radical_guardian(),
     "Artifact Guardian": artifact_guardian(),
 }
+
+from .GIF import all_poses as gif_poses

@@ -1,7 +1,12 @@
-from utils.playsound_copy import playsound
-from assets.assets import *
+from assets import music_files, sound_files
 from multiprocessing import Process
 import time
+from pygame import mixer
+
+try:
+  from utils.playsound_copy import playsound
+except:
+  playsound = None
 
 
 class Player:
@@ -59,7 +64,7 @@ class Player:
     If loop is set to true, creates a separate
     process to auto loop the track in the background.
     """
-    if not self.on:
+    if not self.on or playsound is None:
       return
     if not (0 <= num < len(self.album)):
       # If our track number isn't in our album, return
@@ -130,3 +135,51 @@ class SoundPlayer(Player):
     -   7 -> run away
     """
     return super().play_track(num=num, loop=loop)
+
+
+class PyGamePlayer:
+
+  def __init__(self):
+    mixer.init()
+    self.mixer = mixer
+    self.on = True
+    self.album = []
+
+  def turn_off(self):
+    self.on = False
+
+  def turn_on(self):
+    self.on = True
+
+
+class PyGameMusicPlayer(PyGamePlayer):
+
+  def __init__(self):
+    super().__init__()
+    self.album = music_files
+
+  def play_track(self, num, loop=-1):
+    if not self.on:
+      return
+    track = self.album[num]
+    self.mixer.music.load(track)
+    self.mixer.music.play(loop)
+
+  def stop_track(self):
+    self.mixer.music.stop()
+
+
+class PyGameSoundPlayer(PyGamePlayer):
+
+  def __init__(self):
+    super().__init__()
+    self.album = [self.mixer.Sound(sound) for sound in sound_files]
+
+  def play_track(self, num, loop=-1):
+    if not self.on:
+      return
+    track = self.album[num]
+    self.mixer.Sound.play(track)
+
+  def stop_track(self):
+    pass

@@ -28,7 +28,7 @@ class TravelController:
     self.adv.display.update(*display_info)
 
   def quit_game(self, user_in):
-    self.adv.playing_game = False
+    self.adv.quit_game()
 
   def toggle_options(self, user_in):
     self.adv.sound_player.play_track(5)
@@ -107,7 +107,6 @@ class TravelController:
       success, item_name = self.adv.player.use_item(item_name)
       if success:
         self.play_credits()
-        self.adv.playing_game = False
         return
       elif success is None:
         error_str = "({}) is not in your inventory."
@@ -128,14 +127,6 @@ class TravelController:
 
   def play_credits(self):
     # Clear the screen, cut the music
-    self.adv.display.black_out()
-    self.adv.sound_player.play_track(7)
-    time.sleep(0.3)
-    self.adv.music_player.stop_track()
-    time.sleep(0.6)
-
-    # Display credits with the correct jingle
-    self.adv.sound_player.play_track(2)
     self.adv.display.show_credits()
 
   def main(self, user_in):
@@ -163,12 +154,12 @@ class BattleController:
     else:
       return user_in[0].isdigit()
 
-  def quit_game(self, user_in):
-    self.adv.sound_player.play_track(5)
-    sure = self.adv.display.get_input(
-        "Quit the Game. Are you sure? [Y/N]>> ").lower()
-    if sure == "y":
-      self.adv.playing_game = False
+  def confirm_quit(self):
+    error_str = "If you are sure you want to quit the game, type {}."
+    self.adv.display.send_response("error", error_str, "quit")
+
+  def quit_game(self):
+    self.adv.quit_game()
 
   def use_item(self, user_in):
     """
@@ -198,13 +189,13 @@ class BattleController:
       self.adv.sound_player.play_track(2)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "battle", "You used ({})!", item_name, sec_to_wait=1)
+          "battle", "You used ({})!", item_name, sec_to_wait=1, cb=self.check_battle_condition)
     else:
       # Incorrect item? Angry guardian!
       self.adv.sound_player.play_track(3)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "error", "({}) is not the correct item!", item_name, sec_to_wait=1)
+          "error", "({}) is not the correct item!", item_name, sec_to_wait=1, cb=self.check_battle_condition)
 
   def answer_question(self, user_in):
     if user_in[0] == "answer":
@@ -220,13 +211,13 @@ class BattleController:
       self.adv.sound_player.play_track(2)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "battle", "{} is correct!", answer, sec_to_wait=1)
+          "battle", "{} is correct!", answer, sec_to_wait=1, cb=self.check_battle_condition)
     else:
       # Incorrect answer? Angry guardian!
       self.adv.sound_player.play_track(3)
       self.adv.display.update(self.guardian)
       self.adv.display.send_response(
-          "error", "{} is not the correct answer!", answer, sec_to_wait=1)
+          "error", "{} is not the correct answer!", answer, sec_to_wait=1, cb=self.check_battle_condition)
 
   def end_of_battle(self, win_or_lose):
 
@@ -235,13 +226,13 @@ class BattleController:
       self.adv.sound_player.play_track(7)
       self.adv.player.run_away()
       self.adv.display.send_response(
-          "battle", "You ran away!", sec_to_wait=1.3)
+          "battle", "You ran away!", sec_to_wait=1.3, cb=self.leave_battle)
 
     elif win_or_lose is True:
       # Winning the battle
       self.adv.sound_player.play_track(1)
       self.adv.display.send_response(
-          "battle", "You defeated the {}!", self.guardian.name, sec_to_wait=2)
+          "battle", "You defeated the {}!", self.guardian.name, sec_to_wait=2, cb=self.leave_battle)
       if self.guardian.name[:8] == "Artifact":
         # Stop music for dramatic moment
         self.adv.music_player.stop_track()
@@ -250,41 +241,43 @@ class BattleController:
     else:
       # Losing the battle
       self.adv.player.run_away()
-      self.adv.sound_player.play_track(0)
-      self.adv.display.send_response(
-          "battle", "You lost the battle! You have to run away!", sec_to_wait=0.1)
-      time.sleep(0.5)
-      self.adv.sound_player.play_track(0)
-      time.sleep(0.6)
-      self.adv.sound_player.play_track(0)
-      time.sleep(0.8)
+      self.adv.display.lose_battle(cb=self.leave_battle)
 
+  def leave_battle(self):
     self.adv.display.fade_out()
     self.adv.change_controller(TravelController(self.adv))
+
+  def invalid_input(self):
+    error_str = "You must {} ({}), {} the math problem, or {}!"
+    error_vals = ["use", "item", "answer", "run away"]
+    self.adv.display.send_response("error", error_str, *error_vals)
+
+  def check_battle_condition(self):
+    """
+    Check if the player has won or lost the battle.
+    If we have won or lost, break
+    """
+    win_or_lose = self.guardian.check_victory()
+    if win_or_lose is not None:
+      self.end_of_battle(win_or_lose)
+    else:
+      self.guardian.create_question()
+      self.adv.display.update(self.guardian)
 
   def main(self, user_in):
     user_in = user_in.lower().split(" ")
     if user_in[0] == "q":
-      self.quit_game(user_in)
+      self.confirm_quit()
+      return
+    elif user_in[0] == "quit":
+      self.quit_game()
       return
     elif " ".join(user_in) == "run away":
       self.end_of_battle(None)
       return
-
     elif user_in[0] == "use":
       self.use_item(user_in)
     elif self.is_answering_math(user_in):
       self.answer_question(user_in)
-    else:  # Not a proper input? Display help message
-      error_str = "You must {} ({}), {} the math problem, or {}!"
-      error_vals = ["use", "item", "answer", "run away"]
-      self.adv.display.send_response("error", error_str, *error_vals)
-
-    # Check if we've won or lost
-    # If we have, break the loop
-    win_or_lose = self.guardian.check_victory()
-    if win_or_lose is not None:
-      self.end_of_battle(win_or_lose)
-      return
-    self.guardian.create_question()
-    self.adv.display.update(self.guardian)
+    else:
+      self.invalid_input()
