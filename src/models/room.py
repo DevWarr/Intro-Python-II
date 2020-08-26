@@ -31,8 +31,8 @@ class Room:
 
 class DebugRoom(Room):
   def __init__(self):
-    name = "|——————————————————————————————————————————————————————————————————————————————|"
-    desc = "This adventure game requires a terminal 80 characters wide and 15 lines tall."
+    name = "You're an explorer, you see!"
+    desc = "Search through the Mathematical Caves, find the Artifact, and make your escape!"
     inventory = [Item("Please resize"), Item(
-        "So you can see"), Item("This text")]
+        "So you can see"), Item("All of"), Item("This text")]
     super().__init__(name, desc, inventory)
