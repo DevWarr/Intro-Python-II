@@ -1,5 +1,6 @@
 .vscode
 *.pyc
+*.pyo
 __pycache__
 
 # Created by pyinstaller
