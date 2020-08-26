@@ -1,6 +1,6 @@
 from .intro_controller import IntroController
 from models.game_map import GameMap
-from utils.music import MusicPlayer, SoundPlayer
+from utils.music import MusicPlayer, SoundPlayer, PyGameMusicPlayer, PyGameSoundPlayer
 from views.terminal_view import TerminalView
 from views.tkinter_view import TkinterView
 
@@ -47,8 +47,8 @@ class TkinterController:
     self.game_map     = GameMap()
     self.player       = None  # Waits until player is created
 
-    self.music_player = MusicPlayer()
-    self.sound_player = SoundPlayer()
+    self.music_player = PyGameMusicPlayer()
+    self.sound_player = PyGameSoundPlayer()
 
     self.display      = TkinterView(self)
     self.controller   = None
