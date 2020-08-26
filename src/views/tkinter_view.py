@@ -410,7 +410,6 @@ class TkinterView:
       info[0], info[1] = name, pose
       new_pose = gif_poses[name][pose]
       self.update_guardian_pose(new_pose)
-      
 
     # If our question changed, update the wide info
     if guardian.question != self.wide_info["guardian_question"]:
@@ -571,7 +570,7 @@ class TkinterView:
 
     unique_id = frame.winfo_children()[0]
     self.response["id"] = unique_id
-    frame.after(int(sec_to_wait * 1000),
+    frame.after(int(sec_to_wait * 900),
                 lambda: self.erase_response(unique_id))
 
   def erase_response(self, unique_id):
@@ -581,6 +580,13 @@ class TkinterView:
       cb = self.cb
       self.cb = None
       cb()
+
+  def lose_battle(self, cb=None):
+    self.send_response(
+        "battle", "You lost the battle! You have to run away!", sec_to_wait=2.2, cb=cb)
+    self.adv.sound_player.play_track(0)
+    self.root.after(500, lambda: self.adv.sound_player.play_track(0))
+    self.root.after(1100, lambda: self.adv.sound_player.play_track(0))
 
   def start_game(self):
     return

@@ -285,6 +285,17 @@ class TerminalView:
     if cb is not None:
       cb()
 
+  def lose_battle(self, cb=None):
+    self.send_response(
+        "battle", "You lost the battle! You have to run away!", sec_to_wait=0.1)
+    self.adv.sound_player.play_track(0)
+    sleep(0.5)
+    self.adv.sound_player.play_track(0)
+    sleep(0.6)
+    self.adv.sound_player.play_track(0)
+    sleep(0.8)
+    cb()
+
   def black_out(self):
     system("cls||clear")
     print()

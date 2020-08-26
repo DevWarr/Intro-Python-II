@@ -226,13 +226,13 @@ class BattleController:
       self.adv.sound_player.play_track(7)
       self.adv.player.run_away()
       self.adv.display.send_response(
-          "battle", "You ran away!", sec_to_wait=1.3)
+          "battle", "You ran away!", sec_to_wait=1.3, cb=self.leave_battle)
 
     elif win_or_lose is True:
       # Winning the battle
       self.adv.sound_player.play_track(1)
       self.adv.display.send_response(
-          "battle", "You defeated the {}!", self.guardian.name, sec_to_wait=2)
+          "battle", "You defeated the {}!", self.guardian.name, sec_to_wait=2, cb=self.leave_battle)
       if self.guardian.name[:8] == "Artifact":
         # Stop music for dramatic moment
         self.adv.music_player.stop_track()
@@ -241,15 +241,9 @@ class BattleController:
     else:
       # Losing the battle
       self.adv.player.run_away()
-      self.adv.sound_player.play_track(0)
-      self.adv.display.send_response(
-          "battle", "You lost the battle! You have to run away!", sec_to_wait=0.1)
-      time.sleep(0.5)
-      self.adv.sound_player.play_track(0)
-      time.sleep(0.6)
-      self.adv.sound_player.play_track(0)
-      time.sleep(0.8)
+      self.adv.display.lose_battle(cb=self.leave_battle)
 
+  def leave_battle(self):
     self.adv.display.fade_out()
     self.adv.change_controller(TravelController(self.adv))
 
