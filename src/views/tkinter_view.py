@@ -94,6 +94,8 @@ class TkinterView:
 
   def create_window(self):
     root = Tk()
+    icon = ImageTk.PhotoImage(gif_poses["Multip Guardian"]["stand"])
+    root.iconphoto(False, icon)
     root.minsize(600, 300)
     root.geometry("1200x600")
 
