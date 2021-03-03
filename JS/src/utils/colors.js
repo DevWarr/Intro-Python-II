@@ -27,6 +27,10 @@ const ansiTable = {
  * Example input: 'No color ~rRed Color ~eReset'
  *
  * Backslashes currently will not escape tildes.
+ * 
+ * @param {string} msg
+ * 
+ * @returns {string} A formatted string with the proper escape codes to color the terminal text.
  */
 const color = (msg) => {
 	let out = '';
