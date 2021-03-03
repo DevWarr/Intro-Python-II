@@ -81,12 +81,16 @@ const color_test = () => {
 
 	while (true) {
 		const user_in = await rl.askQuestion('type some things!\n>> ');
-		rl.pause()
+		rl.pause();
 		if (['quit', 'q'].includes(user_in)) break;
 		console.log(color(user_in));
 		await sleep(1);
-		console.log()
+		console.log();
 	}
 
 	rl.quit();
 })();
+
+module.exports = {
+	color,
+};
