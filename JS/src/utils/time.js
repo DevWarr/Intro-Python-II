@@ -1,0 +1,1 @@
+exports.sleep = (secToWait) => new Promise(res => setTimeout(res, secToWait*1000))
