@@ -1,4 +1,4 @@
-ansi_table = {
+const ansiTable = {
 	x: '\u001b[30m',
 	r: '\u001b[31m',
 	g: '\u001b[32m',
@@ -24,18 +24,19 @@ ansi_table = {
  * Takes in a string with the proper formatting,
  * and outputs a string with ANSI color codes.
  *
- * Example input: "No color ~rRed Color ~eReset"
+ * Example input: 'No color ~rRed Color ~eReset'
  *
  * Backslashes currently will not escape tildes.
  */
 const color = (msg) => {
 	let out = '';
 	for (let i = 0; i < msg.length; i++) {
+		const v = msg[i];
 		// Extra support: Turns the
 		// ‾ character into it's unicode
 		// equivalent for printing safety
-		if (char === '‾') {
-			out += ansi_table[char];
+		if (v === '‾') {
+			out += ansiTable['‾'];
 		}
 
 		// If we have a tilde,
@@ -43,8 +44,8 @@ const color = (msg) => {
 		// Get that color code from our dict,
 		// or return nothing if it cannot be found.
 		else if (v === '~') {
-			color = msg[i + 1];
-			out += ansi_table[color] ?? '';
+			colorCode = msg[i + 1];
+			out += ansiTable[colorCode] ?? '';
 		}
 		// If the letter comes directly after a tilde,
 		// it is a color code. Skip it.
@@ -56,28 +57,36 @@ const color = (msg) => {
 			out += v;
 		}
 	}
-	return out + ansi_table['e'];
+	return out + ansiTable['e'];
 };
 
 const color_test = () => {
 	const text = 'Hello World!';
-	const keys = Object.keys(ansi_table);
+	const keys = Object.keys(ansiTable);
 
 	for (key of keys) {
-		console.log(ansi_table[key] + text);
+		console.log(ansiTable[key] + text);
 	}
 };
 
 (async function () {
-	if (require.main === module) {
-		console.clear();
-		color_test();
-		// while (true) {
-		//     user_in = input("types some things!")
-		//     if user_in == "quit":
-		//       break
-		//     print(user_in)
-		//     await wait(1)
-		// }
+	if (require.main !== module) return;
+	console.clear();
+
+	color_test();
+
+	const { createReadline } = require('./Readline');
+	const { sleep } = require('./time');
+	const rl = createReadline();
+
+	while (true) {
+		const user_in = await rl.askQuestion('type some things!\n>> ');
+		rl.pause()
+		if (['quit', 'q'].includes(user_in)) break;
+		console.log(color(user_in));
+		await sleep(1);
+		console.log()
 	}
+
+	rl.quit();
 })();
