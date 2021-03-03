@@ -6,10 +6,21 @@ const test = async (str, func) => {
         await func()
         process.stdout.write(color(`\r~G[✓] ~e~y${str}~e\n`))
     } catch (err) {
-        process.stdout.write(color(`\r~R[X] ~e~y${str}~e\n`))
+        process.stdout.write(color(`\r~R[X] ~e~p${str}~e\n`))
         const errorMessage = err.message
-        console.error(errorMessage)
+        console.error(`${errorMessage}\n`)
     }
 }
 
-module.exports = test
+const describe = async (str, testsArray) => {
+    console.log(str)
+    for (testInfo of testsArray) {
+        await test(...testInfo)
+    }
+    console.log()
+}
+
+module.exports = {
+    test,
+    describe
+}
