@@ -18,6 +18,7 @@ const createReadline = () => {
 
 	return {
 		askQuestion,
+		pause: rl.pause.bind(rl),
 		quit: rl.close.bind(rl)
 	}
 };
