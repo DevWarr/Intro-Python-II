@@ -24,9 +24,10 @@ const ansiTable = {
  * Takes in a string with the proper formatting,
  * and outputs a string with ANSI color codes.
  *
- * Example input: 'No color ~rRed Color ~eReset'
+ * Example input: `'No color ~rRed Color ~eReset'`
  *
- * Backslashes currently will not escape tildes.
+ * Tildes cannot be used in the input string.
+ * Backslashes will not escape tildes.
  * 
  * @param {string} msg
  * 
