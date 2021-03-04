@@ -4,9 +4,8 @@ const { describe } = require('../utils/testFunction');
 const { Item } = require('./Item');
 
 describe('Item tests', [
-	[
-		'item creation has the proper name and description',
-		() => {
+	{
+		'item creation has the proper name and description': () => {
 			const itemName = 'Test Item';
 			const itemDescription = 'A wonderful item!';
 			const newItem = new Item('Test Item', 'A wonderful item!');
@@ -15,11 +14,10 @@ describe('Item tests', [
 			assert.equal(newItem.name, itemName);
 			assert.equal(newItem.description, itemDescription);
 		},
-	],
+	},
 
-	[
-		'item creation has no description if not given',
-		() => {
+	{
+		'item creation has no description if not given': () => {
 			const itemName = 'Test Item';
 			const newItem = new Item('Test Item');
 
@@ -27,5 +25,5 @@ describe('Item tests', [
 			assert.equal(newItem.name, itemName);
 			assert.equal(newItem.description, '');
 		},
-	],
+	},
 ]);
