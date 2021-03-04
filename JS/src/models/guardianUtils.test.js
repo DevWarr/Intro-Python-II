@@ -1,6 +1,7 @@
-const assert = require('assert').strict;
 const {
 	describe,
+	assertEquals,
+	assertMatch,
 	assertIncludes,
 	assertLessThanOrEqualTo,
 	assertGreaterThanOrEqualTo,
@@ -13,8 +14,8 @@ const confirmTypesForQuestionAndAnswer = (func) => {
 		'Returns a question and answer': () => {
 			const [question, answer] = func();
 
-			assert.equal(typeof question, 'string');
-			assert.equal(typeof answer, 'number');
+			assertEquals(typeof question, 'string');
+			assertEquals(typeof answer, 'number');
 		},
 	};
 };
@@ -274,13 +275,12 @@ describe('Guardian Utility Functions', [
 
 					testSquareArray.map(([question, answer]) => {
 						if (question.match('cubed') !== null) {
-							assertIncludes(expectedCubes, answer)
+							assertIncludes(expectedCubes, answer);
+						} else {
+							assertIncludes(expectedSquares, answer);
 						}
-						else {
-							assertIncludes(expectedSquares, answer)
-						}
-					})
-				}
+					});
+				},
 			},
 		],
 	},
@@ -295,7 +295,7 @@ describe('Guardian Utility Functions', [
 						.fill(0)
 						.map(() => root(0)[1]);
 
-					checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax)
+					checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax);
 				},
 			},
 			{
@@ -306,7 +306,7 @@ describe('Guardian Utility Functions', [
 						.fill(0)
 						.map(() => root(1)[1]);
 
-					checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax)
+					checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax);
 				},
 			},
 			{
@@ -317,7 +317,7 @@ describe('Guardian Utility Functions', [
 						.fill(0)
 						.map(() => root(2)[1]);
 
-					checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax)
+					checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax);
 				},
 			},
 			{
@@ -332,10 +332,10 @@ describe('Guardian Utility Functions', [
 						.fill(0)
 						.map(() => root(2)[0]);
 
-					difficulty0QuestionsArray.map(question => assert.match(question, /square/i))
-					difficulty1QuestionsArray.map(question => assert.match(question, /square/i))
-					difficulty2QuestionsArray.map(question => assert.match(question, /cube/i))
-				}
+					difficulty0QuestionsArray.map((question) => assertMatch(question, /square/i));
+					difficulty1QuestionsArray.map((question) => assertMatch(question, /square/i));
+					difficulty2QuestionsArray.map((question) => assertMatch(question, /cube/i));
+				},
 			},
 		],
 	},

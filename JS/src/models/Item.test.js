@@ -1,5 +1,4 @@
-const assert = require('assert').strict;
-const { describe } = require('../utils/testFunction');
+const { describe, assertEquals } = require('../utils/testFunction');
 
 const { Item } = require('./Item');
 
@@ -10,9 +9,9 @@ describe('Item tests', [
 			const itemDescription = 'A wonderful item!';
 			const newItem = new Item('Test Item', 'A wonderful item!');
 
-			assert.equal(newItem.toString(), itemName);
-			assert.equal(newItem.name, itemName);
-			assert.equal(newItem.description, itemDescription);
+			assertEquals(newItem.toString(), itemName);
+			assertEquals(newItem.name, itemName);
+			assertEquals(newItem.description, itemDescription);
 		},
 	},
 
@@ -21,9 +20,9 @@ describe('Item tests', [
 			const itemName = 'Test Item';
 			const newItem = new Item('Test Item');
 
-			assert.equal(newItem.toString(), itemName);
-			assert.equal(newItem.name, itemName);
-			assert.equal(newItem.description, '');
+			assertEquals(newItem.toString(), itemName);
+			assertEquals(newItem.name, itemName);
+			assertEquals(newItem.description, '');
 		},
 	},
 ]);

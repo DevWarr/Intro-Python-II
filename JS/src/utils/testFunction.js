@@ -30,6 +30,14 @@ const describe = async (str, testsArray, nested = false) => {
     if (!nested) console.log()
 }
 
+assertEquals = (value, compare) => {
+    assert.equal(value, compare)
+}
+
+assertMatch = (value, regex) => {
+    assert.match(value, regex)
+}
+
 const assertLessThan = (value, compare) => {
     try {
         assert.equal(value < compare, true)
@@ -74,6 +82,8 @@ const assertIncludes = (array, value) => {
 module.exports = {
     test,
     describe,
+    assertEquals,
+    assertMatch,
     assertIncludes,
     assertGreaterThan,
     assertGreaterThanOrEqualTo,

@@ -1,5 +1,4 @@
-const assert = require('assert').strict;
-const { describe } = require('../utils/testFunction');
+const { describe, assertEquals } = require('../utils/testFunction');
 
 const { Room } = require('./Room');
 
@@ -9,9 +8,9 @@ describe('Room tests', [
 			const inventory = [1, 2, 3];
 			const testRoom = new Room('testRoom', 'testDescription', inventory);
 
-			assert.equal(testRoom.name, 'testRoom');
-			assert.equal(testRoom.description, 'testDescription');
-			assert.equal(testRoom.inventory, inventory);
+			assertEquals(testRoom.name, 'testRoom');
+			assertEquals(testRoom.description, 'testDescription');
+			assertEquals(testRoom.inventory, inventory);
 		},
 	},
 	{
@@ -19,9 +18,9 @@ describe('Room tests', [
 			const testRoom = new Room('testRoom', 'testDescription', [{ name: '1' }, { name: '4' }]);
 			const returnedItem = testRoom.remove_from_inventory('4');
 
-			assert.equal(testRoom.inventory.length, 1);
-			assert.equal(testRoom.inventory[0].name, '1');
-			assert.equal(returnedItem.name, '4');
+			assertEquals(testRoom.inventory.length, 1);
+			assertEquals(testRoom.inventory[0].name, '1');
+			assertEquals(returnedItem.name, '4');
 		},
 	},
 	{
@@ -29,8 +28,8 @@ describe('Room tests', [
 			const testRoom = new Room('testRoom', 'testDescription', [{ name: '1' }, { name: '4' }]);
 			const returnedItem = testRoom.remove_from_inventory('17');
 
-			assert.equal(testRoom.inventory.length, 2);
-			assert.equal(returnedItem, null);
+			assertEquals(testRoom.inventory.length, 2);
+			assertEquals(returnedItem, null);
 		},
 	},
 	{
@@ -39,8 +38,8 @@ describe('Room tests', [
 			testRoom.add_to_inventory({ name: '2' });
 			const expectedInventoryIndex = 2;
 
-			assert.equal(testRoom.inventory.length, 3);
-			assert.equal(testRoom.inventory[expectedInventoryIndex].name, '2');
+			assertEquals(testRoom.inventory.length, 3);
+			assertEquals(testRoom.inventory[expectedInventoryIndex].name, '2');
 		},
 	},
 ]);
