@@ -1,28 +1,24 @@
-const { describe, assertEquals } = require('../utils/testFunction');
+const { test, describe, expect } = require('@jest/globals');
 
 const { Item } = require('./Item');
 
-describe('Item tests', [
-	{
-		'item creation has the proper name and description': () => {
-			const itemName = 'Test Item';
-			const itemDescription = 'A wonderful item!';
-			const newItem = new Item('Test Item', 'A wonderful item!');
+describe('Item tests', () => {
+    test('item creation has the proper name and description', () => {
+        const itemName = 'Test Item';
+        const itemDescription = 'A wonderful item!';
+        const newItem = new Item('Test Item', 'A wonderful item!');
 
-			assertEquals(newItem.toString(), itemName);
-			assertEquals(newItem.name, itemName);
-			assertEquals(newItem.description, itemDescription);
-		},
-	},
+        expect(newItem.toString()).toEqual(itemName);
+        expect(newItem.name).toEqual(itemName);
+        expect(newItem.description).toEqual(itemDescription);
+    });
 
-	{
-		'item creation has no description if not given': () => {
-			const itemName = 'Test Item';
-			const newItem = new Item('Test Item');
+    test('item creation has no description if not given', () => {
+        const itemName = 'Test Item';
+        const newItem = new Item('Test Item');
 
-			assertEquals(newItem.toString(), itemName);
-			assertEquals(newItem.name, itemName);
-			assertEquals(newItem.description, '');
-		},
-	},
-]);
+        expect(newItem.toString()).toEqual(itemName);
+        expect(newItem.name).toEqual(itemName);
+        expect(newItem.description).toEqual('');
+    });
+});
