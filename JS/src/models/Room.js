@@ -22,9 +22,9 @@ class Room {
      *
      * @returns {null | Item} The item removed from the room inventory, or null.
      */
-    remove_from_inventory(name) {
+    removeFromInventory(name) {
         let item = null;
-        const itemIndex = this.inventory.findIndex((item) => item.name.toLowerCase() === name);
+        const itemIndex = this.inventory.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
         if (itemIndex > -1) {
             item = this.inventory[itemIndex];
             this.inventory.splice(itemIndex, 1);
@@ -36,7 +36,7 @@ class Room {
      *
      * @param {Item} item
      */
-    add_to_inventory(item) {
+    addToInventory(item) {
         this.inventory.push(item);
     }
 }

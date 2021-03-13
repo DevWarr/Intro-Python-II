@@ -15,7 +15,7 @@ describe('Room', () => {
     
     test('Room successfully removes and returns item from inventory', () => {
         const testRoom = new Room('testRoom', 'testDescription', [{ name: '1' }, { name: '4' }]);
-        const returnedItem = testRoom.remove_from_inventory('4');
+        const returnedItem = testRoom.removeFromInventory('4');
     
         expect(testRoom.inventory.length).toEqual(1);
         expect(testRoom.inventory[0].name).toEqual('1');
@@ -24,7 +24,7 @@ describe('Room', () => {
     
     test('Room returns null and removes nothing if the item is not found in inventory', () => {
         const testRoom = new Room('testRoom', 'testDescription', [{ name: '1' }, { name: '4' }]);
-        const returnedItem = testRoom.remove_from_inventory('17');
+        const returnedItem = testRoom.removeFromInventory('17');
     
         expect(testRoom.inventory.length).toEqual(2);
         expect(returnedItem).toEqual(null);
@@ -32,7 +32,7 @@ describe('Room', () => {
     
     test('Room successfully adds an item to inventory', () => {
         const testRoom = new Room('testRoom', 'testDescription', [{ name: '1' }, { name: '4' }]);
-        testRoom.add_to_inventory({ name: '2' });
+        testRoom.addToInventory({ name: '2' });
         const expectedInventoryIndex = 2;
     
         expect(testRoom.inventory.length).toEqual(3);
