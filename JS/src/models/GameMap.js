@@ -51,6 +51,14 @@ const ROOM_TEMPLATES = [
     ],
 ];
 
+const DEBUG_MAP = [
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+];
+
 /**
  * Creates a map like this:
  * ```
@@ -65,13 +73,13 @@ const ROOM_TEMPLATES = [
  * - X = Cave Entrance.
  */
 class GameMap {
-    constructor() {
-        this.map = this.createMap();
+    constructor(template = MAP_TEMPLATE) {
+        this.map = this.createMap(template);
         this.entrance = this.map[4][1];
     }
 
-    createMap = (self) => {
-        return MAP_TEMPLATE.map((rowOfRooms) =>
+    createMap = (template) => {
+        return template.map((rowOfRooms) =>
             rowOfRooms.map((roomId) => {
                 const roomInfo = ROOM_TEMPLATES[roomId];
 
@@ -89,4 +97,5 @@ class GameMap {
 
 module.exports = {
     GameMap,
+    testing: { DEBUG_MAP },
 };
