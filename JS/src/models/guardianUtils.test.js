@@ -147,7 +147,10 @@ describe('Square function', () => {
             .fill(0)
             .map(() => square(0)[1]);
 
-        testSquareAnswersArray.map((num) => expect(expectedSquares).toContain(num));
+        const invalidAnswers = testSquareAnswersArray.filter(
+            (num) => !expectedSquares.find((square) => square === num)
+        );
+        expect(invalidAnswers).toHaveLength(0);
         expect(testSquareAnswersArray).toContain(expectedMax);
         expect(testSquareAnswersArray).toContain(expectedMin);
     });
@@ -159,7 +162,10 @@ describe('Square function', () => {
             .fill(0)
             .map(() => square(1)[1]);
 
-        testSquareAnswersArray.map((num) => expect(expectedSquares).toContain(num));
+        const invalidAnswers = testSquareAnswersArray.filter(
+            (num) => !expectedSquares.find((square) => square === num)
+        );
+        expect(invalidAnswers).toHaveLength(0);
         expect(testSquareAnswersArray).toContain(expectedMax);
         expect(testSquareAnswersArray).toContain(expectedMin);
     });
@@ -173,7 +179,10 @@ describe('Square function', () => {
             .fill(0)
             .map(() => square(2)[1]);
 
-        testSquareAnswersArray.map((num) => expect(expectedAnswers).toContain(num));
+        const invalidAnswers = testSquareAnswersArray.filter(
+            (num) => !expectedAnswers.find((square) => square === num)
+        );
+        expect(invalidAnswers).toHaveLength(0);
         expect(testSquareAnswersArray).toContain(expectedMax);
         expect(testSquareAnswersArray).toContain(expectedMin);
     });
@@ -184,13 +193,14 @@ describe('Square function', () => {
             .fill(0)
             .map(() => square(2));
 
-        testSquareArray.map(([question, answer]) => {
+        const invalidAnswers = testSquareArray.filter(([question, answer]) => {
             if (question.match('cubed') !== null) {
-                expect(expectedCubes).toContain(answer);
+                return !expectedCubes.find(num => num === answer)
             } else {
-                expect(expectedSquares).toContain(answer);
+                return !expectedSquares.find(num => num === answer)
             }
-        });
+        })
+        expect(invalidAnswers).toHaveLength(0)
     });
 });
 describe('Root function', () => {
