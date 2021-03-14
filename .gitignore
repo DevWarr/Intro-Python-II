@@ -7,3 +7,6 @@ __pycache__
 build
 dist
 adv.spec
+
+# JS ignores
+node_modules/

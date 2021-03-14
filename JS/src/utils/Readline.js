@@ -8,6 +8,12 @@ const createReadline = () => {
 	});
 	const promisifiedQuestion = util.promisify(rl.question).bind(rl)
 	
+	/**
+	 * 
+	 * @param {string} message 
+	 * 
+	 * @returns {string} user input
+	 */
 	const askQuestion = async (message) => {
 		try {
 			return await promisifiedQuestion(message);
@@ -18,8 +24,8 @@ const createReadline = () => {
 
 	return {
 		askQuestion,
-		pause: rl.pause.bind(rl),
-		quit: rl.close.bind(rl)
+		pause: () => rl.pause(),
+		quit: () => rl.close()
 	}
 };
 

@@ -24,9 +24,14 @@ const ansiTable = {
  * Takes in a string with the proper formatting,
  * and outputs a string with ANSI color codes.
  *
- * Example input: 'No color ~rRed Color ~eReset'
+ * Example input: `'No color ~rRed Color ~eReset'`
  *
- * Backslashes currently will not escape tildes.
+ * Tildes cannot be used in the input string.
+ * Backslashes will not escape tildes.
+ * 
+ * @param {string} msg
+ * 
+ * @returns {string} A formatted string with the proper escape codes to color the terminal text.
  */
 const color = (msg) => {
 	let out = '';
@@ -81,12 +86,16 @@ const color_test = () => {
 
 	while (true) {
 		const user_in = await rl.askQuestion('type some things!\n>> ');
-		rl.pause()
+		rl.pause();
 		if (['quit', 'q'].includes(user_in)) break;
 		console.log(color(user_in));
 		await sleep(1);
-		console.log()
+		console.log();
 	}
 
 	rl.quit();
 })();
+
+module.exports = {
+	color,
+};
