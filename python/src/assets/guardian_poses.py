@@ -201,6 +201,9 @@ def artifact_guardian():
 
   return {"stand": stand, "correct": correct, "incorrect": incorrect}
 
+
+
+
 all_poses = {
     "Multip Guardian": multip_guardian(),
     "Divid Guardian": divid_guardian(),
@@ -209,4 +212,12 @@ all_poses = {
     "Artifact Guardian": artifact_guardian(),
 }
 
-from .GIF import all_poses as gif_poses
+try:
+    print(__name__)
+    import pkg_resources
+    pkg_resources.require([
+        'PIL>=1.0.0'
+    ])
+    from .GIF import all_poses as gif_poses
+except:
+    pass
