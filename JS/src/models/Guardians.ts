@@ -1,35 +1,40 @@
-const { addition, subtraction, division, multiplication, square, root } = require("./guardianUtils");
+import {
+  buildAdditionQuestion,
+  buildSubtractionQuestion,
+  buildDivisionQuestion,
+  buildMultiplicationQuestion,
+  buildExponentQuestion,
+  buildRootQuestion,
+} from "./guardianUtils";
+import { Shrine } from "./Room";
 
-const STAND = "stand";
-const CORRECT = "correct";
-const INCORRECT = "incorrect";
+export enum GuardianPose {
+  STAND = "stand",
+  CORRECT = "correct",
+  INCORRECT = "incorrect",
+}
 
-class NotImplementedError extends Error {
-  constructor(methodName) {
+export class NotImplementedError extends Error {
+  constructor(methodName: string) {
     super();
     this.message = `This method (${methodName}) has not been implemented. Create a child class that extends this class, and implement this function.`;
   }
 }
 
 /**Parent Guardian Class. All Guardians derive from this class. */
-class Guardian {
-  /**
-   *
-   * @param {string} name
-   * @param {string} description
-   */
-  constructor(name, description) {
-    this.name = name;
-    this.description = description;
-    this.shrine = {};
-    this.pose = STAND;
+export class Guardian {
+  constructor(
+    public name: string,
+    public description: string,
+    public shrine: Shrine | null = null,
+    public pose: GuardianPose = GuardianPose.STAND,
 
-    this.tryCount = 3;
-    this.questionCount = 5;
-    this.question = null;
-    this.answer = null;
-    this.requiredItem = "Calculator";
-  }
+    public tryCount: number = 3,
+    public questionCount: number = 5,
+    public question: string | null = null,
+    public answer: number | null = null,
+    public requiredItem: string | null = "Calculator",
+  ) {}
 
   /**
    * Preps for the battle
@@ -51,7 +56,7 @@ class Guardian {
    * All else, creates and asks a new math question.
    */
   createQuestion = () => {
-    this.pose = STAND;
+    this.pose = GuardianPose.STAND;
     if (this.question) return;
 
     if (this.requiredItem) {
@@ -61,7 +66,7 @@ class Guardian {
     }
   };
 
-  mathQuestion = () => {
+  mathQuestion = (): void => {
     throw new NotImplementedError("mathQuestion");
   };
 
@@ -71,7 +76,7 @@ class Guardian {
    * This includes decreasing the questionCount,
    * and setting a requiredItem if necessary.
    */
-  nextQuestionPrep = () => {
+  nextQuestionPrep = (): void => {
     throw new NotImplementedError("nextQuestionPrep");
   };
 
@@ -81,19 +86,15 @@ class Guardian {
    * If:
    * - Item matches required item   → true
    * - Item does not match required → false
-   *
-   * @param {string} name - name of the item
-   *
-   * @returns boolean
    */
-  checkItem(name) {
+  checkItem(name: string): boolean {
     if (name === this.requiredItem) {
       this.requiredItem = null;
       this.question = null;
-      this.pose = CORRECT;
+      this.pose = GuardianPose.CORRECT;
       return true;
     } else {
-      this.pose = INCORRECT;
+      this.pose = GuardianPose.INCORRECT;
       this.tryCount -= 1;
       return false;
     }
@@ -108,20 +109,16 @@ class Guardian {
    * and returns true,
    *
    * Else, returns false.
-   *
-   * @param {number} answer - the given answer to the math problem.
-   *
-   * @returns boolean
    */
-  checkAnswer(answer) {
+  checkAnswer(answer: number): boolean {
     if (answer === this.answer) {
       this.answer = null;
       this.question = null;
-      this.pose = CORRECT;
+      this.pose = GuardianPose.CORRECT;
       this.nextQuestionPrep();
       return true;
     } else {
-      this.pose = INCORRECT;
+      this.pose = GuardianPose.INCORRECT;
       this.tryCount -= 1;
       return false;
     }
@@ -137,20 +134,18 @@ class Guardian {
    * detach the guardian from the Shrine and return true
    *
    * Still battling? Return null
-   *
-   * @returns boolean | null
    */
-  checkVictory = () => {
+  checkVictory = (): boolean | null => {
     if (this.tryCount === 0) return false;
     else if (this.questionCount === 0) {
-      this.shrine.guardian = null;
+      this.shrine!.guardian = null;
       return true;
     } else return null;
   };
 }
 
 /**Asks addition questions. Drops the Multip sign.*/
-class MultipGuardian extends Guardian {
+export class MultipGuardian extends Guardian {
   constructor() {
     super("Multip Guardian", "Guardian of the Multip Shrine. Keep your guard!");
   }
@@ -167,13 +162,13 @@ class MultipGuardian extends Guardian {
     let problem;
     if (this.questionCount > 3) {
       // First two questions? Difficulty easy
-      problem = addition(0);
+      problem = buildAdditionQuestion(0);
     } else if (this.questionCount > 2) {
       // Third question? Difficulty medium
-      problem = addition(1);
+      problem = buildAdditionQuestion(1);
     } else {
       // Last two questions? Difficulty hard
-      problem = addition(2);
+      problem = buildAdditionQuestion(2);
     }
     [this.question, this.answer] = problem;
   };
@@ -183,7 +178,7 @@ class MultipGuardian extends Guardian {
   };
 }
 
-class DividGuardian extends Guardian {
+export class DividGuardian extends Guardian {
   constructor() {
     super("Divid Guardian", "Guardian of the Divid Shrine. Keep it sleek, slick.");
   }
@@ -200,13 +195,13 @@ class DividGuardian extends Guardian {
     let problem;
     if (this.questionCount > 3) {
       // First two questions? Difficulty easy
-      problem = subtraction(0);
+      problem = buildSubtractionQuestion(0);
     } else if (this.questionCount > 2) {
       // Third question? Difficulty medium
-      problem = subtraction(1);
+      problem = buildSubtractionQuestion(1);
     } else {
       // Last two questions? Difficulty hard
-      problem = subtraction(2);
+      problem = buildSubtractionQuestion(2);
     }
     [this.question, this.answer] = problem;
   };
@@ -216,7 +211,7 @@ class DividGuardian extends Guardian {
   };
 }
 
-class SquareGuardian extends Guardian {
+export class SquareGuardian extends Guardian {
   constructor() {
     super("Square Guardian", "Guardian of the Square Shrine. Stay happy, stay civil!");
   }
@@ -233,19 +228,19 @@ class SquareGuardian extends Guardian {
     let problem;
     switch (this.questionCount) {
       case 5:
-        problem = addition(0);
+        problem = buildAdditionQuestion(0);
         break;
       case 4:
-        problem = addition(1);
+        problem = buildAdditionQuestion(1);
         break;
       case 3:
-        problem = addition(2);
+        problem = buildAdditionQuestion(2);
         break;
       case 2:
-        problem = multiplication(0);
+        problem = buildMultiplicationQuestion(0);
         break;
       default:
-        problem = multiplication(1);
+        problem = buildMultiplicationQuestion(1);
     }
 
     [this.question, this.answer] = problem;
@@ -259,7 +254,7 @@ class SquareGuardian extends Guardian {
   };
 }
 
-class RadicalGuardian extends Guardian {
+export class RadicalGuardian extends Guardian {
   constructor() {
     super("Radical Guardian", "Guardian of the Radical Shrine. Radical!!!");
   }
@@ -276,19 +271,19 @@ class RadicalGuardian extends Guardian {
     let problem;
     switch (this.questionCount) {
       case 5:
-        problem = addition(1);
+        problem = buildAdditionQuestion(1);
         break;
       case 4:
-        problem = subtraction(2);
+        problem = buildSubtractionQuestion(2);
         break;
       case 3:
-        problem = square(2);
+        problem = buildExponentQuestion(2);
         break;
       case 2:
-        problem = division(1);
+        problem = buildDivisionQuestion(1);
         break;
       default:
-        problem = division(2);
+        problem = buildDivisionQuestion(2);
     }
 
     [this.question, this.answer] = problem;
@@ -305,7 +300,7 @@ class RadicalGuardian extends Guardian {
   };
 }
 
-class ArtifactGuardian extends Guardian {
+export class ArtifactGuardian extends Guardian {
   constructor() {
     super("Artifact Guardian", "The final challenge! If you run away, your questions won't get reset.");
     // The artifact Guardian holds it's own questions and tries.
@@ -348,28 +343,28 @@ class ArtifactGuardian extends Guardian {
     let problem;
     switch (this.questionCount) {
       case 8:
-        problem = multiplication(2);
+        problem = buildMultiplicationQuestion(2);
         break;
       case 7:
-        problem = square(1);
+        problem = buildExponentQuestion(1);
         break;
       case 6:
-        problem = square(2);
+        problem = buildExponentQuestion(2);
         break;
       case 4:
-        problem = division(2);
+        problem = buildDivisionQuestion(2);
         break;
       case 3:
-        problem = root(1);
+        problem = buildRootQuestion(1);
         break;
       case 2:
-        problem = root(2);
+        problem = buildRootQuestion(2);
         break;
       case 1:
-        problem = addition(2);
+        problem = buildAdditionQuestion(2);
         break;
       default:
-        problem = subtraction(2);
+        problem = buildSubtractionQuestion(2);
     }
     [this.question, this.answer] = problem;
   };
@@ -397,13 +392,3 @@ class ArtifactGuardian extends Guardian {
     }
   };
 }
-
-module.exports = {
-  Guardian,
-  MultipGuardian,
-  DividGuardian,
-  SquareGuardian,
-  RadicalGuardian,
-  ArtifactGuardian,
-  testing: { STAND, CORRECT, INCORRECT, NotImplementedError },
-};

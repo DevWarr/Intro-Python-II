@@ -1,4 +1,4 @@
-const ansiTable = {
+const ansiTable: Record<string, string> = {
   x: "\u001b[30m",
   r: "\u001b[31m",
   g: "\u001b[32m",
@@ -29,11 +29,9 @@ const ansiTable = {
  * Tildes cannot be used in the input string.
  * Backslashes will not escape tildes.
  *
- * @param {string} msg
- *
  * @returns {string} A formatted string with the proper escape codes to color the terminal text.
  */
-const color = (msg) => {
+export const color = (msg: string): string => {
   let out = "";
   for (let i = 0; i < msg.length; i++) {
     const v = msg[i];
@@ -49,7 +47,7 @@ const color = (msg) => {
     // Get that color code from our dict,
     // or return nothing if it cannot be found.
     else if (v === "~") {
-      colorCode = msg[i + 1];
+      const colorCode = msg[i + 1];
       out += ansiTable[colorCode] ?? "";
     }
     // If the letter comes directly after a tilde,
@@ -65,37 +63,11 @@ const color = (msg) => {
   return out + ansiTable["e"];
 };
 
-const color_test = () => {
+export const colorTest = () => {
   const text = "Hello World!";
   const keys = Object.keys(ansiTable);
 
-  for (key of keys) {
+  for (const key of keys) {
     console.log(ansiTable[key] + text);
   }
-};
-
-(async function () {
-  if (require.main !== module) return;
-  console.clear();
-
-  color_test();
-
-  const { createReadline } = require("./Readline");
-  const { sleep } = require("./time");
-  const rl = createReadline();
-
-  while (true) {
-    const user_in = await rl.askQuestion("type some things!\n>> ");
-    rl.pause();
-    if (["quit", "q"].includes(user_in)) break;
-    console.log(color(user_in));
-    await sleep(1);
-    console.log();
-  }
-
-  rl.quit();
-})();
-
-module.exports = {
-  color,
 };

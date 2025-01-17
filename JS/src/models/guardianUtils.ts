@@ -2,24 +2,17 @@
  * Returns a random number between the min and max values.
  *
  * Both min and max included.
- *
- * @param {number} min
- * @param {number} max
- *
- * @returns {number} Random resulting number
  */
-const randint = (min, max) => {
+export const randint = (min: number, max: number): number => {
   return Number(min + Math.round(Math.random() * (max - min)));
 };
 
+export type MathQuestion = (difficulty: number) => [string, number];
+
 /**
  * Creates an addition question.
- *
- * @param {number} difficulty
- *
- * @returns {[string, number]} [question, answer]
  */
-const addition = (difficulty = 0) => {
+export const buildAdditionQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(0, 20);
@@ -38,12 +31,8 @@ const addition = (difficulty = 0) => {
 
 /**
  * Creates a subtraction question.
- *
- * @param {number} difficulty
- *
- * @returns {[string, number]} [question, answer]
  */
-const subtraction = (difficulty = 0) => {
+export const buildSubtractionQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   while (true) {
     if (difficulty == 0) {
@@ -67,12 +56,8 @@ const subtraction = (difficulty = 0) => {
 
 /**
  * Creates a division question.
- *
- * @param {number} difficulty
- *
- * @returns {[string, number]} [question, answer]
  */
-const division = (difficulty = 0) => {
+export const buildDivisionQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   while (true) {
     if (difficulty == 0) {
@@ -95,12 +80,8 @@ const division = (difficulty = 0) => {
 
 /**
  * Creates a multiplication question.
- *
- * @param {number} difficulty
- *
- * @returns {[string, number]} [question, answer]
  */
-const multiplication = (difficulty = 0) => {
+export const buildMultiplicationQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(3, 9);
@@ -120,12 +101,8 @@ const multiplication = (difficulty = 0) => {
 
 /**
  * Creates an exponent question.
- *
- * @param {number} difficulty
- *
- * @returns {[string, number]} [question, answer]
  */
-const square = (difficulty = 0) => {
+export const buildExponentQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(2, 5);
@@ -137,12 +114,7 @@ const square = (difficulty = 0) => {
     num1 = randint(2, 13);
     num2 = randint(2, 3);
   }
-
-  if (num2 == 2) {
-    second_half = "squared";
-  } else {
-    second_half = "cubed";
-  }
+  const second_half = num2 == 2 ? "squared" : "cubed";
 
   const question = `What is ${num1} ${second_half} ?`;
   const answer = num1 ** num2;
@@ -155,12 +127,8 @@ const CUBES = [8, 27, 64, 125, 216, 343];
 
 /**
  * Creates a radical division question.
- *
- * @param {number} difficulty
- *
- * @returns {[string, number]} [question, answer]
  */
-const root = (difficulty = 0) => {
+export const buildRootQuestion: MathQuestion = (difficulty) => {
   let num, is_square;
 
   if (difficulty == 0) {
@@ -188,14 +156,4 @@ const root = (difficulty = 0) => {
 
   const question = `What is the ${root} root of ${num} ?`;
   return [question, answer];
-};
-
-module.exports = {
-  randint,
-  addition,
-  subtraction,
-  division,
-  multiplication,
-  square,
-  root,
 };
