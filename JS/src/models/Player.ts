@@ -7,7 +7,7 @@ const ENTRANCE_ROOM = {
   y: 4,
 };
 
-class Player {
+export class Player {
   constructor(
     public name: string,
     public gameMap: GameMap = new GameMap(),
@@ -209,13 +209,13 @@ class Player {
   }
 }
 
-class GamePlayer extends Player {
+export class GamePlayer extends Player {
   constructor(name: string, gameMap: GameMap = new GameMap()) {
     super(name, gameMap, [new Item("Calculator", "Simple Calculator. Can add and subtract.")]);
   }
 }
 
-class DebugPlayer extends Player {
+export class DebugPlayer extends Player {
   constructor(name: string) {
     const inventory = [
       new Item("Calculator", "Simple Calculator. Can add and subtract."),
@@ -224,5 +224,3 @@ class DebugPlayer extends Player {
     super(name, new GameMap(), inventory);
   }
 }
-
-export { Player, GamePlayer, DebugPlayer };

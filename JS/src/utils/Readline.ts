@@ -1,7 +1,7 @@
 import readline from "readline";
 import util from "util";
 
-const createReadline = () => {
+export const createReadline = () => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -36,5 +36,3 @@ const createReadline = () => {
   console.log(answer);
   rl.quit();
 })();
-
-exports.createReadline = createReadline;

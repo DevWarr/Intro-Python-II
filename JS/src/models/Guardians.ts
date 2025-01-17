@@ -1,13 +1,13 @@
 import { addition, subtraction, division, multiplication, square, root } from "./guardianUtils";
 import { Shrine } from "./Room";
 
-enum GuardianPose {
+export enum GuardianPose {
   STAND = "stand",
   CORRECT = "correct",
   INCORRECT = "incorrect",
 }
 
-class NotImplementedError extends Error {
+export class NotImplementedError extends Error {
   constructor(methodName: string) {
     super();
     this.message = `This method (${methodName}) has not been implemented. Create a child class that extends this class, and implement this function.`;
@@ -15,7 +15,7 @@ class NotImplementedError extends Error {
 }
 
 /**Parent Guardian Class. All Guardians derive from this class. */
-class Guardian {
+export class Guardian {
   constructor(
     public name: string,
     public description: string,
@@ -138,7 +138,7 @@ class Guardian {
 }
 
 /**Asks addition questions. Drops the Multip sign.*/
-class MultipGuardian extends Guardian {
+export class MultipGuardian extends Guardian {
   constructor() {
     super("Multip Guardian", "Guardian of the Multip Shrine. Keep your guard!");
   }
@@ -171,7 +171,7 @@ class MultipGuardian extends Guardian {
   };
 }
 
-class DividGuardian extends Guardian {
+export class DividGuardian extends Guardian {
   constructor() {
     super("Divid Guardian", "Guardian of the Divid Shrine. Keep it sleek, slick.");
   }
@@ -204,7 +204,7 @@ class DividGuardian extends Guardian {
   };
 }
 
-class SquareGuardian extends Guardian {
+export class SquareGuardian extends Guardian {
   constructor() {
     super("Square Guardian", "Guardian of the Square Shrine. Stay happy, stay civil!");
   }
@@ -247,7 +247,7 @@ class SquareGuardian extends Guardian {
   };
 }
 
-class RadicalGuardian extends Guardian {
+export class RadicalGuardian extends Guardian {
   constructor() {
     super("Radical Guardian", "Guardian of the Radical Shrine. Radical!!!");
   }
@@ -293,7 +293,7 @@ class RadicalGuardian extends Guardian {
   };
 }
 
-class ArtifactGuardian extends Guardian {
+export class ArtifactGuardian extends Guardian {
   constructor() {
     super("Artifact Guardian", "The final challenge! If you run away, your questions won't get reset.");
     // The artifact Guardian holds it's own questions and tries.
@@ -385,14 +385,3 @@ class ArtifactGuardian extends Guardian {
     }
   };
 }
-
-export {
-  Guardian,
-  MultipGuardian,
-  DividGuardian,
-  SquareGuardian,
-  RadicalGuardian,
-  ArtifactGuardian,
-  GuardianPose,
-  NotImplementedError,
-};

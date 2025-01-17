@@ -1,7 +1,7 @@
 import { Item } from "./Item";
 import { Guardian } from "./Guardians";
 
-class Room {
+export class Room {
   constructor(
     public name: string,
     public description: string,
@@ -26,7 +26,8 @@ class Room {
     this.inventory.push(item);
   }
 }
-class Shrine extends Room {
+
+export class Shrine extends Room {
   private __guardian: Guardian | null;
 
   constructor(name: string, description: string, inventory: Item[] = [], guardian: Guardian | null = null) {
@@ -49,10 +50,8 @@ class Shrine extends Room {
   }
 }
 
-const debugRoom = new Room(
+export const debugRoom = new Room(
   "You're an explorer, you see!",
   "Search through the Mathematical Caves, find the Artifact, and make your escape!",
   [new Item("Please resize"), new Item("So you can see"), new Item("All of"), new Item("This text")],
 );
-
-export { Room, Shrine, debugRoom };
