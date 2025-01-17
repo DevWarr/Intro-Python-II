@@ -1,28 +1,18 @@
-const { Item } = require("./Item");
-const { Guardian } = require("./Guardians");
+import { Item } from "./Item";
+import { Guardian } from "./Guardians";
 
 class Room {
-  /**
-   *
-   * @param {string} name
-   * @param {string} description
-   * @param {Item[]} inventory
-   */
-  constructor(name, description, inventory = []) {
-    this.name = name;
-    this.description = description;
-    this.inventory = inventory;
-  }
+  constructor(
+    public name: string,
+    public description: string,
+    public inventory: Item[] = [],
+  ) {}
 
   /**
    * If possible, removes item from room.
    * Casing does not matter.
-   *
-   * @param {string} name
-   *
-   * @returns {null | Item} The item removed from the room inventory, or null.
    */
-  removeFromInventory(name) {
+  removeFromInventory(name: string): null | Item {
     let item = null;
     const itemIndex = this.inventory.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
     if (itemIndex > -1) {
@@ -32,23 +22,14 @@ class Room {
     return item;
   }
 
-  /**
-   *
-   * @param {Item} item
-   */
-  addToInventory(item) {
+  addToInventory(item: Item) {
     this.inventory.push(item);
   }
 }
 class Shrine extends Room {
-  /**
-   *
-   * @param {string} name
-   * @param {string} description
-   * @param {Item[]} inventory
-   * @param {Guardian | null} guardian
-   */
-  constructor(name, description, inventory = [], guardian = null) {
+  private __guardian: Guardian | null;
+
+  constructor(name: string, description: string, inventory: Item[] = [], guardian: Guardian | null = null) {
     super(name, description, inventory);
     this.__guardian = guardian;
     if (this.__guardian != null) {
@@ -74,8 +55,4 @@ const debugRoom = new Room(
   [new Item("Please resize"), new Item("So you can see"), new Item("All of"), new Item("This text")],
 );
 
-module.exports = {
-  Room,
-  Shrine,
-  debugRoom,
-};
+export { Room, Shrine, debugRoom };

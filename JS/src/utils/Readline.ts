@@ -1,5 +1,5 @@
-const readline = require("readline");
-const util = require("util");
+import readline from "readline";
+import util from "util";
 
 const createReadline = () => {
   const rl = readline.createInterface({
@@ -14,7 +14,7 @@ const createReadline = () => {
    *
    * @returns {string} user input
    */
-  const askQuestion = async (message) => {
+  const askQuestion = async (message: string) => {
     try {
       return await promisifiedQuestion(message);
     } catch (err) {

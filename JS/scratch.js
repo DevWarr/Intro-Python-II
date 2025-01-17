@@ -1,4 +1,4 @@
-const { createSpyAndMock } = require("./src/utils/testFunction");
+import { createSpyAndMock } from "./src/utils/testFunction";
 
 const o1 = {
   myFunc: () => "hello",
@@ -28,15 +28,15 @@ console.log(o1.myFunc.calls);
 console.log(o1.myFunc());
 console.log(o1.myFunc.calls);
 
-const guardianUtils = require("./src/models/guardianUtils");
+import guardianUtils, { addition } from "./src/models/guardianUtils";
 
 console.log("\n\n");
-console.log(guardianUtils.addition);
+console.log(addition);
 createSpyAndMock(guardianUtils, "addition");
-console.log(guardianUtils.addition);
-console.log(guardianUtils.addition.calls);
-guardianUtils.addition.setReturnValue(24);
-console.log(guardianUtils.addition);
-console.log(guardianUtils.addition(123));
-console.log(guardianUtils.addition.calls);
-console.log(guardianUtils.addition.lastCalledWith);
+console.log(addition);
+console.log(addition.calls);
+addition.setReturnValue(24);
+console.log(addition);
+console.log(addition(123));
+console.log(addition.calls);
+console.log(addition.lastCalledWith);

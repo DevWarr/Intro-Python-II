@@ -1,15 +1,14 @@
-const { test, describe, expect } = require("@jest/globals");
-const { randint, addition, subtraction, division, multiplication, square, root } = require("./guardianUtils");
+import { randint, addition, subtraction, division, multiplication, square, root, MathQuestion } from "./guardianUtils";
 
-const confirmTypesForQuestionAndAnswer = (func) =>
+const confirmTypesForQuestionAndAnswer = (func: MathQuestion) =>
   test("Returns a question and answer", () => {
-    const [question, answer] = func();
+    const [question, answer] = func(1);
 
     expect(typeof question).toEqual("string");
     expect(typeof answer).toEqual("number");
   });
 
-const checkAnswersBetweenMinAndMax = (numArray, min, max) => {
+const checkAnswersBetweenMinAndMax = (numArray: number[], min: number | bigint, max: number | bigint) => {
   expect(Math.max(...numArray)).toBeLessThanOrEqual(max);
   expect(Math.min(...numArray)).toBeGreaterThanOrEqual(min);
   expect(numArray).toContain(max);

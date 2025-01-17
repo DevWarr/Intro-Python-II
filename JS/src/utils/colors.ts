@@ -1,4 +1,7 @@
-const ansiTable = {
+import { createReadline } from "./Readline";
+import { sleep } from "./time";
+
+const ansiTable: Record<string, string> = {
   x: "\u001b[30m",
   r: "\u001b[31m",
   g: "\u001b[32m",
@@ -33,7 +36,7 @@ const ansiTable = {
  *
  * @returns {string} A formatted string with the proper escape codes to color the terminal text.
  */
-const color = (msg) => {
+export const color = (msg: string): string => {
   let out = "";
   for (let i = 0; i < msg.length; i++) {
     const v = msg[i];
@@ -79,9 +82,6 @@ const color_test = () => {
   console.clear();
 
   color_test();
-
-  const { createReadline } = require("./Readline");
-  const { sleep } = require("./time");
   const rl = createReadline();
 
   while (true) {
@@ -95,7 +95,3 @@ const color_test = () => {
 
   rl.quit();
 })();
-
-module.exports = {
-  color,
-};

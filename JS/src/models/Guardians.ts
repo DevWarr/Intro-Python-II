@@ -1,11 +1,14 @@
-const { addition, subtraction, division, multiplication, square, root } = require("./guardianUtils");
+import { addition, subtraction, division, multiplication, square, root } from "./guardianUtils";
+import { Shrine } from "./Room";
 
-const STAND = "stand";
-const CORRECT = "correct";
-const INCORRECT = "incorrect";
+enum GuardianPose {
+  STAND = "stand",
+  CORRECT = "correct",
+  INCORRECT = "incorrect",
+}
 
 class NotImplementedError extends Error {
-  constructor(methodName) {
+  constructor(methodName: string) {
     super();
     this.message = `This method (${methodName}) has not been implemented. Create a child class that extends this class, and implement this function.`;
   }
@@ -13,23 +16,18 @@ class NotImplementedError extends Error {
 
 /**Parent Guardian Class. All Guardians derive from this class. */
 class Guardian {
-  /**
-   *
-   * @param {string} name
-   * @param {string} description
-   */
-  constructor(name, description) {
-    this.name = name;
-    this.description = description;
-    this.shrine = {};
-    this.pose = STAND;
+  constructor(
+    public name: string,
+    public description: string,
+    public shrine: Shrine | null = null,
+    public pose: GuardianPose = GuardianPose.STAND,
 
-    this.tryCount = 3;
-    this.questionCount = 5;
-    this.question = null;
-    this.answer = null;
-    this.requiredItem = "Calculator";
-  }
+    public tryCount: number = 3,
+    public questionCount: number = 5,
+    public question: string | null = null,
+    public answer: number | null = null,
+    public requiredItem: string | null = "Calculator",
+  ) {}
 
   /**
    * Preps for the battle
@@ -51,7 +49,7 @@ class Guardian {
    * All else, creates and asks a new math question.
    */
   createQuestion = () => {
-    this.pose = STAND;
+    this.pose = GuardianPose.STAND;
     if (this.question) return;
 
     if (this.requiredItem) {
@@ -61,7 +59,7 @@ class Guardian {
     }
   };
 
-  mathQuestion = () => {
+  mathQuestion = (): void => {
     throw new NotImplementedError("mathQuestion");
   };
 
@@ -71,7 +69,7 @@ class Guardian {
    * This includes decreasing the questionCount,
    * and setting a requiredItem if necessary.
    */
-  nextQuestionPrep = () => {
+  nextQuestionPrep = (): void => {
     throw new NotImplementedError("nextQuestionPrep");
   };
 
@@ -81,19 +79,15 @@ class Guardian {
    * If:
    * - Item matches required item   → true
    * - Item does not match required → false
-   *
-   * @param {string} name - name of the item
-   *
-   * @returns boolean
    */
-  checkItem(name) {
+  checkItem(name: string): boolean {
     if (name === this.requiredItem) {
       this.requiredItem = null;
       this.question = null;
-      this.pose = CORRECT;
+      this.pose = GuardianPose.CORRECT;
       return true;
     } else {
-      this.pose = INCORRECT;
+      this.pose = GuardianPose.INCORRECT;
       this.tryCount -= 1;
       return false;
     }
@@ -108,20 +102,16 @@ class Guardian {
    * and returns true,
    *
    * Else, returns false.
-   *
-   * @param {number} answer - the given answer to the math problem.
-   *
-   * @returns boolean
    */
-  checkAnswer(answer) {
+  checkAnswer(answer: number): boolean {
     if (answer === this.answer) {
       this.answer = null;
       this.question = null;
-      this.pose = CORRECT;
+      this.pose = GuardianPose.CORRECT;
       this.nextQuestionPrep();
       return true;
     } else {
-      this.pose = INCORRECT;
+      this.pose = GuardianPose.INCORRECT;
       this.tryCount -= 1;
       return false;
     }
@@ -137,13 +127,11 @@ class Guardian {
    * detach the guardian from the Shrine and return true
    *
    * Still battling? Return null
-   *
-   * @returns boolean | null
    */
-  checkVictory = () => {
+  checkVictory = (): boolean | null => {
     if (this.tryCount === 0) return false;
     else if (this.questionCount === 0) {
-      this.shrine.guardian = null;
+      this.shrine!.guardian = null;
       return true;
     } else return null;
   };
@@ -398,12 +386,13 @@ class ArtifactGuardian extends Guardian {
   };
 }
 
-module.exports = {
+export {
   Guardian,
   MultipGuardian,
   DividGuardian,
   SquareGuardian,
   RadicalGuardian,
   ArtifactGuardian,
-  testing: { STAND, CORRECT, INCORRECT, NotImplementedError },
+  GuardianPose,
+  NotImplementedError,
 };

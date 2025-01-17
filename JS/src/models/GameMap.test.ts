@@ -1,7 +1,6 @@
-const { test, expect } = require("@jest/globals");
-const { GameMap } = require("./GameMap");
-const { Shrine, Room } = require("./Room");
-const { MultipGuardian, DividGuardian, SquareGuardian, RadicalGuardian, ArtifactGuardian } = require("./Guardians");
+import { GameMap } from "./GameMap";
+import { Shrine, Room } from "./Room";
+import { MultipGuardian, DividGuardian, SquareGuardian, RadicalGuardian, ArtifactGuardian } from "./Guardians";
 
 const gameMap = new GameMap();
 

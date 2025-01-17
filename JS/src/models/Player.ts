@@ -1,6 +1,6 @@
-const { Item } = require("./Item");
-const { Shrine } = require("./Room");
-const { GameMap } = require("./GameMap");
+import { Item } from "./Item";
+import { Shrine } from "./Room";
+import { GameMap } from "./GameMap";
 
 const ENTRANCE_ROOM = {
   x: 1,
@@ -8,20 +8,14 @@ const ENTRANCE_ROOM = {
 };
 
 class Player {
-  /**
-   *
-   * @param {string} name
-   * @param {GameMap} gameMap
-   * @param {Item[]} inv
-   */
-  constructor(name, gameMap, inv = []) {
-    this.name = name;
-    this.gameMap = gameMap;
-    this.position = [ENTRANCE_ROOM.y, ENTRANCE_ROOM.x]; // [y, x]
-    this.prev = null;
-    this.__inv = inv;
-    this.__maxInv = 4;
-  }
+  constructor(
+    public name: string,
+    public gameMap: GameMap = new GameMap(),
+    private __inv: Item[] = [],
+    public position: [number, number] = [ENTRANCE_ROOM.y, ENTRANCE_ROOM.x], // [y, x]
+    public prev: [number, number] = this.position,
+    private __maxInv: number = 4,
+  ) {}
 
   get x() {
     return this.position[1];
@@ -48,7 +42,7 @@ class Player {
    *
    * Else, adds item and returns true.
    */
-  addToInv(item) {
+  addToInv(item: Item) {
     if (this.__inv.length >= this.__maxInv) {
       return false;
     } else {
@@ -65,7 +59,7 @@ class Player {
    *
    * Else, returns null.
    */
-  getFromInv(name) {
+  getFromInv(name: string) {
     return this.__inv.find((item) => item.name.toLowerCase() === name.toLowerCase());
   }
 
@@ -78,7 +72,7 @@ class Player {
    *
    * Else, returns null.
    */
-  removeFromInv(name) {
+  removeFromInv(name: string) {
     const indexOfItem = this.__inv.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
     if (indexOfItem > -1) {
       const [item] = this.__inv.splice(indexOfItem, 1);
@@ -92,7 +86,7 @@ class Player {
    * Takes an item from the current room
    * And adds to the player inventory
    */
-  takeItem(name) {
+  takeItem(name: string) {
     const room = this.currentRoom;
     const item = room.removeFromInventory(name);
 
@@ -117,7 +111,7 @@ class Player {
    * Removes item from player inventory
    * And adds to current room.
    */
-  dropItem(name) {
+  dropItem(name: string) {
     const item = this.removeFromInv(name);
     if (item === null) {
       return [null, name];
@@ -140,7 +134,7 @@ class Player {
    * - Above conditions are met → (true, item.name).
    * - Else                     → (false, item.name).
    */
-  useItem(name) {
+  useItem(name: string) {
     const item = this.getFromInv(name);
     if (!item) {
       return [null, name];
@@ -160,7 +154,7 @@ class Player {
    * But the y, x, and valid room checks are
    *  separated for readability.
    */
-  _confirmDirection(y, x) {
+  _confirmDirection(y: number, x: number) {
     if (this.gameMap.map[y]) {
       return !!this.gameMap.map[y][x];
     }
@@ -172,7 +166,7 @@ class Player {
    *
    * Returns true if we moved, and false otherwise
    */
-  move(direction) {
+  move(direction: "n" | "s" | "w" | "e") {
     if (direction === "n" && this._confirmDirection(this.y - 1, this.x)) {
       this.prev = [...this.position];
       this.position[0] -= 1;
@@ -212,23 +206,19 @@ class Player {
 }
 
 class GamePlayer extends Player {
-  constructor(name, gameMap) {
+  constructor(name: string, gameMap: GameMap = new GameMap()) {
     super(name, gameMap, [new Item("Calculator", "Simple Calculator. Can add and subtract.")]);
   }
 }
 
 class DebugPlayer extends Player {
-  constructor(name) {
-    inventory = [
+  constructor(name: string) {
+    const inventory = [
       new Item("Calculator", "Simple Calculator. Can add and subtract."),
       new Item("Artifact", "Simple Calculator. Can add and subtract."),
     ];
-    super(name, null, inventory);
+    super(name, new GameMap(), inventory);
   }
 }
 
-module.exports = {
-  Player,
-  GamePlayer,
-  DebugPlayer,
-};
+export { Player, GamePlayer, DebugPlayer };

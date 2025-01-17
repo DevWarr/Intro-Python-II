@@ -1,16 +1,16 @@
-const { test, describe, expect, beforeEach } = require("@jest/globals");
-
-const {
+import {
   Guardian,
   MultipGuardian,
   DividGuardian,
   SquareGuardian,
   RadicalGuardian,
   ArtifactGuardian,
-  testing: { STAND, CORRECT, INCORRECT, NotImplementedError },
-} = require("./Guardians");
+  GuardianPose,
+  NotImplementedError,
+} from "./Guardians";
 
-const guardianUtils = require("./guardianUtils");
+import * as guardianUtils from "./guardianUtils";
+
 jest.mock("./guardianUtils", () => ({
   addition: jest.fn(() => ["Q", "A"]),
   subtraction: jest.fn(() => ["Q", "A"]),
@@ -32,7 +32,7 @@ describe("Base Guardian Class", () => {
     const expectedDescription = "testDescription";
     const expectedTryCount = 3;
     const expectedQuestionCount = 5;
-    const expectedPose = STAND;
+    const expectedPose = GuardianPose.STAND;
     const expectedRequiredItem = "Calculator";
 
     const testGuardian = createTestGuardian();
@@ -60,7 +60,7 @@ describe("Base Guardian Class", () => {
     expect(testGuardian.requiredItem).toEqual(expectedRequiredItem);
   });
   test("confirm mathQuestion() and nextQuestionPrep() are not implemented for this base class", () => {
-    const testGuardian = new Guardian("testName, testDescription");
+    const testGuardian = new Guardian("testName", "testDescription");
 
     expect(testGuardian.mathQuestion).toThrow(NotImplementedError);
     expect(testGuardian.nextQuestionPrep).toThrow(NotImplementedError);
@@ -79,7 +79,7 @@ describe("Base Guardian Class", () => {
       testGuardian.requiredItem = null;
 
       jest.spyOn(testGuardian, "mathQuestion");
-      testGuardian.mathQuestion.mockImplementation(() => true);
+      (testGuardian.mathQuestion as jest.Mock).mockImplementation(() => true);
 
       testGuardian.createQuestion();
       expect(testGuardian.mathQuestion).toHaveBeenCalledTimes(1);
@@ -101,16 +101,16 @@ describe("Base Guardian Class", () => {
       expect(testGuardian.checkItem("testItem")).toEqual(true);
       expect(testGuardian.answer).toEqual(null);
       expect(testGuardian.question).toEqual(null);
-      expect(testGuardian.pose).toEqual(CORRECT);
+      expect(testGuardian.pose).toEqual(GuardianPose.CORRECT);
     });
     test("sets the 'INCORRECT' pose, decrements the tryCount, and returns false if the item matches the requiredItem", () => {
       const testGuardian = createTestGuardian();
+      const expectedTryCount = 2;
       testGuardian.requiredItem = "testItem";
-      expectedTryCount = 2;
 
       expect(testGuardian.checkItem("wrongItem")).toEqual(false);
       expect(testGuardian.tryCount).toEqual(expectedTryCount);
-      expect(testGuardian.pose).toEqual(INCORRECT);
+      expect(testGuardian.pose).toEqual(GuardianPose.INCORRECT);
     });
   });
   describe("checkAnswer()", () => {
@@ -119,13 +119,13 @@ describe("Base Guardian Class", () => {
       testGuardian.answer = 25;
 
       jest.spyOn(testGuardian, "nextQuestionPrep");
-      testGuardian.nextQuestionPrep.mockImplementation(() => null);
+      (testGuardian.nextQuestionPrep as jest.Mock).mockImplementation(() => null);
 
       expect(testGuardian.checkAnswer(25)).toEqual(true);
 
       expect(testGuardian.answer).toEqual(null);
       expect(testGuardian.question).toEqual(null);
-      expect(testGuardian.pose).toEqual(CORRECT);
+      expect(testGuardian.pose).toEqual(GuardianPose.CORRECT);
       expect(testGuardian.nextQuestionPrep).toHaveBeenCalledTimes(1);
     });
     test("decrements the tryCount, sets pose to 'INCORRECT', and returns false if the answer is wrong", () => {
@@ -135,7 +135,7 @@ describe("Base Guardian Class", () => {
 
       expect(testGuardian.checkAnswer(20)).toEqual(false);
 
-      expect(testGuardian.pose).toEqual(INCORRECT);
+      expect(testGuardian.pose).toEqual(GuardianPose.INCORRECT);
       expect(testGuardian.tryCount).toEqual(2);
     });
   });
@@ -168,27 +168,27 @@ describe("Multip Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 0,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 4,
         expectedDifficulty: 0,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 3,
         expectedDifficulty: 1,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 2,
         expectedDifficulty: 2,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -197,8 +197,8 @@ describe("Multip Guardian", () => {
 
         testGuardian.mathQuestion();
 
-        expect(guardianUtils[functionToCall]).toHaveBeenCalled();
-        expect(guardianUtils[functionToCall]).toHaveBeenCalledWith(expectedDifficulty);
+        expect(functionToCall).toHaveBeenCalled();
+        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
         expect(testGuardian.question).toEqual("Q");
         expect(testGuardian.answer).toEqual("A");
       });
@@ -220,27 +220,27 @@ describe("Divid Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 0,
-        functionToCall: "subtraction",
+        functionToCall: guardianUtils.subtraction,
       },
       {
         questionCount: 4,
         expectedDifficulty: 0,
-        functionToCall: "subtraction",
+        functionToCall: guardianUtils.subtraction,
       },
       {
         questionCount: 3,
         expectedDifficulty: 1,
-        functionToCall: "subtraction",
+        functionToCall: guardianUtils.subtraction,
       },
       {
         questionCount: 2,
         expectedDifficulty: 2,
-        functionToCall: "subtraction",
+        functionToCall: guardianUtils.subtraction,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: "subtraction",
+        functionToCall: guardianUtils.subtraction,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -249,8 +249,8 @@ describe("Divid Guardian", () => {
 
         testGuardian.mathQuestion();
 
-        expect(guardianUtils[functionToCall]).toHaveBeenCalled();
-        expect(guardianUtils[functionToCall]).toHaveBeenCalledWith(expectedDifficulty);
+        expect(functionToCall).toHaveBeenCalled();
+        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
         expect(testGuardian.question).toEqual("Q");
         expect(testGuardian.answer).toEqual("A");
       });
@@ -272,27 +272,27 @@ describe("Square Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 0,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 4,
         expectedDifficulty: 1,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 3,
         expectedDifficulty: 2,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 2,
         expectedDifficulty: 0,
-        functionToCall: "multiplication",
+        functionToCall: guardianUtils.multiplication,
       },
       {
         questionCount: 1,
         expectedDifficulty: 1,
-        functionToCall: "multiplication",
+        functionToCall: guardianUtils.multiplication,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -301,8 +301,8 @@ describe("Square Guardian", () => {
 
         testGuardian.mathQuestion();
 
-        expect(guardianUtils[functionToCall]).toHaveBeenCalled();
-        expect(guardianUtils[functionToCall]).toHaveBeenCalledWith(expectedDifficulty);
+        expect(functionToCall).toHaveBeenCalled();
+        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
         expect(testGuardian.question).toEqual("Q");
         expect(testGuardian.answer).toEqual("A");
       });
@@ -337,27 +337,27 @@ describe("Radical Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 1,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
       {
         questionCount: 4,
         expectedDifficulty: 2,
-        functionToCall: "subtraction",
+        functionToCall: guardianUtils.subtraction,
       },
       {
         questionCount: 3,
         expectedDifficulty: 2,
-        functionToCall: "square",
+        functionToCall: guardianUtils.square,
       },
       {
         questionCount: 2,
         expectedDifficulty: 1,
-        functionToCall: "division",
+        functionToCall: guardianUtils.division,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: "division",
+        functionToCall: guardianUtils.division,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -366,8 +366,8 @@ describe("Radical Guardian", () => {
 
         testGuardian.mathQuestion();
 
-        expect(guardianUtils[functionToCall]).toHaveBeenCalled();
-        expect(guardianUtils[functionToCall]).toHaveBeenCalledWith(expectedDifficulty);
+        expect(functionToCall).toHaveBeenCalled();
+        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
         expect(testGuardian.question).toEqual("Q");
         expect(testGuardian.answer).toEqual("A");
       });
@@ -412,42 +412,42 @@ describe("Artifact Guardian", () => {
       {
         questionCount: 10,
         expectedDifficulty: 2,
-        functionToCall: "subtraction",
+        functionToCall: guardianUtils.subtraction,
       },
       {
         questionCount: 8,
         expectedDifficulty: 2,
-        functionToCall: "multiplication",
+        functionToCall: guardianUtils.multiplication,
       },
       {
         questionCount: 7,
         expectedDifficulty: 1,
-        functionToCall: "square",
+        functionToCall: guardianUtils.square,
       },
       {
         questionCount: 6,
         expectedDifficulty: 2,
-        functionToCall: "square",
+        functionToCall: guardianUtils.square,
       },
       {
         questionCount: 4,
         expectedDifficulty: 2,
-        functionToCall: "division",
+        functionToCall: guardianUtils.division,
       },
       {
         questionCount: 3,
         expectedDifficulty: 1,
-        functionToCall: "root",
+        functionToCall: guardianUtils.root,
       },
       {
         questionCount: 2,
         expectedDifficulty: 2,
-        functionToCall: "root",
+        functionToCall: guardianUtils.root,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: "addition",
+        functionToCall: guardianUtils.addition,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -456,8 +456,8 @@ describe("Artifact Guardian", () => {
 
         testGuardian.mathQuestion();
 
-        expect(guardianUtils[functionToCall]).toHaveBeenCalled();
-        expect(guardianUtils[functionToCall]).toHaveBeenCalledWith(expectedDifficulty);
+        expect(functionToCall).toHaveBeenCalled();
+        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
         expect(testGuardian.question).toEqual("Q");
         expect(testGuardian.answer).toEqual("A");
       });
