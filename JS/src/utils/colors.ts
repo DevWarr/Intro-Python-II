@@ -49,7 +49,7 @@ const color = (msg) => {
     // Get that color code from our dict,
     // or return nothing if it cannot be found.
     else if (v === "~") {
-      colorCode = msg[i + 1];
+      const colorCode = msg[i + 1];
       out += ansiTable[colorCode] ?? "";
     }
     // If the letter comes directly after a tilde,
@@ -69,7 +69,7 @@ const color_test = () => {
   const text = "Hello World!";
   const keys = Object.keys(ansiTable);
 
-  for (key of keys) {
+  for (const key of keys) {
     console.log(ansiTable[key] + text);
   }
 };
