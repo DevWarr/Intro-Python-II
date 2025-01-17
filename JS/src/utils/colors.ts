@@ -1,6 +1,3 @@
-import { createReadline } from "./Readline";
-import { sleep } from "./time";
-
 const ansiTable: Record<string, string> = {
   x: "\u001b[30m",
   r: "\u001b[31m",
@@ -31,8 +28,6 @@ const ansiTable: Record<string, string> = {
  *
  * Tildes cannot be used in the input string.
  * Backslashes will not escape tildes.
- *
- * @param {string} msg
  *
  * @returns {string} A formatted string with the proper escape codes to color the terminal text.
  */
@@ -68,7 +63,7 @@ export const color = (msg: string): string => {
   return out + ansiTable["e"];
 };
 
-const color_test = () => {
+export const colorTest = () => {
   const text = "Hello World!";
   const keys = Object.keys(ansiTable);
 
@@ -76,22 +71,3 @@ const color_test = () => {
     console.log(ansiTable[key] + text);
   }
 };
-
-(async function () {
-  if (require.main !== module) return;
-  console.clear();
-
-  color_test();
-  const rl = createReadline();
-
-  while (true) {
-    const user_in = await rl.askQuestion("type some things!\n>> ");
-    rl.pause();
-    if (["quit", "q"].includes(user_in)) break;
-    console.log(color(user_in));
-    await sleep(1);
-    console.log();
-  }
-
-  rl.quit();
-})();

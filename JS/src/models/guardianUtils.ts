@@ -12,7 +12,7 @@ export type MathQuestion = (difficulty: number) => [string, number];
 /**
  * Creates an addition question.
  */
-export const addition: MathQuestion = (difficulty) => {
+export const buildAdditionQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(0, 20);
@@ -32,7 +32,7 @@ export const addition: MathQuestion = (difficulty) => {
 /**
  * Creates a subtraction question.
  */
-export const subtraction: MathQuestion = (difficulty) => {
+export const buildSubtractionQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   while (true) {
     if (difficulty == 0) {
@@ -57,7 +57,7 @@ export const subtraction: MathQuestion = (difficulty) => {
 /**
  * Creates a division question.
  */
-export const division: MathQuestion = (difficulty) => {
+export const buildDivisionQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   while (true) {
     if (difficulty == 0) {
@@ -81,7 +81,7 @@ export const division: MathQuestion = (difficulty) => {
 /**
  * Creates a multiplication question.
  */
-export const multiplication: MathQuestion = (difficulty) => {
+export const buildMultiplicationQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(3, 9);
@@ -102,7 +102,7 @@ export const multiplication: MathQuestion = (difficulty) => {
 /**
  * Creates an exponent question.
  */
-export const square: MathQuestion = (difficulty) => {
+export const buildExponentQuestion: MathQuestion = (difficulty) => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(2, 5);
@@ -128,7 +128,7 @@ const CUBES = [8, 27, 64, 125, 216, 343];
 /**
  * Creates a radical division question.
  */
-export const root: MathQuestion = (difficulty) => {
+export const buildRootQuestion: MathQuestion = (difficulty) => {
   let num, is_square;
 
   if (difficulty == 0) {

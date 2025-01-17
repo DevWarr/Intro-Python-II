@@ -1,4 +1,5 @@
 import { Application } from "pixi.js";
+import { colorTest } from "./utils/colors";
 
 const ONE_REM_IN_PX = 16;
 
@@ -7,5 +8,7 @@ await app.init({
   width: 82 * ONE_REM_IN_PX,
   height: 16 * ONE_REM_IN_PX,
 });
-app.renderer.view.resolution = 4;
+app.renderer.view.resolution = 1;
 document.getElementById("app")!.appendChild(app.canvas);
+
+colorTest();

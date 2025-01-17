@@ -1,4 +1,11 @@
-import { addition, subtraction, division, multiplication, square, root } from "./guardianUtils";
+import {
+  buildAdditionQuestion,
+  buildSubtractionQuestion,
+  buildDivisionQuestion,
+  buildMultiplicationQuestion,
+  buildExponentQuestion,
+  buildRootQuestion,
+} from "./guardianUtils";
 import { Shrine } from "./Room";
 
 export enum GuardianPose {
@@ -155,13 +162,13 @@ export class MultipGuardian extends Guardian {
     let problem;
     if (this.questionCount > 3) {
       // First two questions? Difficulty easy
-      problem = addition(0);
+      problem = buildAdditionQuestion(0);
     } else if (this.questionCount > 2) {
       // Third question? Difficulty medium
-      problem = addition(1);
+      problem = buildAdditionQuestion(1);
     } else {
       // Last two questions? Difficulty hard
-      problem = addition(2);
+      problem = buildAdditionQuestion(2);
     }
     [this.question, this.answer] = problem;
   };
@@ -188,13 +195,13 @@ export class DividGuardian extends Guardian {
     let problem;
     if (this.questionCount > 3) {
       // First two questions? Difficulty easy
-      problem = subtraction(0);
+      problem = buildSubtractionQuestion(0);
     } else if (this.questionCount > 2) {
       // Third question? Difficulty medium
-      problem = subtraction(1);
+      problem = buildSubtractionQuestion(1);
     } else {
       // Last two questions? Difficulty hard
-      problem = subtraction(2);
+      problem = buildSubtractionQuestion(2);
     }
     [this.question, this.answer] = problem;
   };
@@ -221,19 +228,19 @@ export class SquareGuardian extends Guardian {
     let problem;
     switch (this.questionCount) {
       case 5:
-        problem = addition(0);
+        problem = buildAdditionQuestion(0);
         break;
       case 4:
-        problem = addition(1);
+        problem = buildAdditionQuestion(1);
         break;
       case 3:
-        problem = addition(2);
+        problem = buildAdditionQuestion(2);
         break;
       case 2:
-        problem = multiplication(0);
+        problem = buildMultiplicationQuestion(0);
         break;
       default:
-        problem = multiplication(1);
+        problem = buildMultiplicationQuestion(1);
     }
 
     [this.question, this.answer] = problem;
@@ -264,19 +271,19 @@ export class RadicalGuardian extends Guardian {
     let problem;
     switch (this.questionCount) {
       case 5:
-        problem = addition(1);
+        problem = buildAdditionQuestion(1);
         break;
       case 4:
-        problem = subtraction(2);
+        problem = buildSubtractionQuestion(2);
         break;
       case 3:
-        problem = square(2);
+        problem = buildExponentQuestion(2);
         break;
       case 2:
-        problem = division(1);
+        problem = buildDivisionQuestion(1);
         break;
       default:
-        problem = division(2);
+        problem = buildDivisionQuestion(2);
     }
 
     [this.question, this.answer] = problem;
@@ -336,28 +343,28 @@ export class ArtifactGuardian extends Guardian {
     let problem;
     switch (this.questionCount) {
       case 8:
-        problem = multiplication(2);
+        problem = buildMultiplicationQuestion(2);
         break;
       case 7:
-        problem = square(1);
+        problem = buildExponentQuestion(1);
         break;
       case 6:
-        problem = square(2);
+        problem = buildExponentQuestion(2);
         break;
       case 4:
-        problem = division(2);
+        problem = buildDivisionQuestion(2);
         break;
       case 3:
-        problem = root(1);
+        problem = buildRootQuestion(1);
         break;
       case 2:
-        problem = root(2);
+        problem = buildRootQuestion(2);
         break;
       case 1:
-        problem = addition(2);
+        problem = buildAdditionQuestion(2);
         break;
       default:
-        problem = subtraction(2);
+        problem = buildSubtractionQuestion(2);
     }
     [this.question, this.answer] = problem;
   };

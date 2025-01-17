@@ -8,23 +8,29 @@ import {
   GuardianPose,
   NotImplementedError,
 } from "./Guardians";
+import {
+  buildAdditionQuestion,
+  buildSubtractionQuestion,
+  buildMultiplicationQuestion,
+  buildExponentQuestion,
+  buildDivisionQuestion,
+  buildRootQuestion,
+} from "./guardianUtils";
 
-import * as guardianUtils from "./guardianUtils";
 import { Shrine } from "./Room";
 
-jest.mock("./guardianUtils", () => ({
-  addition: jest.fn(() => ["Q", "A"]),
-  subtraction: jest.fn(() => ["Q", "A"]),
-  division: jest.fn(() => ["Q", "A"]),
-  multiplication: jest.fn(() => ["Q", "A"]),
-  square: jest.fn(() => ["Q", "A"]),
-  root: jest.fn(() => ["Q", "A"]),
-}));
+jest.mock("./guardianUtils");
 
 const createTestGuardian = () => new Guardian("testName", "testDescription");
 
 beforeEach(() => {
   jest.clearAllMocks();
+  (buildAdditionQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
+  (buildSubtractionQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
+  (buildMultiplicationQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
+  (buildExponentQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
+  (buildDivisionQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
+  (buildRootQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
 });
 
 describe("Base Guardian Class", () => {
@@ -170,27 +176,27 @@ describe("Multip Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 0,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 4,
         expectedDifficulty: 0,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 3,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 2,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -222,27 +228,27 @@ describe("Divid Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 0,
-        functionToCall: guardianUtils.subtraction,
+        functionToCall: buildSubtractionQuestion,
       },
       {
         questionCount: 4,
         expectedDifficulty: 0,
-        functionToCall: guardianUtils.subtraction,
+        functionToCall: buildSubtractionQuestion,
       },
       {
         questionCount: 3,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.subtraction,
+        functionToCall: buildSubtractionQuestion,
       },
       {
         questionCount: 2,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.subtraction,
+        functionToCall: buildSubtractionQuestion,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.subtraction,
+        functionToCall: buildSubtractionQuestion,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -274,27 +280,27 @@ describe("Square Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 0,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 4,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 3,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 2,
         expectedDifficulty: 0,
-        functionToCall: guardianUtils.multiplication,
+        functionToCall: buildMultiplicationQuestion,
       },
       {
         questionCount: 1,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.multiplication,
+        functionToCall: buildMultiplicationQuestion,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -339,27 +345,27 @@ describe("Radical Guardian", () => {
       {
         questionCount: 5,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
       {
         questionCount: 4,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.subtraction,
+        functionToCall: buildSubtractionQuestion,
       },
       {
         questionCount: 3,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.square,
+        functionToCall: buildExponentQuestion,
       },
       {
         questionCount: 2,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.division,
+        functionToCall: buildDivisionQuestion,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.division,
+        functionToCall: buildDivisionQuestion,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
@@ -414,42 +420,42 @@ describe("Artifact Guardian", () => {
       {
         questionCount: 10,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.subtraction,
+        functionToCall: buildSubtractionQuestion,
       },
       {
         questionCount: 8,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.multiplication,
+        functionToCall: buildMultiplicationQuestion,
       },
       {
         questionCount: 7,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.square,
+        functionToCall: buildExponentQuestion,
       },
       {
         questionCount: 6,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.square,
+        functionToCall: buildExponentQuestion,
       },
       {
         questionCount: 4,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.division,
+        functionToCall: buildDivisionQuestion,
       },
       {
         questionCount: 3,
         expectedDifficulty: 1,
-        functionToCall: guardianUtils.root,
+        functionToCall: buildRootQuestion,
       },
       {
         questionCount: 2,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.root,
+        functionToCall: buildRootQuestion,
       },
       {
         questionCount: 1,
         expectedDifficulty: 2,
-        functionToCall: guardianUtils.addition,
+        functionToCall: buildAdditionQuestion,
       },
     ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
       test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
