@@ -12,15 +12,15 @@ test("All shrines are in the correct locations", () => {
   const artifactShrineLocation = gameMap.map[4][3];
 
   expect(multipShrineLocation).toBeInstanceOf(Shrine);
-  expect(multipShrineLocation.guardian).toBeInstanceOf(MultipGuardian);
+  expect((multipShrineLocation as Shrine).guardian).toBeInstanceOf(MultipGuardian);
   expect(dividShrineLocation).toBeInstanceOf(Shrine);
-  expect(dividShrineLocation.guardian).toBeInstanceOf(DividGuardian);
+  expect((dividShrineLocation as Shrine).guardian).toBeInstanceOf(DividGuardian);
   expect(squareShrineLocation).toBeInstanceOf(Shrine);
-  expect(squareShrineLocation.guardian).toBeInstanceOf(SquareGuardian);
+  expect((squareShrineLocation as Shrine).guardian).toBeInstanceOf(SquareGuardian);
   expect(radicalShrineLocation).toBeInstanceOf(Shrine);
-  expect(radicalShrineLocation.guardian).toBeInstanceOf(RadicalGuardian);
+  expect((radicalShrineLocation as Shrine).guardian).toBeInstanceOf(RadicalGuardian);
   expect(artifactShrineLocation).toBeInstanceOf(Shrine);
-  expect(artifactShrineLocation.guardian).toBeInstanceOf(ArtifactGuardian);
+  expect((artifactShrineLocation as Shrine).guardian).toBeInstanceOf(ArtifactGuardian);
 });
 
 test("Entrance is the Entrance", () => {

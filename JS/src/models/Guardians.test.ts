@@ -10,6 +10,7 @@ import {
 } from "./Guardians";
 
 import * as guardianUtils from "./guardianUtils";
+import { Shrine } from "./Room";
 
 jest.mock("./guardianUtils", () => ({
   addition: jest.fn(() => ["Q", "A"]),
@@ -148,6 +149,7 @@ describe("Base Guardian Class", () => {
     });
     test("returns true if questionCount is at zero", () => {
       const testGuardian = createTestGuardian();
+      testGuardian.shrine = new Shrine("testShrine", "testDescription", []);
       testGuardian.questionCount = 0;
 
       expect(testGuardian.checkVictory()).toEqual(true);

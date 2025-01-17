@@ -1,5 +1,5 @@
 import { Item } from "./Item";
-import { Shrine } from "./Room";
+import { Room, Shrine } from "./Room";
 import { GameMap } from "./GameMap";
 
 const ENTRANCE_ROOM = {
@@ -25,9 +25,13 @@ class Player {
     return this.position[0];
   }
 
-  /**Returns the Room object the player is currently in*/
-  get currentRoom() {
-    return this.gameMap.map[this.y][this.x];
+  /**
+   * Returns the Room object the player is currently in
+   *
+   * Will throw an error if the player is in an invalid room.
+   */
+  get currentRoom(): Room {
+    return this.gameMap.map[this.y][this.x]!;
   }
 
   get inv() {

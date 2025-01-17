@@ -19,28 +19,31 @@ describe("Room", () => {
 
   test("Room successfully removes and returns item from inventory", () => {
     const testRoom = new Room("testRoom", "testDescription", inventory);
-    const returnedItem = testRoom.removeFromInventory("4");
+    const expectedInventoryLength = inventory.length - 1;
+    const nameOfItemToRemove = "1";
+    const returnedItem = testRoom.removeFromInventory(nameOfItemToRemove);
 
-    expect(testRoom.inventory.length).toEqual(1);
-    expect(testRoom.inventory[0].name).toEqual("1");
-    expect(returnedItem?.name).toEqual("4");
+    expect(testRoom.inventory.length).toEqual(expectedInventoryLength);
+    expect(returnedItem?.name).toEqual(nameOfItemToRemove);
   });
 
   test("Room returns null and removes nothing if the item is not found in inventory", () => {
     const testRoom = new Room("testRoom", "testDescription", inventory);
+    const expectedInventoryLength = inventory.length;
     const returnedItem = testRoom.removeFromInventory("17");
 
-    expect(testRoom.inventory.length).toEqual(2);
+    expect(testRoom.inventory.length).toEqual(expectedInventoryLength);
     expect(returnedItem).toEqual(null);
   });
 
   test("Room successfully adds an item to inventory", () => {
     const testRoom = new Room("testRoom", "testDescription", inventory);
-    testRoom.addToInventory(new Item("4"));
-    const expectedInventoryIndex = 2;
+    const expectedInventoryLength = inventory.length + 1;
+    const newItemName = "4";
+    testRoom.addToInventory(new Item(newItemName));
 
-    expect(testRoom.inventory.length).toEqual(3);
-    expect(testRoom.inventory[expectedInventoryIndex].name).toEqual("2");
+    expect(testRoom.inventory.length).toEqual(expectedInventoryLength);
+    expect(testRoom.inventory[expectedInventoryLength - 1].name).toEqual(newItemName);
   });
 });
 
