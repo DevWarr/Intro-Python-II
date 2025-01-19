@@ -1,9 +1,8 @@
 import { Application, Sprite, Text, Texture } from "pixi.js";
 import { GameContainer } from "./views/GameContainer";
-import { colorTest } from "./utils/colors";
 import { ControlsContainer, ControlType } from "./views/ControlsContainer";
 import { FONT_SIZE_PX } from "./models/SizeVector2";
-import { textSizeTest } from "./views/buildTextListWithColors";
+import { MapLegendContainer } from "./views/MapLegendContainer";
 
 const MAX_CHARACTERS_WIDTH = 85;
 
@@ -31,13 +30,12 @@ const mapContainer = new GameContainer({
 });
 setBackgroundColor(0xffffff, mapContainer);
 
-const legendContainer = new GameContainer({
+const legendContainer = new MapLegendContainer({
   width: 21 * FONT_SIZE_PX.w,
   height: 5 * FONT_SIZE_PX.h,
-  x: 22 * FONT_SIZE_PX.w,
+  x: 23 * FONT_SIZE_PX.w,
   y: 1 * FONT_SIZE_PX.h,
 });
-setBackgroundColor(0xff0000, legendContainer);
 
 const inventoryContainer = new GameContainer({
   width: 20 * FONT_SIZE_PX.w,
