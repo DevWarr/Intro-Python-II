@@ -127,8 +127,10 @@ const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
  * ]
  * ```
  *
+ * @param {string} text The text to build pixi text objects from
+ * @param {number} verticalOffset Any vertical offset. Useful for shifting full lines of text down
  */
-export const buildTextListWithColors = (text: string): Text[] => {
+export const buildTextListWithColors = (text: string, verticalOffset: number = 0): Text[] => {
   let finalTextList: Text[] = [];
   let currentColor = ColorLabel.DEFAULT;
   let currentTextOffset = 0;
@@ -155,6 +157,7 @@ export const buildTextListWithColors = (text: string): Text[] => {
         ...COLOR_LABEL_TO_UNICODE_COLOR[currentColor],
         text: char,
         x: currentTextOffset * FONT_SIZE_PX.w,
+        y: verticalOffset * FONT_SIZE_PX.h + (COLOR_LABEL_TO_UNICODE_COLOR[currentColor]?.y ?? 0),
       });
       finalTextList.push(newPixiText);
       currentTextOffset++;
