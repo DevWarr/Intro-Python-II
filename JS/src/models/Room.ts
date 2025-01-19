@@ -50,7 +50,7 @@ export class Shrine extends Room {
   }
 }
 
-export const debugRoom = new Room(
+export const DEBUG_ROOM = new Room(
   "You're an explorer, you see!",
   "Search through the Mathematical Caves, find the Artifact, and make your escape!",
   [new Item("Please resize"), new Item("So you can see"), new Item("All of"), new Item("This text")],

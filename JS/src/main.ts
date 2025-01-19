@@ -3,6 +3,8 @@ import { GameContainer } from "./views/GameContainer";
 import { ControlsContainer, ControlType } from "./views/ControlsContainer";
 import { FONT_SIZE_PX } from "./models/SizeVector2";
 import { MapLegendContainer } from "./views/MapLegendContainer";
+import { RoomInfoContainer } from "./views/RoomInfoContainer";
+import { DEBUG_ROOM, Room } from "./models/Room";
 
 const MAX_CHARACTERS_WIDTH = 85;
 
@@ -45,13 +47,13 @@ const inventoryContainer = new GameContainer({
 });
 setBackgroundColor(0x00ff00, inventoryContainer);
 
-const infoContainer = new GameContainer({
+const roomInfoContainer = new RoomInfoContainer({
   width: MAX_CHARACTERS_WIDTH * FONT_SIZE_PX.w,
   height: 3 * FONT_SIZE_PX.h,
   x: 0,
   y: 7 * FONT_SIZE_PX.h,
 });
-setBackgroundColor(0x0000ff, infoContainer);
+roomInfoContainer.renderRoomInfo(new Room("test room", "today we'll be talking about the wonders of the world"));
 
 const controlsContainer = new ControlsContainer({
   width: MAX_CHARACTERS_WIDTH * FONT_SIZE_PX.w,
@@ -91,7 +93,7 @@ responseContainer.container.addChild(responseText);
 app.stage.addChild(mapContainer.container);
 app.stage.addChild(legendContainer.container);
 app.stage.addChild(inventoryContainer.container);
-app.stage.addChild(infoContainer.container);
+app.stage.addChild(roomInfoContainer.container);
 app.stage.addChild(controlsContainer.container);
 app.stage.addChild(inputContainer.container);
 app.stage.addChild(responseContainer.container);

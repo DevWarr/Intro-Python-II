@@ -23,7 +23,7 @@ enum ColorLabel {
 
 const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
   [ColorLabel.BLACK]: {
-    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#000000", fontWeight: "normal" },
+    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#555555", fontWeight: "normal" },
     y: 0,
   },
   [ColorLabel.RED]: {
@@ -31,7 +31,7 @@ const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
     y: 0,
   },
   [ColorLabel.GREEN]: {
-    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00ff000", fontWeight: "normal" },
+    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00ff00", fontWeight: "normal" },
     y: 0,
   },
   [ColorLabel.YELLOW]: {
@@ -47,7 +47,7 @@ const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
     y: 0,
   },
   [ColorLabel.CYAN]: {
-    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00ffff", fontWeight: "normal" },
+    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00bbff", fontWeight: "normal" },
     y: 0,
   },
   [ColorLabel.WHITE]: {
@@ -79,7 +79,7 @@ const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
     y: -1,
   },
   [ColorLabel.CYAN_BOLD]: {
-    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00ffff", fontWeight: "bold" },
+    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00bbff", fontWeight: "bold" },
     y: -1,
   },
   [ColorLabel.WHITE_BOLD]: {
@@ -87,7 +87,7 @@ const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
     y: -1,
   },
   [ColorLabel.DEFAULT]: {
-    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#999999", fontWeight: "normal" },
+    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#bbbbbb", fontWeight: "normal" },
     y: 0,
   },
 };
