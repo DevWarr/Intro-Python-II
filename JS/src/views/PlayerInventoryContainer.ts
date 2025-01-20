@@ -10,7 +10,7 @@ export class PlayerInventoryContainer {
 
   renderPlayerInventory(player: Player) {
     const inventoryHeader = `~W${player.name}'s inventory:`;
-    const playerInventoryStrings = player.invenvtory.map((item) => `  ~c( ${item.name} )~e`);
+    const playerInventoryStrings = player.inventory.inventoryNames.map((itemName) => `  ~c( ${itemName} )~e`);
 
     this.container.removeChildren();
     [inventoryHeader, ...playerInventoryStrings].forEach((text, index) => {

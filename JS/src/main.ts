@@ -46,14 +46,14 @@ const resetPlayerInput = () => {
 };
 
 const gameMap = new GameMap();
-const player = new GamePlayer("My player here", gameMap);
+const player = new GamePlayer("My player here");
 
 const currentGameState = new ExplorationState(gameMap, player, mapContainer, roomInfoContainer, responseContainer);
 
 mapContainer.renderMap(gameMap, player.position);
 legendContainer.renderMapLegend();
 playerInventoryContainer.renderPlayerInventory(player);
-roomInfoContainer.renderRoomInfo(player.currentRoom);
+roomInfoContainer.renderRoomInfo(gameMap.getRoomAtPosition(player.position)!);
 controlsContainer.renderControlType(ControlType.SIMPLE);
 
 document.onkeydown = async (e) => {

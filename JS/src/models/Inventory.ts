@@ -6,6 +6,10 @@ export class Inventory {
     private maxInventorySize: number = 4,
   ) {}
 
+  get length() {
+    return this.inventory.length;
+  }
+
   /**
    * Returns a list of the names of the items in the inventory.
    *
