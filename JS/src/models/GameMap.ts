@@ -128,4 +128,8 @@ export class GameMap {
       }),
     );
   };
+
+  public getRoomAtPosition(roomPosition: PositionVector2) {
+    return this.map[roomPosition.y][roomPosition.x];
+  }
 }

@@ -1,28 +1,36 @@
 import { Item } from "./Item";
 import { Room, Shrine } from "./Room";
 import { GameMap } from "./GameMap";
+import { PositionVector2 } from "./PositionVector2";
 
-const ENTRANCE_ROOM = {
-  x: 1,
-  y: 4,
-};
+const ENTRANCE_ROOM: PositionVector2 = new PositionVector2(1, 4);
 
 export class Player {
   constructor(
     public name: string,
     public gameMap: GameMap = new GameMap(),
     private __inventory: Item[] = [],
-    public position: [number, number] = [ENTRANCE_ROOM.y, ENTRANCE_ROOM.x], // [y, x]
-    public prev: [number, number] = this.position,
+    private __position: PositionVector2 = ENTRANCE_ROOM,
+    private __previousPosition: PositionVector2 = this.__position,
     private __maxInv: number = 4,
   ) {}
 
   get x() {
-    return this.position[1];
+    return this.__position.x;
   }
 
   get y() {
-    return this.position[0];
+    return this.__position.y;
+  }
+
+  /** Returns a copy of the player's position */
+  get position() {
+    return PositionVector2.fromSerializedPosition(this.__position.serializedPosition);
+  }
+
+  /** Returns a copy of the player's previous position */
+  get previousPosition() {
+    return PositionVector2.fromSerializedPosition(this.__previousPosition.serializedPosition);
   }
 
   /**
@@ -34,6 +42,7 @@ export class Player {
     return this.gameMap.map[this.y][this.x]!;
   }
 
+  /** Returns a copy of the player's inventory */
   get invenvtory() {
     return [...this.__inventory];
   }
@@ -172,20 +181,20 @@ export class Player {
    */
   move(direction: "n" | "s" | "w" | "e") {
     if (direction === "n" && this._confirmDirection(this.y - 1, this.x)) {
-      this.prev = [...this.position];
-      this.position[0] -= 1;
+      this.__previousPosition = this.__position;
+      this.__position = this.__position.add(PositionVector2.UP);
       return true;
     } else if (direction === "s" && this._confirmDirection(this.y + 1, this.x)) {
-      this.prev = [...this.position];
-      this.position[0] += 1;
+      this.__previousPosition = this.__position;
+      this.__position = this.__position.add(PositionVector2.DOWN);
       return true;
     } else if (direction === "w" && this._confirmDirection(this.y, this.x - 1)) {
-      this.prev = [...this.position];
-      this.position[1] -= 1;
+      this.__previousPosition = this.__position;
+      this.__position = this.__position.add(PositionVector2.LEFT);
       return true;
     } else if (direction === "e" && this._confirmDirection(this.y, this.x + 1)) {
-      this.prev = [...this.position];
-      this.position[1] += 1;
+      this.__previousPosition = this.__position;
+      this.__position = this.__position.add(PositionVector2.RIGHT);
       return true;
     } else {
       return false;
@@ -193,7 +202,7 @@ export class Player {
   }
 
   runAway() {
-    this.position = [...this.prev];
+    this.__position = this.__previousPosition;
   }
 
   /**

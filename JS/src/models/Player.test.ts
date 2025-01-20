@@ -3,6 +3,7 @@ import { Room, Shrine } from "./Room";
 import { Item } from "./Item";
 import { Guardian } from "./Guardians";
 import { GameMap, DEBUG_MAP } from "./GameMap";
+import { PositionVector2 } from "./PositionVector2";
 
 test("Creating a Player sets the name, description, and inventory properly", () => {
   const expectedItem = new Item("testItem", "testDescription");
@@ -160,12 +161,11 @@ describe("Using an item", () => {
 });
 
 describe("Moving", () => {
-  const STARTING_POINT = { x: 2, y: 2 };
+  const STARTING_POINT = new PositionVector2(2, 2);
   let player: Player;
 
   beforeEach(() => {
-    player = new Player("testPlayer", new GameMap(DEBUG_MAP));
-    player.position = [STARTING_POINT.y, STARTING_POINT.x];
+    player = new Player("testPlayer", new GameMap(DEBUG_MAP), [], STARTING_POINT);
   });
 
   [
@@ -182,46 +182,43 @@ describe("Moving", () => {
       expect(success).toEqual(true);
       expect(player.x).toEqual(expectedX);
       expect(player.y).toEqual(expectedY);
-      expect(player.prev[0]).toEqual(STARTING_POINT.y);
-      expect(player.prev[1]).toEqual(STARTING_POINT.x);
     });
   });
 
-  test("returns false if there is no room in a given direction", () => {
-    player.position = [0, 0];
+  test.each([
+    { startingPoint: new PositionVector2(0, 0), directionToMove: "n" },
+    { startingPoint: new PositionVector2(0, 0), directionToMove: "w" },
+    { startingPoint: new PositionVector2(4, 4), directionToMove: "s" },
+    { startingPoint: new PositionVector2(4, 4), directionToMove: "e" },
+  ])("returns false if there is no room in a given direction", ({ startingPoint, directionToMove }) => {
+    player = new Player("testPlayer", new GameMap(DEBUG_MAP), [], startingPoint);
 
-    expect(player.move("n")).toEqual(false);
-    expect(player.move("w")).toEqual(false);
-
-    player.position = [4, 4];
-
-    expect(player.move("s")).toEqual(false);
-    expect(player.move("e")).toEqual(false);
+    expect(player.move(directionToMove as "n" | "s" | "e" | "w")).toEqual(false);
   });
 });
 
 test("Running away sets the current position to the previous position", () => {
   const player = new Player("testPlayer", new GameMap(DEBUG_MAP));
 
-  player.prev = [2, 2];
-  player.runAway();
+  player.move("w");
+  const expectedPositionAfterRunningAway = player.previousPosition;
 
-  expect(player.x).toEqual(2);
-  expect(player.y).toEqual(2);
+  player.runAway();
+  expect(player.position.isEqualTo(expectedPositionAfterRunningAway)).toBe(true);
 });
 
 describe("Checking for a Guardian", () => {
   test("Returns the guardian if the current room is a Shrine", () => {
-    const player = new Player("testPlayer", new GameMap());
-    player.position = [3, 1]; // the position of a Shrine in the game
+    const shrinePosition = new PositionVector2(1, 3);
+    const player = new Player("testPlayer", new GameMap(), [], shrinePosition);
 
     expect(player.currentRoom).toBeInstanceOf(Shrine);
     expect(player.checkForGuardian()).toBeInstanceOf(Guardian);
   });
 
   test("Returns nothing if the current room is not a Shrine", () => {
-    const player = new Player("testPlayer", new GameMap());
-    player.position = [4, 1]; // the position of a non-Shrine room
+    const nonShrinePosition = new PositionVector2(1, 4);
+    const player = new Player("testPlayer", new GameMap(), [], nonShrinePosition);
 
     expect(player.checkForGuardian()).toBe(undefined);
   });
