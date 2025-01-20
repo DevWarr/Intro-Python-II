@@ -33,7 +33,7 @@ export class ExplorationState {
 
       if (controllerResponse.actionSuccess) {
         this.mapContainer.renderMap(this.gameMap, this.player.position);
-        this.roomInfoContainer.renderRoomInfo(this.player.currentRoom);
+        this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
       }
 
       if (controllerResponse.responseToPlayer) {
