@@ -10,6 +10,10 @@ export class Inventory {
     return this.inventory.length;
   }
 
+  get isFull() {
+    return this.inventory.length >= this.maxInventorySize;
+  }
+
   /**
    * Returns a list of the names of the items in the inventory.
    *
@@ -49,7 +53,7 @@ export class Inventory {
    * Else, adds item and returns true.
    */
   public addToInventory(item: Item): boolean {
-    if (this.inventory.length >= this.maxInventorySize) {
+    if (this.isFull) {
       return false;
     } else {
       this.inventory.push(item);

@@ -48,7 +48,14 @@ const resetPlayerInput = () => {
 const gameMap = new GameMap();
 const player = new GamePlayer("My player here");
 
-const currentGameState = new ExplorationState(gameMap, player, mapContainer, roomInfoContainer, responseContainer);
+const currentGameState = new ExplorationState(
+  gameMap,
+  player,
+  mapContainer,
+  playerInventoryContainer,
+  roomInfoContainer,
+  responseContainer,
+);
 
 mapContainer.renderMap(gameMap, player.position);
 legendContainer.renderMapLegend();

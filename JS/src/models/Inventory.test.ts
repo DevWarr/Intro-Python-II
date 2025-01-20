@@ -18,6 +18,14 @@ describe("Inventory", () => {
     emptyInventory = new Inventory();
   });
 
+  test("isFull returns true when inventory is full", () => {
+    expect(fullInventory.isFull).toBe(true);
+  });
+
+  test("isFull returns false when inventory is not full", () => {
+    expect(emptyInventory.isFull).toBe(false);
+  });
+
   test("inventoryNames property should return the names of all items in the inventory", () => {
     const expectedItemNames = itemList.map((item) => item.name);
 
