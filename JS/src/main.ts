@@ -4,7 +4,9 @@ import { ControlsContainer, ControlType } from "./views/ControlsContainer";
 import { FONT_SIZE_PX } from "./models/SizeVector2";
 import { MapLegendContainer } from "./views/MapLegendContainer";
 import { RoomInfoContainer } from "./views/RoomInfoContainer";
-import { DEBUG_ROOM, Room } from "./models/Room";
+import { DEBUG_ROOM } from "./models/Room";
+import { PlayerInventoryContainer } from "./views/PlayerInventoryContainer";
+import { DebugPlayer } from "./models/Player";
 
 const MAX_CHARACTERS_WIDTH = 85;
 
@@ -33,46 +35,36 @@ const mapContainer = new GameContainer({
 setBackgroundColor(0xffffff, mapContainer);
 
 const legendContainer = new MapLegendContainer({
-  width: 21 * FONT_SIZE_PX.w,
-  height: 5 * FONT_SIZE_PX.h,
   x: 23 * FONT_SIZE_PX.w,
   y: 1 * FONT_SIZE_PX.h,
 });
+legendContainer.renderMapLegend();
 
-const inventoryContainer = new GameContainer({
-  width: 20 * FONT_SIZE_PX.w,
-  height: 5 * FONT_SIZE_PX.h,
-  x: 43 * FONT_SIZE_PX.w,
+const playerInventoryContainer = new PlayerInventoryContainer({
+  x: 53 * FONT_SIZE_PX.w,
   y: 1 * FONT_SIZE_PX.h,
 });
-setBackgroundColor(0x00ff00, inventoryContainer);
+const debugPlayer = new DebugPlayer("testing testing");
+playerInventoryContainer.renderPlayerInventory(debugPlayer);
 
 const roomInfoContainer = new RoomInfoContainer({
-  width: MAX_CHARACTERS_WIDTH * FONT_SIZE_PX.w,
-  height: 3 * FONT_SIZE_PX.h,
   x: 0,
   y: 7 * FONT_SIZE_PX.h,
 });
-roomInfoContainer.renderRoomInfo(new Room("test room", "today we'll be talking about the wonders of the world"));
+roomInfoContainer.renderRoomInfo(DEBUG_ROOM);
 
 const controlsContainer = new ControlsContainer({
-  width: MAX_CHARACTERS_WIDTH * FONT_SIZE_PX.w,
-  height: 1 * FONT_SIZE_PX.h,
   x: 0,
   y: 11 * FONT_SIZE_PX.h,
 });
 controlsContainer.setActiveControl(ControlType.INTRO);
 
 const inputContainer = new GameContainer({
-  width: MAX_CHARACTERS_WIDTH * FONT_SIZE_PX.w,
-  height: 1 * FONT_SIZE_PX.h,
   x: 0,
   y: 12 * FONT_SIZE_PX.h,
 });
 
 const responseContainer = new GameContainer({
-  width: MAX_CHARACTERS_WIDTH * FONT_SIZE_PX.w,
-  height: 1 * FONT_SIZE_PX.h,
   x: 0,
   y: 13 * FONT_SIZE_PX.h,
 });
@@ -92,7 +84,7 @@ responseContainer.container.addChild(responseText);
 
 app.stage.addChild(mapContainer.container);
 app.stage.addChild(legendContainer.container);
-app.stage.addChild(inventoryContainer.container);
+app.stage.addChild(playerInventoryContainer.container);
 app.stage.addChild(roomInfoContainer.container);
 app.stage.addChild(controlsContainer.container);
 app.stage.addChild(inputContainer.container);

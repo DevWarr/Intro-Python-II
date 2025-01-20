@@ -5,7 +5,7 @@ import { buildTextListWithColors } from "./buildTextListWithColors";
 
 export class RoomInfoContainer {
   constructor(
-    public containerOptions: ContainerOptions,
+    containerOptions: ContainerOptions,
     public container: Container = new Container(containerOptions),
   ) {}
 
@@ -16,6 +16,7 @@ export class RoomInfoContainer {
     const itemNameString = room.inventory.map((item: Item) => `~c(${item.name})~e`);
     const roomInventoryString = `Items: [ ${itemNameString.length ? itemNameString.join(" ") : "~xempty~e"} ]`;
 
+    this.container.removeChildren();
     [roomNameString, roomDescriptionString, roomInventoryString].forEach((text, index) => {
       const pixiTextObjects = buildTextListWithColors(text, index);
       pixiTextObjects.forEach((pixiTextObject) => this.container.addChild(pixiTextObject));
