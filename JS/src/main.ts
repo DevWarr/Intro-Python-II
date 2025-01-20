@@ -1,5 +1,4 @@
-import { Application, Sprite, Text, Texture } from "pixi.js";
-import { GameContainer } from "./views/GameContainer";
+import { Application, Container, Text } from "pixi.js";
 import { ControlsContainer, ControlType } from "./views/ControlsContainer";
 import { FONT_SIZE_PX } from "./models/SizeVector2";
 import { MapLegendContainer } from "./views/MapLegendContainer";
@@ -7,6 +6,8 @@ import { RoomInfoContainer } from "./views/RoomInfoContainer";
 import { DEBUG_ROOM } from "./models/Room";
 import { PlayerInventoryContainer } from "./views/PlayerInventoryContainer";
 import { DebugPlayer } from "./models/Player";
+import { GameMapContainer } from "./views/GameMapContainer";
+import { GameMap } from "./models/GameMap";
 
 const MAX_CHARACTERS_WIDTH = 85;
 
@@ -18,21 +19,14 @@ await app.init({
 app.renderer.view.resolution = 2;
 document.getElementById("app")!.appendChild(app.canvas);
 
-const setBackgroundColor = (color: number, gameContainer: GameContainer) => {
-  const background = new Sprite(Texture.WHITE);
-  background.width = gameContainer.containerOptions.width ?? app.canvas.width;
-  background.height = gameContainer.containerOptions.height ?? app.canvas.height;
-  background.tint = color;
-  gameContainer.container.addChild(background);
-};
+const gameMap = new GameMap();
+const debugPlayer = new DebugPlayer("testing testing");
 
-const mapContainer = new GameContainer({
-  width: 22 * FONT_SIZE_PX.w,
-  height: 5 * FONT_SIZE_PX.h,
+const mapContainer = new GameMapContainer({
   x: 0,
   y: 1 * FONT_SIZE_PX.h,
 });
-setBackgroundColor(0xffffff, mapContainer);
+mapContainer.renderMap(gameMap, debugPlayer.position);
 
 const legendContainer = new MapLegendContainer({
   x: 23 * FONT_SIZE_PX.w,
@@ -44,7 +38,6 @@ const playerInventoryContainer = new PlayerInventoryContainer({
   x: 53 * FONT_SIZE_PX.w,
   y: 1 * FONT_SIZE_PX.h,
 });
-const debugPlayer = new DebugPlayer("testing testing");
 playerInventoryContainer.renderPlayerInventory(debugPlayer);
 
 const roomInfoContainer = new RoomInfoContainer({
@@ -59,12 +52,12 @@ const controlsContainer = new ControlsContainer({
 });
 controlsContainer.setActiveControl(ControlType.INTRO);
 
-const inputContainer = new GameContainer({
+const inputContainer = new Container({
   x: 0,
   y: 12 * FONT_SIZE_PX.h,
 });
 
-const responseContainer = new GameContainer({
+const responseContainer = new Container({
   x: 0,
   y: 13 * FONT_SIZE_PX.h,
 });
@@ -80,15 +73,15 @@ const responseText = new Text({
   x: 0,
   y: 0,
 });
-responseContainer.container.addChild(responseText);
+responseContainer.addChild(responseText);
 
 app.stage.addChild(mapContainer.container);
 app.stage.addChild(legendContainer.container);
 app.stage.addChild(playerInventoryContainer.container);
 app.stage.addChild(roomInfoContainer.container);
 app.stage.addChild(controlsContainer.container);
-app.stage.addChild(inputContainer.container);
-app.stage.addChild(responseContainer.container);
+app.stage.addChild(inputContainer);
+app.stage.addChild(responseContainer);
 
 const TEXT_PLACEHOLDER = ">>  ";
 const playerInputText = new Text({
@@ -103,7 +96,7 @@ const playerInputText = new Text({
   y: 0,
 });
 
-inputContainer.container.addChild(playerInputText);
+inputContainer.addChild(playerInputText);
 
 let playerCanType = true;
 
