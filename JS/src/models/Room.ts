@@ -69,6 +69,11 @@ export class Shrine extends Room {
   get guardian() {
     return this.__guardian;
   }
+
+  /** Removes the guardian from the shrine (used when the guardian dies) */
+  removeGuardian() {
+    this.__guardian = null;
+  }
 }
 
 export const DEBUG_ROOM = new Room(
