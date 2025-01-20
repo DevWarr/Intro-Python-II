@@ -9,6 +9,7 @@ import {
   Guardian,
 } from "./Guardians";
 import { PositionVector2 } from "./PositionVector2";
+import { Inventory } from "./Inventory";
 
 // 0 -> Entrance
 // 1 -> Tunnel
@@ -123,8 +124,9 @@ export class GameMap {
         // If there is something in index three, there's a guardian
         // Ergo, we must make a shrine instead of a room
         if (roomInfo.guardian) {
-          return new Shrine(roomInfo.name, roomInfo.description, roomInfo.guardian, roomInfo.inventory);
-        } else return new Room(roomInfo.name, roomInfo.description, roomInfo.roomType, roomInfo.inventory);
+          return new Shrine(roomInfo.guardian, roomInfo.name, roomInfo.description, new Inventory(roomInfo.inventory));
+        } else
+          return new Room(roomInfo.name, roomInfo.description, roomInfo.roomType, new Inventory(roomInfo.inventory));
       }),
     );
   };

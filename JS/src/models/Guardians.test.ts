@@ -132,7 +132,7 @@ describe("Base Guardian Class", () => {
       expect(testGuardian.checkVictory()).toEqual(false);
     });
     test("returns true if questionCount is at zero", () => {
-      testGuardian.shrine = new Shrine("testShrine", "testDescription", testGuardian);
+      testGuardian.shrine = new Shrine(testGuardian, "testShrine", "testDescription");
       testGuardian.questionCount = 0;
 
       expect(testGuardian.checkVictory()).toEqual(true);
