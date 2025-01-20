@@ -10,7 +10,7 @@ test("Creating a Player sets the name, description, and inventory properly", () 
 
   expect(player.name).toMatch(/player/i);
   expect(player.gameMap).toBeInstanceOf(GameMap);
-  expect(player.inv).toContain(expectedItem);
+  expect(player.invenvtory).toContain(expectedItem);
   expect(player.x).toEqual(1);
   expect(player.y).toEqual(4);
   expect(player.currentRoom).toBeInstanceOf(Room);
@@ -34,7 +34,7 @@ describe("Adding an item to the inventory", () => {
     const success = player.addToInv(itemToAdd);
 
     expect(success).toEqual(true);
-    expect(player.inv).toContain(itemToAdd);
+    expect(player.invenvtory).toContain(itemToAdd);
   });
 });
 
@@ -43,21 +43,21 @@ describe("Removing an item from the inventory", () => {
     const itemToRemove = new Item("testItem");
     const player = new Player("testPlayer", new GameMap(), [itemToRemove]);
 
-    expect(player.inv).toHaveLength(1);
+    expect(player.invenvtory).toHaveLength(1);
     const itemOrNull = player.removeFromInv("testitem");
 
     expect(itemOrNull).toBe(itemToRemove);
-    expect(player.inv).toHaveLength(0);
+    expect(player.invenvtory).toHaveLength(0);
   });
 
   test("Returns null if the item is not found in the inventory", () => {
     const player = new Player("testPlayer", new GameMap(), [new Item("testItem")]);
 
-    expect(player.inv).toHaveLength(1);
+    expect(player.invenvtory).toHaveLength(1);
     const itemOrNull = player.removeFromInv("noitemlikethis");
 
     expect(itemOrNull).toEqual(null);
-    expect(player.inv).toHaveLength(1);
+    expect(player.invenvtory).toHaveLength(1);
   });
 });
 
@@ -66,12 +66,12 @@ describe("Taking an Item from the room", () => {
     const player = new Player("testPlayer", new GameMap());
     player.currentRoom.removeFromInventory = jest.fn(() => null);
 
-    expect(player.inv).toHaveLength(0);
+    expect(player.invenvtory).toHaveLength(0);
     const [success] = player.takeItem("item");
 
     expect(player.currentRoom.removeFromInventory).toHaveBeenCalled();
     expect(success).toEqual(null);
-    expect(player.inv).toHaveLength(0);
+    expect(player.invenvtory).toHaveLength(0);
   });
 
   test("Fails if the player inventory is too full", () => {
@@ -82,14 +82,14 @@ describe("Taking an Item from the room", () => {
     player.currentRoom.removeFromInventory = jest.fn(() => itemToTake);
     player.currentRoom.addToInventory = jest.fn();
 
-    expect(player.inv).toHaveLength(4);
+    expect(player.invenvtory).toHaveLength(4);
     const [success, itemName] = player.takeItem(itemToTake.name);
 
     expect(player.currentRoom.removeFromInventory).toHaveBeenCalled();
     expect(player.currentRoom.addToInventory).toHaveBeenCalled();
     expect(itemName).toEqual(itemToTake.name);
     expect(success).toEqual(false);
-    expect(player.inv).toHaveLength(4);
+    expect(player.invenvtory).toHaveLength(4);
   });
 
   test("Succeeds if item is in room and inventory has space", () => {
@@ -98,14 +98,14 @@ describe("Taking an Item from the room", () => {
     const player = new Player("testPlayer", new GameMap());
     player.currentRoom.removeFromInventory = jest.fn(() => itemToTake);
 
-    expect(player.inv).toHaveLength(0);
+    expect(player.invenvtory).toHaveLength(0);
     const [success, itemName] = player.takeItem(itemToTake.name);
 
     expect(player.currentRoom.removeFromInventory).toHaveBeenCalled();
     expect(itemName).toEqual(itemToTake.name);
     expect(success).toEqual(true);
-    expect(player.inv).toHaveLength(1);
-    expect(player.inv).toContain(itemToTake);
+    expect(player.invenvtory).toHaveLength(1);
+    expect(player.invenvtory).toContain(itemToTake);
   });
 });
 
@@ -113,23 +113,23 @@ describe("Dropping an item", () => {
   test("Fails if the item is not in the inventory", () => {
     const player = new Player("testPlayer", new GameMap(), [new Item("")]);
 
-    expect(player.inv).toHaveLength(1);
+    expect(player.invenvtory).toHaveLength(1);
     const [success] = player.dropItem("dropma");
 
     expect(success).toEqual(null);
-    expect(player.inv).toHaveLength(1);
+    expect(player.invenvtory).toHaveLength(1);
   });
 
   test("Succeeds if the item is in the inventory", () => {
     const itemToDrop = new Item("dropMa");
     const player = new Player("testPlayer", new GameMap(), [itemToDrop]);
 
-    expect(player.inv).toHaveLength(1);
+    expect(player.invenvtory).toHaveLength(1);
     const [success] = player.dropItem("dropma");
 
     expect(success).toEqual(true);
-    expect(player.inv).toHaveLength(0);
-    expect(player.inv).not.toContain(itemToDrop);
+    expect(player.invenvtory).toHaveLength(0);
+    expect(player.invenvtory).not.toContain(itemToDrop);
     expect(player.currentRoom.inventory).toContain(itemToDrop);
   });
 });

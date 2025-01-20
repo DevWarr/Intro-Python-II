@@ -11,7 +11,7 @@ export class Player {
   constructor(
     public name: string,
     public gameMap: GameMap = new GameMap(),
-    private __inv: Item[] = [],
+    private __inventory: Item[] = [],
     public position: [number, number] = [ENTRANCE_ROOM.y, ENTRANCE_ROOM.x], // [y, x]
     public prev: [number, number] = this.position,
     private __maxInv: number = 4,
@@ -34,8 +34,8 @@ export class Player {
     return this.gameMap.map[this.y][this.x]!;
   }
 
-  get inv() {
-    return [...this.__inv];
+  get invenvtory() {
+    return [...this.__inventory];
   }
 
   /**
@@ -47,10 +47,10 @@ export class Player {
    * Else, adds item and returns true.
    */
   addToInv(item: Item) {
-    if (this.__inv.length >= this.__maxInv) {
+    if (this.__inventory.length >= this.__maxInv) {
       return false;
     } else {
-      this.__inv.push(item);
+      this.__inventory.push(item);
       return true;
     }
   }
@@ -64,7 +64,7 @@ export class Player {
    * Else, returns null.
    */
   getFromInv(name: string) {
-    return this.__inv.find((item) => item.name.toLowerCase() === name.toLowerCase());
+    return this.__inventory.find((item) => item.name.toLowerCase() === name.toLowerCase());
   }
 
   /**
@@ -77,9 +77,9 @@ export class Player {
    * Else, returns null.
    */
   removeFromInv(name: string) {
-    const indexOfItem = this.__inv.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
+    const indexOfItem = this.__inventory.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
     if (indexOfItem > -1) {
-      const [item] = this.__inv.splice(indexOfItem, 1);
+      const [item] = this.__inventory.splice(indexOfItem, 1);
       return item;
     }
     return null;
