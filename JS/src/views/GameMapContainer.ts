@@ -19,7 +19,7 @@ export class GameMapContainer {
           if (room === null) return RoomType.EMPTY;
           if (playerPosition.isEqualTo({ x: xPosition, y: yPosition })) return `~Y${room.roomType}~e`;
           if (room.inventory.length > 0) return `~W${room.roomType}~e`;
-          else return RoomType.TUNNEL;
+          else return room.roomType;
         })
         .join("");
     });
