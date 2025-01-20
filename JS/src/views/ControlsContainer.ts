@@ -21,7 +21,7 @@ const CONTROLS_TEXT: Record<ControlType, string> = {
 
 export class ControlsContainer {
   constructor(
-    public containerOptions: ContainerOptions,
+    containerOptions: ContainerOptions,
     public container: Container = new Container(containerOptions),
 
     private controlsMap: Record<ControlType, Container> = {

@@ -11,10 +11,13 @@ const MAP_LEGEND = [
 
 export class MapLegendContainer {
   constructor(
-    public containerOptions: ContainerOptions,
+    containerOptions: ContainerOptions,
     public container: Container = new Container(containerOptions),
-  ) {
-    MAP_LEGEND.forEach((text, index) => {
+  ) {}
+
+  renderMapLegend(mapLegendStringList: string[] = MAP_LEGEND) {
+    this.container.removeChildren();
+    mapLegendStringList.forEach((text, index) => {
       const pixiTextObjects = buildTextListWithColors(text, index);
       pixiTextObjects.forEach((pixiTextObject) => this.container.addChild(pixiTextObject));
     });
