@@ -1,7 +1,7 @@
 import { Item } from "./Item";
 import { Room, Shrine } from "./Room";
 import { GameMap } from "./GameMap";
-import { PositionVector2 } from "./PositionVector2";
+import { PositionVector2, ValidDirection } from "./PositionVector2";
 
 const ENTRANCE_ROOM: PositionVector2 = new PositionVector2(1, 4);
 
@@ -160,45 +160,13 @@ export class Player {
   }
 
   /**
-   * Confirms that our new direction is both
-   *  -   in range
-   *  -   A valid room
-   * This could be done all in one if statement,
-   * But the y, x, and valid room checks are
-   *  separated for readability.
-   */
-  _confirmDirection(y: number, x: number) {
-    if (this.gameMap.map[y]) {
-      return !!this.gameMap.map[y][x];
-    }
-  }
-
-  /**
-   * Confirming each direction and making sure we stay in bounds,
-   * moves a direction and stores previous location.
+   * Moves the player in the specified direction.
    *
-   * Returns true if we moved, and false otherwise
+   * Updates the previous and the current position of the player.
    */
-  move(direction: "n" | "s" | "w" | "e") {
-    if (direction === "n" && this._confirmDirection(this.y - 1, this.x)) {
-      this.__previousPosition = this.__position;
-      this.__position = this.__position.add(PositionVector2.UP);
-      return true;
-    } else if (direction === "s" && this._confirmDirection(this.y + 1, this.x)) {
-      this.__previousPosition = this.__position;
-      this.__position = this.__position.add(PositionVector2.DOWN);
-      return true;
-    } else if (direction === "w" && this._confirmDirection(this.y, this.x - 1)) {
-      this.__previousPosition = this.__position;
-      this.__position = this.__position.add(PositionVector2.LEFT);
-      return true;
-    } else if (direction === "e" && this._confirmDirection(this.y, this.x + 1)) {
-      this.__previousPosition = this.__position;
-      this.__position = this.__position.add(PositionVector2.RIGHT);
-      return true;
-    } else {
-      return false;
-    }
+  move(directionToMove: ValidDirection) {
+    this.__previousPosition = this.__position;
+    this.__position = this.__position.add(directionToMove);
   }
 
   runAway() {

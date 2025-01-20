@@ -47,7 +47,7 @@ export class ControlsContainer {
     this.controlsMap[this.activeControl].alpha = 1;
   }
 
-  public setActiveControl(controlType: ControlType): void {
+  public renderControlType(controlType: ControlType): void {
     this.controlsMap[this.activeControl].alpha = 0;
     this.controlsMap[controlType].alpha = 1;
     this.activeControl = controlType;

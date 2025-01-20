@@ -169,38 +169,39 @@ describe("Moving", () => {
   });
 
   [
-    { direction: "n", expectedX: 2, expectedY: 1 },
-    { direction: "s", expectedX: 2, expectedY: 3 },
-    { direction: "e", expectedX: 3, expectedY: 2 },
-    { direction: "w", expectedX: 1, expectedY: 2 },
-  ].forEach(({ direction, expectedX, expectedY }) => {
-    test(`succeeds when moving ${direction}`, () => {
-      expect(player.x).toEqual(STARTING_POINT.x);
-      expect(player.y).toEqual(STARTING_POINT.y);
-      const success = player.move(direction as "n" | "s" | "w" | "e");
+    {
+      directionToMoveString: "LEFT",
+      directionToMove: PositionVector2.LEFT,
+      newPosition: STARTING_POINT.add(PositionVector2.LEFT),
+    },
+    {
+      directionToMoveString: "RIGHT",
+      directionToMove: PositionVector2.RIGHT,
+      newPosition: STARTING_POINT.add(PositionVector2.RIGHT),
+    },
+    {
+      directionToMoveString: "UP",
+      directionToMove: PositionVector2.UP,
+      newPosition: STARTING_POINT.add(PositionVector2.UP),
+    },
+    {
+      directionToMoveString: "DOWN",
+      directionToMove: PositionVector2.DOWN,
+      newPosition: STARTING_POINT.add(PositionVector2.DOWN),
+    },
+  ].forEach(({ directionToMoveString, directionToMove, newPosition }) => {
+    test(`Updates player direction when moving ${directionToMoveString}`, () => {
+      player.move(directionToMove);
 
-      expect(success).toEqual(true);
-      expect(player.x).toEqual(expectedX);
-      expect(player.y).toEqual(expectedY);
+      expect(player.position.isEqualTo(newPosition)).toBe(true);
     });
-  });
-
-  test.each([
-    { startingPoint: new PositionVector2(0, 0), directionToMove: "n" },
-    { startingPoint: new PositionVector2(0, 0), directionToMove: "w" },
-    { startingPoint: new PositionVector2(4, 4), directionToMove: "s" },
-    { startingPoint: new PositionVector2(4, 4), directionToMove: "e" },
-  ])("returns false if there is no room in a given direction", ({ startingPoint, directionToMove }) => {
-    player = new Player("testPlayer", new GameMap(DEBUG_MAP), [], startingPoint);
-
-    expect(player.move(directionToMove as "n" | "s" | "e" | "w")).toEqual(false);
   });
 });
 
 test("Running away sets the current position to the previous position", () => {
   const player = new Player("testPlayer", new GameMap(DEBUG_MAP));
 
-  player.move("w");
+  player.move(PositionVector2.LEFT);
   const expectedPositionAfterRunningAway = player.previousPosition;
 
   player.runAway();
