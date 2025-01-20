@@ -29,7 +29,7 @@ const mapContainer = new GameMapContainer({
 mapContainer.renderMap(gameMap, debugPlayer.position);
 
 const legendContainer = new MapLegendContainer({
-  x: 23 * FONT_SIZE_PX.w,
+  x: 25 * FONT_SIZE_PX.w,
   y: 1 * FONT_SIZE_PX.h,
 });
 legendContainer.renderMapLegend();
@@ -42,24 +42,24 @@ playerInventoryContainer.renderPlayerInventory(debugPlayer);
 
 const roomInfoContainer = new RoomInfoContainer({
   x: 0,
-  y: 7 * FONT_SIZE_PX.h,
+  y: 9 * FONT_SIZE_PX.h,
 });
 roomInfoContainer.renderRoomInfo(DEBUG_ROOM);
 
 const controlsContainer = new ControlsContainer({
   x: 0,
-  y: 11 * FONT_SIZE_PX.h,
+  y: 14 * FONT_SIZE_PX.h,
 });
 controlsContainer.setActiveControl(ControlType.INTRO);
 
 const inputContainer = new Container({
   x: 0,
-  y: 12 * FONT_SIZE_PX.h,
+  y: 15 * FONT_SIZE_PX.h,
 });
 
 const responseContainer = new Container({
   x: 0,
-  y: 13 * FONT_SIZE_PX.h,
+  y: 16 * FONT_SIZE_PX.h,
 });
 
 const responseText = new Text({
