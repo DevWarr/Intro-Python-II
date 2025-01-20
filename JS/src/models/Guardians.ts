@@ -138,7 +138,7 @@ export class Guardian {
   checkVictory = (): boolean | null => {
     if (this.tryCount === 0) return false;
     else if (this.questionCount === 0) {
-      this.shrine!.guardian = null;
+      this.shrine!.removeGuardian();
       return true;
     } else return null;
   };
