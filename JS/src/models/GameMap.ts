@@ -129,7 +129,7 @@ export class GameMap {
     );
   };
 
-  public getRoomAtPosition(roomPosition: PositionVector2) {
-    return this.map[roomPosition.y][roomPosition.x];
+  public getRoomAtPosition(roomPosition: PositionVector2): Room | null {
+    return this.map[roomPosition.y]?.[roomPosition.x] ?? null;
   }
 }
