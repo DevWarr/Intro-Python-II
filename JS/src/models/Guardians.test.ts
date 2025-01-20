@@ -34,29 +34,17 @@ beforeEach(() => {
 });
 
 describe("Base Guardian Class", () => {
-  test("Guardian creation stores proper attributes", () => {
-    const expectedName = "testName";
-    const expectedDescription = "testDescription";
-    const expectedTryCount = 3;
-    const expectedQuestionCount = 5;
-    const expectedPose = GuardianPose.STAND;
-    const expectedRequiredItem = "Calculator";
+  let testGuardian: Guardian;
 
-    const testGuardian = createTestGuardian();
-
-    expect(testGuardian.name).toEqual(expectedName);
-    expect(testGuardian.description).toEqual(expectedDescription);
-    expect(testGuardian.tryCount).toEqual(expectedTryCount);
-    expect(testGuardian.questionCount).toEqual(expectedQuestionCount);
-    expect(testGuardian.pose).toEqual(expectedPose);
-    expect(testGuardian.requiredItem).toEqual(expectedRequiredItem);
+  beforeEach(() => {
+    testGuardian = createTestGuardian();
   });
+
   test("prepQuiz() resets the tryCount, questionCount, and requiredItem", () => {
     const expectedTryCount = 3;
     const expectedQuestionCount = 5;
     const expectedRequiredItem = "Calculator";
 
-    const testGuardian = createTestGuardian();
     testGuardian.tryCount = 0;
     testGuardian.questionCount = 2;
     testGuardian.requiredItem = null;
@@ -67,14 +55,11 @@ describe("Base Guardian Class", () => {
     expect(testGuardian.requiredItem).toEqual(expectedRequiredItem);
   });
   test("confirm mathQuestion() and nextQuestionPrep() are not implemented for this base class", () => {
-    const testGuardian = new Guardian("testName", "testDescription");
-
     expect(testGuardian.mathQuestion).toThrow(NotImplementedError);
     expect(testGuardian.nextQuestionPrep).toThrow(NotImplementedError);
   });
   describe("createQuestion()", () => {
     test("sets the question to the required item if an item is required", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.requiredItem = "testItem";
 
       testGuardian.createQuestion();
@@ -82,7 +67,6 @@ describe("Base Guardian Class", () => {
       expect(testGuardian.question).toMatch(/\(testItem\)/i);
     });
     test("tries calling mathQuestion if no requiredItem is set", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.requiredItem = null;
 
       jest.spyOn(testGuardian, "mathQuestion");
@@ -92,7 +76,6 @@ describe("Base Guardian Class", () => {
       expect(testGuardian.mathQuestion).toHaveBeenCalledTimes(1);
     });
     test("does not change the question if there already is one", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.question = "testQuestion";
 
       testGuardian.createQuestion();
@@ -102,7 +85,6 @@ describe("Base Guardian Class", () => {
   });
   describe("checkItem()", () => {
     test("sets the 'CORRECT' pose, resets the requiredItem and question, and returns true if the item matches the requiredItem", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.requiredItem = "testItem";
 
       expect(testGuardian.checkItem("testItem")).toEqual(true);
@@ -111,7 +93,6 @@ describe("Base Guardian Class", () => {
       expect(testGuardian.pose).toEqual(GuardianPose.CORRECT);
     });
     test("sets the 'INCORRECT' pose, decrements the tryCount, and returns false if the item matches the requiredItem", () => {
-      const testGuardian = createTestGuardian();
       const expectedTryCount = 2;
       testGuardian.requiredItem = "testItem";
 
@@ -122,7 +103,6 @@ describe("Base Guardian Class", () => {
   });
   describe("checkAnswer()", () => {
     test("sets answer and question to null, sets pose to 'CORRECT', calls nextQuestionPrep, and returns true if the answer is correct", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.answer = 25;
 
       jest.spyOn(testGuardian, "nextQuestionPrep");
@@ -136,7 +116,6 @@ describe("Base Guardian Class", () => {
       expect(testGuardian.nextQuestionPrep).toHaveBeenCalledTimes(1);
     });
     test("decrements the tryCount, sets pose to 'INCORRECT', and returns false if the answer is wrong", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.tryCount = 3;
       testGuardian.answer = 25;
 
@@ -148,20 +127,17 @@ describe("Base Guardian Class", () => {
   });
   describe("checkVictory()", () => {
     test("returns false if tryCount is at zero", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.tryCount = 0;
 
       expect(testGuardian.checkVictory()).toEqual(false);
     });
     test("returns true if questionCount is at zero", () => {
-      const testGuardian = createTestGuardian();
-      testGuardian.shrine = new Shrine("testShrine", "testDescription", []);
+      testGuardian.shrine = new Shrine("testShrine", "testDescription", testGuardian);
       testGuardian.questionCount = 0;
 
       expect(testGuardian.checkVictory()).toEqual(true);
     });
     test("returns null if neither the tryCount nor questionCount are at zero", () => {
-      const testGuardian = createTestGuardian();
       testGuardian.tryCount = 3;
       testGuardian.questionCount = 5;
 

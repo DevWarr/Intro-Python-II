@@ -123,7 +123,7 @@ export class GameMap {
         // If there is something in index three, there's a guardian
         // Ergo, we must make a shrine instead of a room
         if (roomInfo.guardian) {
-          return new Shrine(roomInfo.name, roomInfo.description, roomInfo.inventory, roomInfo.guardian);
+          return new Shrine(roomInfo.name, roomInfo.description, roomInfo.guardian, roomInfo.inventory);
         } else return new Room(roomInfo.name, roomInfo.description, roomInfo.roomType, roomInfo.inventory);
       }),
     );

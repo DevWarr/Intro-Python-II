@@ -60,7 +60,7 @@ export class Room {
 export class Shrine extends Room {
   private __guardian: Guardian | null;
 
-  constructor(name: string, description: string, inventory: Item[] = [], guardian: Guardian) {
+  constructor(name: string, description: string, guardian: Guardian, inventory: Item[] = []) {
     super(name, description, RoomType.SHRINE, inventory);
     this.__guardian = guardian;
     guardian.shrine = this;
