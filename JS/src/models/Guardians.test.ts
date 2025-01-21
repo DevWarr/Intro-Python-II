@@ -18,8 +18,6 @@ import {
   buildRootQuestion,
 } from "./guardianUtils";
 
-import { Shrine } from "./Room";
-
 jest.mock("./guardianUtils");
 
 const createTestGuardian = () => new Guardian(GuardianName.ARTIFACT, "testDescription");
@@ -133,10 +131,16 @@ describe("Base Guardian Class", () => {
       expect(testGuardian.checkVictory()).toEqual(false);
     });
     test("returns true if questionCount is at zero", () => {
-      testGuardian.shrine = new Shrine(testGuardian, "testShrine", "testDescription");
       testGuardian.questionCount = 0;
 
       expect(testGuardian.checkVictory()).toEqual(true);
+    });
+    test("guardian is no longer alive if it loses a battle", () => {
+      testGuardian.questionCount = 0;
+
+      testGuardian.checkVictory();
+
+      expect(testGuardian.isAlive).toEqual(false);
     });
     test("returns null if neither the tryCount nor questionCount are at zero", () => {
       testGuardian.tryCount = 3;

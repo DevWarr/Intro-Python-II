@@ -6,7 +6,6 @@ import {
   buildExponentQuestion,
   buildRootQuestion,
 } from "./guardianUtils";
-import { Shrine } from "./Room";
 
 export enum GuardianPose {
   STAND = "stand",
@@ -34,8 +33,8 @@ export class Guardian {
   constructor(
     public name: GuardianName,
     public description: string,
-    public shrine: Shrine | null = null,
     public pose: GuardianPose = GuardianPose.STAND,
+    public isAlive: boolean = true,
 
     public tryCount: number = 3,
     public questionCount: number = 5,
@@ -146,7 +145,7 @@ export class Guardian {
   checkVictory = (): boolean | null => {
     if (this.tryCount === 0) return false;
     else if (this.questionCount === 0) {
-      this.shrine!.removeGuardian();
+      this.isAlive = false;
       return true;
     } else return null;
   };

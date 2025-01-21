@@ -26,7 +26,6 @@ export class Shrine extends Room {
     super(name, description, RoomType.SHRINE, inventory);
 
     this.__guardian = guardian;
-    guardian.shrine = this;
   }
 
   get guardian() {
