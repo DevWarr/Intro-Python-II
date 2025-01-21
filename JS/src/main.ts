@@ -12,6 +12,7 @@ import { ExplorationState } from "./GameStates/ExplorationState";
 import { PlayerInputContainer } from "./views/PlayerInputContainer";
 import { GuardianPoseContainer } from "./views/GuardianPoseContainer";
 import { GuardianName, GuardianPose } from "./models/Guardians";
+import { BattleInfoContainer } from "./views/BattleInfoContainer";
 
 const MAX_CHARACTERS_WIDTH = 85;
 
@@ -26,6 +27,7 @@ document.getElementById("app")!.appendChild(app.canvas);
 const mapContainer = new GameMapContainer({ x: 0, y: 1 * FONT_SIZE_PX.h });
 const guardianPoseContainer = new GuardianPoseContainer({ x: 0, y: 1 * FONT_SIZE_PX.h });
 const legendContainer = new MapLegendContainer({ x: 25 * FONT_SIZE_PX.w, y: 1 * FONT_SIZE_PX.h });
+const battleInfoContainer = new BattleInfoContainer({ x: 25 * FONT_SIZE_PX.w, y: 1 * FONT_SIZE_PX.h });
 const playerInventoryContainer = new PlayerInventoryContainer({ x: 53 * FONT_SIZE_PX.w, y: 1 * FONT_SIZE_PX.h });
 const roomInfoContainer = new RoomInfoContainer({ x: 0, y: 9 * FONT_SIZE_PX.h });
 const controlsContainer = new ControlsContainer({ x: 0, y: 14 * FONT_SIZE_PX.h });
@@ -35,6 +37,7 @@ const responseContainer = new ResponseContainer({ x: 0, y: 16 * FONT_SIZE_PX.h }
 app.stage.addChild(mapContainer.container);
 app.stage.addChild(guardianPoseContainer.container);
 app.stage.addChild(legendContainer.container);
+app.stage.addChild(battleInfoContainer.container);
 app.stage.addChild(playerInventoryContainer.container);
 app.stage.addChild(roomInfoContainer.container);
 app.stage.addChild(controlsContainer.container);
@@ -63,10 +66,11 @@ const currentGameState = new ExplorationState(
 
 // mapContainer.renderMap(gameMap, player.position);
 guardianPoseContainer.renderGuardian(GuardianName.DIVID, GuardianPose.INCORRECT);
-legendContainer.renderMapLegend();
+// legendContainer.renderMapLegend();
+battleInfoContainer.renderBattleInfo(5, 3);
 playerInventoryContainer.renderPlayerInventory(player);
 roomInfoContainer.renderRoomInfo(gameMap.getRoomAtPosition(player.position)!);
-controlsContainer.renderControlType(ControlType.SIMPLE);
+controlsContainer.renderControlType(ControlType.BATTLE);
 
 document.onkeydown = (e) => {
   if (!playerCanType) return;
