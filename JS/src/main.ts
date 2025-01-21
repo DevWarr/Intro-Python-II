@@ -10,6 +10,8 @@ import { GameMap } from "./models/GameMap";
 import { ResponseContainer } from "./views/ResponseContainer";
 import { ExplorationState } from "./GameStates/ExplorationState";
 import { PlayerInputContainer } from "./views/PlayerInputContainer";
+import { GuardianPoseContainer } from "./views/GuardianPoseContainer";
+import { GuardianName, GuardianPose } from "./models/Guardians";
 
 const MAX_CHARACTERS_WIDTH = 85;
 
@@ -22,6 +24,7 @@ app.renderer.view.resolution = 2;
 document.getElementById("app")!.appendChild(app.canvas);
 
 const mapContainer = new GameMapContainer({ x: 0, y: 1 * FONT_SIZE_PX.h });
+const guardianPoseContainer = new GuardianPoseContainer({ x: 0, y: 1 * FONT_SIZE_PX.h });
 const legendContainer = new MapLegendContainer({ x: 25 * FONT_SIZE_PX.w, y: 1 * FONT_SIZE_PX.h });
 const playerInventoryContainer = new PlayerInventoryContainer({ x: 53 * FONT_SIZE_PX.w, y: 1 * FONT_SIZE_PX.h });
 const roomInfoContainer = new RoomInfoContainer({ x: 0, y: 9 * FONT_SIZE_PX.h });
@@ -30,6 +33,7 @@ const inputContainer = new PlayerInputContainer({ x: 0, y: 15 * FONT_SIZE_PX.h }
 const responseContainer = new ResponseContainer({ x: 0, y: 16 * FONT_SIZE_PX.h });
 
 app.stage.addChild(mapContainer.container);
+app.stage.addChild(guardianPoseContainer.container);
 app.stage.addChild(legendContainer.container);
 app.stage.addChild(playerInventoryContainer.container);
 app.stage.addChild(roomInfoContainer.container);
@@ -57,13 +61,14 @@ const currentGameState = new ExplorationState(
   responseContainer,
 );
 
-mapContainer.renderMap(gameMap, player.position);
+// mapContainer.renderMap(gameMap, player.position);
+guardianPoseContainer.renderGuardian(GuardianName.DIVID, GuardianPose.INCORRECT);
 legendContainer.renderMapLegend();
 playerInventoryContainer.renderPlayerInventory(player);
 roomInfoContainer.renderRoomInfo(gameMap.getRoomAtPosition(player.position)!);
 controlsContainer.renderControlType(ControlType.SIMPLE);
 
-document.onkeydown = async (e) => {
+document.onkeydown = (e) => {
   if (!playerCanType) return;
 
   // validate input to only allow alphanumeric characters

@@ -8,7 +8,7 @@ export class PlayerInventoryContainer {
     public container: Container = new Container(containerOptions),
   ) {}
 
-  renderPlayerInventory(player: Player) {
+  public renderPlayerInventory(player: Player) {
     const inventoryHeader = `~W${player.name}'s inventory:`;
     const playerInventoryStrings = player.inventory.inventoryNames.map((itemName) => `  ~c( ${itemName} )~e`);
 

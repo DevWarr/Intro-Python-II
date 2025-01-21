@@ -14,6 +14,14 @@ export enum GuardianPose {
   INCORRECT = "incorrect",
 }
 
+export enum GuardianName {
+  MULTIP = "Multip Guardian",
+  DIVID = "Divid Guardian",
+  SQUARE = "Square Guardian",
+  RADICAL = "Radical Guardian",
+  ARTIFACT = "Artifact Guardian",
+}
+
 export class NotImplementedError extends Error {
   constructor(methodName: string) {
     super();
@@ -24,7 +32,7 @@ export class NotImplementedError extends Error {
 /**Parent Guardian Class. All Guardians derive from this class. */
 export class Guardian {
   constructor(
-    public name: string,
+    public name: GuardianName,
     public description: string,
     public shrine: Shrine | null = null,
     public pose: GuardianPose = GuardianPose.STAND,
@@ -147,7 +155,7 @@ export class Guardian {
 /**Asks addition questions. Drops the Multip sign.*/
 export class MultipGuardian extends Guardian {
   constructor() {
-    super("Multip Guardian", "Guardian of the Multip Shrine. Keep your guard!");
+    super(GuardianName.MULTIP, "Guardian of the Multip Shrine. Keep your guard!");
   }
 
   /**
@@ -180,7 +188,7 @@ export class MultipGuardian extends Guardian {
 
 export class DividGuardian extends Guardian {
   constructor() {
-    super("Divid Guardian", "Guardian of the Divid Shrine. Keep it sleek, slick.");
+    super(GuardianName.DIVID, "Guardian of the Divid Shrine. Keep it sleek, slick.");
   }
 
   /**
@@ -213,7 +221,7 @@ export class DividGuardian extends Guardian {
 
 export class SquareGuardian extends Guardian {
   constructor() {
-    super("Square Guardian", "Guardian of the Square Shrine. Stay happy, stay civil!");
+    super(GuardianName.SQUARE, "Guardian of the Square Shrine. Stay happy, stay civil!");
   }
 
   /**
@@ -256,7 +264,7 @@ export class SquareGuardian extends Guardian {
 
 export class RadicalGuardian extends Guardian {
   constructor() {
-    super("Radical Guardian", "Guardian of the Radical Shrine. Radical!!!");
+    super(GuardianName.RADICAL, "Guardian of the Radical Shrine. Radical!!!");
   }
 
   /**
@@ -302,7 +310,7 @@ export class RadicalGuardian extends Guardian {
 
 export class ArtifactGuardian extends Guardian {
   constructor() {
-    super("Artifact Guardian", "The final challenge! If you run away, your questions won't get reset.");
+    super(GuardianName.ARTIFACT, "The final challenge! If you run away, your questions won't get reset.");
     // The artifact Guardian holds it's own questions and tries.
     // You can run away and the question count won't go down.
     this.questionCount = 10;

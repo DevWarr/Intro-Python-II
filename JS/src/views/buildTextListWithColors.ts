@@ -55,7 +55,7 @@ const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
     y: 0,
   },
   [ColorLabel.BLACK_BOLD]: {
-    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#000000", fontWeight: "bold" },
+    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#555555", fontWeight: "bold" },
     y: -1,
   },
   [ColorLabel.RED_BOLD]: {

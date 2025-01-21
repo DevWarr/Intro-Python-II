@@ -15,7 +15,7 @@ export class MapLegendContainer {
     public container: Container = new Container(containerOptions),
   ) {}
 
-  renderMapLegend(mapLegendStringList: string[] = MAP_LEGEND) {
+  public renderMapLegend(mapLegendStringList: string[] = MAP_LEGEND) {
     this.container.removeChildren();
     mapLegendStringList.forEach((text, index) => {
       const pixiTextObjects = buildTextListWithColors(text, index);
