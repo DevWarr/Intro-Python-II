@@ -63,7 +63,7 @@ playerInventoryContainer.renderPlayerInventory(player);
 roomInfoContainer.renderRoomInfo(gameMap.getRoomAtPosition(player.position)!);
 controlsContainer.renderControlType(ControlType.SIMPLE);
 
-document.onkeydown = async (e) => {
+document.onkeydown = (e) => {
   if (!playerCanType) return;
 
   // validate input to only allow alphanumeric characters

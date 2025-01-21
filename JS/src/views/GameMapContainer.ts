@@ -10,7 +10,7 @@ export class GameMapContainer {
     public container: Container = new Container(containerOptions),
   ) {}
 
-  renderMap(gameMap: GameMap, playerPosition: PositionVector2) {
+  public renderMap(gameMap: GameMap, playerPosition: PositionVector2) {
     // Turn a 2D array of rooms into a list of strings
     // string array is a string representation of the game map
     const mapStringList: string[] = gameMap.map.map((roomRow: Array<Room | null>, yPosition: number) => {

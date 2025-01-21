@@ -8,7 +8,7 @@ export class RoomInfoContainer {
     public container: Container = new Container(containerOptions),
   ) {}
 
-  renderRoomInfo(room: Room) {
+  public renderRoomInfo(room: Room) {
     const roomNameString = `~W${room.name}`;
     const roomDescriptionString = `~g${room.description}`;
 
