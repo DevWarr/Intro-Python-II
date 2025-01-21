@@ -36,7 +36,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
       " ~WY~e___|~r##~e|__9]  ",
       " ~W8~e===]~B//~e[==97  ",
       " ~WI~e‾‾‾|]~x[~e|‾‾    ",
-      " ~WI~e _~W_~e~wJ/~x\\~e\~W_~e_   ",
+      " ~WI~e _~W_~e~wJ/~x\\~e\\~W_~e_   ",
     ],
 
     [GuardianPose.CORRECT]: [
@@ -44,7 +44,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
       " ~W8~e‾=_|~r##~e|__9]  ",
       " ~WI~e‾-=]~B//~e[==97  ",
       " ~WI~e   |]~x[~e|‾‾    ",
-      "   _~W_~e~wJ/~x\\~e\~W_~e_   ",
+      "   _~W_~e~wJ/~x\\~e\\~W_~e_   ",
     ],
 
     [GuardianPose.INCORRECT]: [
@@ -52,7 +52,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
       " ~R8~e‾=_|~r##~e|__9]  ",
       " ~WI~e‾-=]~B//~e[==97  ",
       " ~WI~e   |]~x[~e|‾‾    ",
-      "   _~W_~e~wJ/~x\\~e\~W_~e_   ",
+      "   _~W_~e~wJ/~x\\~e\\~W_~e_   ",
     ],
   },
   /*
@@ -73,7 +73,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
   [GuardianName.MULTIP]: {
     [GuardianPose.STAND]: [
       "~C(~B*~C)~e  +~B**~e+      ",
-      " ~WY~e___|~r##~e|==9\  ",
+      " ~WY~e___|~r##~e|==9\\  ",
       " ~W8~e===]~B**~e[‾‾97  ",
       " ~WI~e   |][|      ",
       " ~WI~e   ~w[]~x[L~e      ",
@@ -81,7 +81,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
 
     [GuardianPose.CORRECT]: [
       " ~WY~e   +~B**~e+      ",
-      " ~W8~e‾=_|~r##~e|==9\  ",
+      " ~W8~e‾=_|~r##~e|==9\\  ",
       " ~WI~e‾-=]~B**~e[‾‾97  ",
       " ~WI~e   |][|      ",
       "     ~w[]~x[L~e      ",
@@ -89,7 +89,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
 
     [GuardianPose.INCORRECT]: [
       " ~RY~e   +~B**~e+      ",
-      " ~R8~e‾=_|~r##~e|==9\  ",
+      " ~R8~e‾=_|~r##~e|==9\\  ",
       " ~WI~e‾-=]~B**~e[‾‾97  ",
       " ~WI~e   |][|      ",
       "     ~w[]~x[L~e      ",
@@ -199,7 +199,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
   [GuardianName.ARTIFACT]: {
     [GuardianPose.STAND]: [
       " ~C*~BA~C+~e *~B//~e*      ",
-      " ~W(8~X__~W|~e~r##~W|~X--~W9~e\  ",
+      " ~W(8~X__~W|~e~r##~W|~X--~W9~e\\  ",
       " ~W(q~X==~W]~BAA~W[~X‾‾~W97~e  ",
       "     ~W|]~X[|  ~Y^^~e  ",
       "     ~Y^^^^~e      ",
@@ -207,7 +207,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
 
     [GuardianPose.CORRECT]: [
       " ~W(8~e  *~B//~e*      ",
-      "  ~W\=~X\~W|~e~r##~W|~X--~W9~e\  ",
+      "  ~W\=~X\~W|~e~r##~W|~X--~W9~e\\  ",
       "   ~X`‾~W]~BAA~W[~X‾‾~W97~e  ",
       "     ~W|]~X[|  ~Y^^~e  ",
       "     ~Y^^^^~e      ",
@@ -215,7 +215,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
 
     [GuardianPose.INCORRECT]: [
       "     *~B//~e*      ",
-      " ~R*A+~e_~W|~e~r##~W|~X--~W9~e\  ",
+      " ~R*A+~e_~W|~e~r##~W|~X--~W9~e\\  ",
       "  ~WR~X==~W]~BAA~W[~X‾‾~W97~e  ",
       "     ~W|]~X[|  ~Y^^~e  ",
       "     ~Y^^^^      ",
