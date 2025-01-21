@@ -7,6 +7,7 @@ import {
   ArtifactGuardian,
   GuardianPose,
   NotImplementedError,
+  GuardianName,
 } from "./Guardians";
 import {
   buildAdditionQuestion,
@@ -21,7 +22,7 @@ import { Shrine } from "./Room";
 
 jest.mock("./guardianUtils");
 
-const createTestGuardian = () => new Guardian("testName", "testDescription");
+const createTestGuardian = () => new Guardian(GuardianName.ARTIFACT, "testDescription");
 
 beforeEach(() => {
   jest.clearAllMocks();
