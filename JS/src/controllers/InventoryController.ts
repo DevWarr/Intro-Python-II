@@ -2,7 +2,7 @@ import { Player } from "../models/Player";
 import { Room } from "../models/Room";
 import { ControllerResponse } from "./MoveController";
 
-export class ItemController {
+export class InventoryController {
   public takeItem(room: Room, player: Player, itemName?: string): ControllerResponse {
     if (!itemName || itemName === "") {
       return {

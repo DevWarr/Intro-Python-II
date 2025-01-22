@@ -1,4 +1,4 @@
-import { ItemController } from "../controllers/ItemController";
+import { InventoryController } from "../controllers/InventoryController";
 import { ControllerResponse, MoveController } from "../controllers/MoveController";
 import { GameMap } from "../models/GameMap";
 import { Player } from "../models/Player";
@@ -15,7 +15,7 @@ const MOVEMENT_DIRECTION_STRING_TO_VECTOR2: Record<string, PositionVector2> = {
   e: PositionVector2.RIGHT,
 };
 
-const ITEM_ACTIONS = ["use", "take", "drop"];
+const INVENTORY_ACTIONS = ["take", "drop"];
 
 export class ExplorationState {
   constructor(
@@ -26,8 +26,8 @@ export class ExplorationState {
     private roomInfoContainer: RoomInfoContainer,
     private responseContainer: ResponseContainer,
     private moveController: MoveController = new MoveController(),
-    private itemController: ItemController = new ItemController(),
-  ) {}
+    private inventoryController: InventoryController = new InventoryController(),
+  ) {
 
   public async processInput(inputString: string, resetInputCallback: () => void) {
     const playerInputList = inputString.toLowerCase().split(" ");
@@ -50,14 +50,14 @@ export class ExplorationState {
       }
     }
 
-    if (ITEM_ACTIONS.includes(playerAction)) {
+    if (INVENTORY_ACTIONS.includes(playerAction)) {
       const itemName = playerInputList[1];
       const currentRoom = this.gameMap.getRoomAtPosition(this.player.position)!;
 
       const controllerResponse: ControllerResponse =
         playerAction === "take"
-          ? this.itemController.takeItem(currentRoom, this.player, itemName)
-          : this.itemController.dropItem(currentRoom, this.player, itemName);
+          ? this.inventoryController.takeItem(currentRoom, this.player, itemName)
+          : this.inventoryController.dropItem(currentRoom, this.player, itemName);
 
       if (controllerResponse.actionSuccess) {
         this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
