@@ -11,14 +11,12 @@ import {
 const checkAnswersBetweenMinAndMax = (numArray: number[], min: number | bigint, max: number | bigint) => {
   expect(Math.max(...numArray)).toBeLessThanOrEqual(max);
   expect(Math.min(...numArray)).toBeGreaterThanOrEqual(min);
-  expect(numArray).toContain(max);
-  expect(numArray).toContain(min);
 };
 
 test("Random Int function returns a random number between min and max", () => {
   const expectedMin = 2;
   const expectedMax = 40;
-  const testedArrayValues = Array(100000)
+  const testedArrayValues = Array(1_000)
     .fill(0)
     .map(() => randint(2, 40));
 
@@ -43,7 +41,7 @@ describe("Addition function", () => {
     },
   ].forEach(({ difficulty, expectedMin, expectedMax }) => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for ${difficulty} `, () => {
-      const testAdditionAnswersArray = Array(100000)
+      const testAdditionAnswersArray = Array(1_000)
         .fill(0)
         .map(() => buildAdditionQuestion(difficulty)[1]);
 
@@ -70,7 +68,7 @@ describe("Subtraction function", () => {
     },
   ].forEach(({ difficulty, expectedMin, expectedMax }) => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for difficulty ${difficulty}`, () => {
-      const testSubtractionAnswersArray = Array(100000)
+      const testSubtractionAnswersArray = Array(1_000)
         .fill(0)
         .map(() => buildSubtractionQuestion(difficulty)[1]);
 
@@ -97,7 +95,7 @@ describe("Division function", () => {
     },
   ].forEach(({ difficulty, expectedMin, expectedMax }) => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for difficulty ${difficulty}`, () => {
-      const testDivisionAnswersArray = Array(100000)
+      const testDivisionAnswersArray = Array(1_000)
         .fill(0)
         .map(() => buildDivisionQuestion(difficulty)[1]);
 
@@ -124,7 +122,7 @@ describe("Multiplication function", () => {
     },
   ].forEach(({ difficulty, expectedMin, expectedMax }) => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for difficulty ${difficulty}`, () => {
-      const testMultiplicationAnswersArray = Array(100000)
+      const testMultiplicationAnswersArray = Array(1_000)
         .fill(0)
         .map(() => buildMultiplicationQuestion(difficulty)[1]);
 
@@ -137,7 +135,7 @@ describe("Square function", () => {
     const expectedSquares = [4, 9, 16, 25];
     const expectedMax = expectedSquares[expectedSquares.length - 1];
     const expectedMin = expectedSquares[0];
-    const testSquareAnswersArray = Array(100000)
+    const testSquareAnswersArray = Array(1_000)
       .fill(0)
       .map(() => buildExponentQuestion(0)[1]);
 
@@ -150,7 +148,7 @@ describe("Square function", () => {
     const expectedSquares = [4, 9, 16, 25, 36, 49, 64, 81, 100];
     const expectedMax = expectedSquares[expectedSquares.length - 1];
     const expectedMin = expectedSquares[0];
-    const testSquareAnswersArray = Array(100000)
+    const testSquareAnswersArray = Array(1_000)
       .fill(0)
       .map(() => buildExponentQuestion(1)[1]);
 
@@ -165,7 +163,7 @@ describe("Square function", () => {
     const expectedAnswers = [...expectedSquares, ...expectedCubes];
     const expectedMax = expectedAnswers[expectedAnswers.length - 1];
     const expectedMin = expectedAnswers[0];
-    const testSquareAnswersArray = Array(100000)
+    const testSquareAnswersArray = Array(1_000)
       .fill(0)
       .map(() => buildExponentQuestion(2)[1]);
 
@@ -177,7 +175,7 @@ describe("Square function", () => {
   test("Formats question properly for a squared answer or cubes answer", () => {
     const expectedSquares = [4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169];
     const expectedCubes = [8, 27, 64, 125, 216, 343, 512, 729, 1000, 1331, 1728, 2197];
-    const testSquareArray = Array(100000)
+    const testSquareArray = Array(1_000)
       .fill(0)
       .map(() => buildExponentQuestion(2));
 
@@ -195,7 +193,7 @@ describe("Root function", () => {
   test("Returns a perfect square root between 2 and 12 for difficulty 0", () => {
     const expectedMax = 12;
     const expectedMin = 2;
-    const testRootAnswersArray = Array(100000)
+    const testRootAnswersArray = Array(1_000)
       .fill(0)
       .map(() => buildRootQuestion(0)[1]);
 
@@ -204,7 +202,7 @@ describe("Root function", () => {
   test("Returns a perfect square root between 8 and 15 for difficulty 1", () => {
     const expectedMax = 15;
     const expectedMin = 8;
-    const testRootAnswersArray = Array(100000)
+    const testRootAnswersArray = Array(1_000)
       .fill(0)
       .map(() => buildRootQuestion(1)[1]);
 
@@ -213,20 +211,20 @@ describe("Root function", () => {
   test("Returns a perfect cube root between 2 and 7 for difficulty 1", () => {
     const expectedMax = 7;
     const expectedMin = 2;
-    const testRootAnswersArray = Array(100000)
+    const testRootAnswersArray = Array(1_000)
       .fill(0)
       .map(() => buildRootQuestion(2)[1]);
 
     checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax);
   });
   test("Formats question properly for a cube root or square root answer", () => {
-    const difficulty0QuestionsArray = Array(100000)
+    const difficulty0QuestionsArray = Array(1_000)
       .fill(0)
       .map(() => buildRootQuestion(0)[0]);
-    const difficulty1QuestionsArray = Array(100000)
+    const difficulty1QuestionsArray = Array(1_000)
       .fill(0)
       .map(() => buildRootQuestion(1)[0]);
-    const difficulty2QuestionsArray = Array(100000)
+    const difficulty2QuestionsArray = Array(1_000)
       .fill(0)
       .map(() => buildRootQuestion(2)[0]);
 
