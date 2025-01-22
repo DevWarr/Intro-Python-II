@@ -6,13 +6,14 @@ import { BattleInfoContainer } from "../views/BattleInfoContainer";
 import { GuardianPoseContainer } from "../views/GuardianPoseContainer";
 import { GuardianQuestionContainer } from "../views/GuardianQuestionContainer";
 import { ResponseContainer } from "../views/ResponseContainer";
+import { GameState } from "./GameState";
 
 export interface BattleStateActionResponse {
   guardianPose: GuardianPose;
   responseToPlayer: string;
 }
 
-export class BattleState {
+export class BattleState implements GameState {
   constructor(
     private player: Player,
     private guardian: Guardian,
@@ -24,7 +25,6 @@ export class BattleState {
     private answerMathController: AnswerMathController = new AnswerMathController(),
   ) {
     this.guardian.prepareQuestions();
-    this.updateRendering();
   }
 
   public updateRendering() {
