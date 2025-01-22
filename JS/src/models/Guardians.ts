@@ -52,7 +52,23 @@ export abstract class Guardian {
 
   /** Removes the current guardian question, also decrementing the total number of questions */
   public removeCurrentQuestion() {
-    this.guardianQuestions.shift();
+    if (this.guardianQuestions[0].itemPrerequisite) {
+      this.guardianQuestions[0].itemPrerequisite = undefined;
+    } else {
+      this.guardianQuestions.shift();
+    }
+  }
+
+  /**
+   * Returns the expected player response
+   *
+   * This could be a number or a string depending on
+   * whether the player needs to use an item or answer a math question.
+   */
+  get correctAnswer(): string | number {
+    const currentQuestion = this.guardianQuestions[0];
+
+    return currentQuestion.itemPrerequisite?.toLowerCase() ?? currentQuestion.mathAnswer;
   }
 
   get isAlive() {
@@ -72,15 +88,19 @@ export abstract class Guardian {
    * Otherwise, our question is a math question
    */
   public getNextQuestion() {
-    const currentQuestion = this.guardianQuestions[0];
-
-    if (currentQuestion.itemPrerequisite) {
-      return `~W${this.name}~e is requesting you use ~c(${currentQuestion.itemPrerequisite})`;
-    } else return currentQuestion.mathQuestion;
+    if (this.guardianQuestions[0].itemPrerequisite) {
+      return `~W${this.name}~e is requesting you use ~c(${this.guardianQuestions[0].itemPrerequisite})`;
+    } else return this.guardianQuestions[0].mathQuestion;
   }
 
-  /** This function SHOULD set the guardianQuestions, even though it returns void. */
-  public abstract prepareQuestions(): void;
+  /**
+   * Resets the user's tries.
+   *
+   * This function SHOULD also set the guardianQuestions.
+   */
+  public prepareQuestions() {
+    this.__triesLeft = 3;
+  }
 }
 
 /**Asks addition questions. Drops the Multip sign.*/
@@ -98,6 +118,7 @@ export class MultipGuardian extends Guardian {
    * - 5th → addition(hard)
    */
   public prepareQuestions(): void {
+    super.prepareQuestions();
     this.guardianQuestions = [
       { ...buildAdditionQuestion(0), itemPrerequisite: "Calculator" },
       buildAdditionQuestion(0),
@@ -122,6 +143,7 @@ export class DividGuardian extends Guardian {
    * - 5th → subtraction(hard)
    */
   public prepareQuestions(): void {
+    super.prepareQuestions();
     this.guardianQuestions = [
       { ...buildSubtractionQuestion(0), itemPrerequisite: "Calculator" },
       buildSubtractionQuestion(0),
@@ -146,6 +168,7 @@ export class SquareGuardian extends Guardian {
    * - 5th → multiplication(hard)
    */
   public prepareQuestions(): void {
+    super.prepareQuestions();
     this.guardianQuestions = [
       { ...buildAdditionQuestion(0), itemPrerequisite: "Calculator" },
       buildAdditionQuestion(1),
@@ -170,6 +193,7 @@ export class RadicalGuardian extends Guardian {
    * - 5th → divide(hard)
    */
   public prepareQuestions(): void {
+    super.prepareQuestions();
     this.guardianQuestions = [
       { ...buildAdditionQuestion(1), itemPrerequisite: "Calculator" },
       buildSubtractionQuestion(2),
@@ -203,6 +227,7 @@ export class ArtifactGuardian extends Guardian {
    * - 10th → subtraction(hard)
    */
   public prepareQuestions(): void {
+    super.prepareQuestions();
     if (this.guardianQuestions.length !== 0) {
       // The artifact guardian doesn't reset its questions.
       // Ergo, if there are already questions on the guardian then we don't do anything.
