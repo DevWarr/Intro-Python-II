@@ -27,7 +27,7 @@ export const buildAdditionQuestion = (difficulty: number): GuardianQuestion => {
 
   return {
     mathAnswer: num1 + num2,
-    mathQuestion: `What is ${num1} plus ${num2} ?`,
+    mathQuestion: `What is ~W${num1}~e plus ~W${num2}~e ?`,
   };
 };
 
@@ -52,7 +52,7 @@ export const buildSubtractionQuestion = (difficulty: number): GuardianQuestion =
   }
   return {
     mathAnswer: num1 - num2,
-    mathQuestion: `What is ${num1} minus ${num2} ?`,
+    mathQuestion: `What is ~W${num1}~e minus ~W${num2}~e ?`,
   };
 };
 
@@ -77,7 +77,7 @@ export const buildDivisionQuestion = (difficulty: number): GuardianQuestion => {
   }
   return {
     mathAnswer: Math.round(num1 / num2),
-    mathQuestion: `What is ${num1} divided by ${num2} ?`,
+    mathQuestion: `What is ~W${num1}~e divided by ~W${num2}~e ?`,
   };
 };
 
@@ -99,7 +99,7 @@ export const buildMultiplicationQuestion = (difficulty: number): GuardianQuestio
 
   return {
     mathAnswer: num1 * num2,
-    mathQuestion: `What is ${num1} times ${num2} ?`,
+    mathQuestion: `What is ~W${num1}~e times ~W${num2}~e ?`,
   };
 };
 
@@ -119,7 +119,7 @@ export const buildExponentQuestion = (difficulty: number): GuardianQuestion => {
     num2 = randint(2, 3);
   }
   return {
-    mathQuestion: `What is ${num1} ${num2 == 2 ? "squared" : "cubed"} ?`,
+    mathQuestion: `What is ~W${num1} ${num2 == 2 ? "squared" : "cubed"}~e ?`,
     mathAnswer: num1 ** num2,
   };
 };
@@ -158,6 +158,6 @@ export const buildRootQuestion = (difficulty: number): GuardianQuestion => {
 
   return {
     mathAnswer,
-    mathQuestion: `What is the ${root} root of ${num} ?`,
+    mathQuestion: `What is the ~W${root}~e root of ~W${num}~e ?`,
   };
 };
