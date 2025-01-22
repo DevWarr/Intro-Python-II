@@ -1,9 +1,9 @@
+import { ExplorationStateActionResponse } from "../GameStates/ExplorationState";
 import { Player } from "../models/Player";
 import { Room } from "../models/Room";
-import { ControllerResponse } from "./MoveController";
 
-export class ItemController {
-  public takeItem(room: Room, player: Player, itemName?: string): ControllerResponse {
+export class InventoryController {
+  public takeItem(room: Room, player: Player, itemName?: string): ExplorationStateActionResponse {
     if (!itemName || itemName === "") {
       return {
         actionSuccess: false,
@@ -34,7 +34,7 @@ export class ItemController {
     };
   }
 
-  public dropItem(room: Room, player: Player, itemName?: string): ControllerResponse {
+  public dropItem(room: Room, player: Player, itemName?: string): ExplorationStateActionResponse {
     if (!itemName || itemName === "") {
       return {
         actionSuccess: false,

@@ -1,3 +1,5 @@
+import { GuardianQuestion } from "./Guardians";
+
 /**
  * Returns a random number between the min and max values.
  *
@@ -7,12 +9,10 @@ export const randint = (min: number, max: number): number => {
   return Number(min + Math.round(Math.random() * (max - min)));
 };
 
-export type MathQuestion = (difficulty: number) => [string, number];
-
 /**
  * Creates an addition question.
  */
-export const buildAdditionQuestion: MathQuestion = (difficulty) => {
+export const buildAdditionQuestion = (difficulty: number): GuardianQuestion => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(0, 20);
@@ -24,15 +24,17 @@ export const buildAdditionQuestion: MathQuestion = (difficulty) => {
     num1 = randint(15, 100);
     num2 = randint(15, 100);
   }
-  const answer = num1 + num2;
-  const question = `What is ${num1} plus ${num2} ?`;
-  return [question, answer];
+
+  return {
+    mathAnswer: num1 + num2,
+    mathQuestion: `What is ~W${num1}~e plus ~W${num2}~e ?`,
+  };
 };
 
 /**
  * Creates a subtraction question.
  */
-export const buildSubtractionQuestion: MathQuestion = (difficulty) => {
+export const buildSubtractionQuestion = (difficulty: number): GuardianQuestion => {
   let num1, num2;
   while (true) {
     if (difficulty == 0) {
@@ -48,16 +50,16 @@ export const buildSubtractionQuestion: MathQuestion = (difficulty) => {
 
     if (num1 - num2 >= 0) break;
   }
-
-  const answer = num1 - num2;
-  const question = `What is ${num1} minus ${num2} ?`;
-  return [question, answer];
+  return {
+    mathAnswer: num1 - num2,
+    mathQuestion: `What is ~W${num1}~e minus ~W${num2}~e ?`,
+  };
 };
 
 /**
  * Creates a division question.
  */
-export const buildDivisionQuestion: MathQuestion = (difficulty) => {
+export const buildDivisionQuestion = (difficulty: number): GuardianQuestion => {
   let num1, num2;
   while (true) {
     if (difficulty == 0) {
@@ -73,15 +75,16 @@ export const buildDivisionQuestion: MathQuestion = (difficulty) => {
 
     if (num1 % num2 === 0) break;
   }
-  const answer = Math.round(num1 / num2);
-  const question = `What is ${num1} divided by ${num2} ?`;
-  return [question, answer];
+  return {
+    mathAnswer: Math.round(num1 / num2),
+    mathQuestion: `What is ~W${num1}~e divided by ~W${num2}~e ?`,
+  };
 };
 
 /**
  * Creates a multiplication question.
  */
-export const buildMultiplicationQuestion: MathQuestion = (difficulty) => {
+export const buildMultiplicationQuestion = (difficulty: number): GuardianQuestion => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(3, 9);
@@ -94,15 +97,16 @@ export const buildMultiplicationQuestion: MathQuestion = (difficulty) => {
     num2 = randint(4, 20);
   }
 
-  const answer = num1 * num2;
-  const question = `What is ${num1} times ${num2} ?`;
-  return [question, answer];
+  return {
+    mathAnswer: num1 * num2,
+    mathQuestion: `What is ~W${num1}~e times ~W${num2}~e ?`,
+  };
 };
 
 /**
  * Creates an exponent question.
  */
-export const buildExponentQuestion: MathQuestion = (difficulty) => {
+export const buildExponentQuestion = (difficulty: number): GuardianQuestion => {
   let num1, num2;
   if (difficulty == 0) {
     num1 = randint(2, 5);
@@ -114,12 +118,10 @@ export const buildExponentQuestion: MathQuestion = (difficulty) => {
     num1 = randint(2, 13);
     num2 = randint(2, 3);
   }
-  const second_half = num2 == 2 ? "squared" : "cubed";
-
-  const question = `What is ${num1} ${second_half} ?`;
-  const answer = num1 ** num2;
-
-  return [question, answer];
+  return {
+    mathQuestion: `What is ~W${num1} ${num2 == 2 ? "squared" : "cubed"}~e ?`,
+    mathAnswer: num1 ** num2,
+  };
 };
 
 const SQUARES = [4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225];
@@ -128,7 +130,7 @@ const CUBES = [8, 27, 64, 125, 216, 343];
 /**
  * Creates a radical division question.
  */
-export const buildRootQuestion: MathQuestion = (difficulty) => {
+export const buildRootQuestion = (difficulty: number): GuardianQuestion => {
   let num, is_square;
 
   if (difficulty == 0) {
@@ -145,15 +147,17 @@ export const buildRootQuestion: MathQuestion = (difficulty) => {
     is_square = false;
   }
 
-  let root, answer;
+  let root, mathAnswer;
   if (is_square) {
     root = "square";
-    answer = Math.round(num ** (1 / 2));
+    mathAnswer = Math.round(num ** (1 / 2));
   } else {
     root = "cube";
-    answer = Math.round(num ** (1 / 3));
+    mathAnswer = Math.round(num ** (1 / 3));
   }
 
-  const question = `What is the ${root} root of ${num} ?`;
-  return [question, answer];
+  return {
+    mathAnswer,
+    mathQuestion: `What is the ~W${root}~e root of ~W${num}~e ?`,
+  };
 };

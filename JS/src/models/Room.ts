@@ -20,21 +20,13 @@ export class Room {
 }
 
 export class Shrine extends Room {
-  private __guardian: Guardian | null;
-
-  constructor(guardian: Guardian, name: string, description: string, inventory: Inventory = new Inventory([])) {
+  constructor(
+    readonly guardian: Guardian,
+    name: string,
+    description: string,
+    inventory: Inventory = new Inventory([]),
+  ) {
     super(name, description, RoomType.SHRINE, inventory);
-
-    this.__guardian = guardian;
-  }
-
-  get guardian() {
-    return this.__guardian;
-  }
-
-  /** Removes the guardian from the shrine (used when the guardian dies) */
-  removeGuardian() {
-    this.__guardian = null;
   }
 }
 
