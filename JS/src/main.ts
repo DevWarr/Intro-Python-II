@@ -11,9 +11,11 @@ import { ResponseContainer } from "./views/ResponseContainer";
 import { ExplorationState } from "./GameStates/ExplorationState";
 import { PlayerInputContainer } from "./views/PlayerInputContainer";
 import { GuardianPoseContainer } from "./views/GuardianPoseContainer";
-import { GuardianName, GuardianPose } from "./models/Guardians";
+import { MultipGuardian } from "./models/Guardians";
 import { BattleInfoContainer } from "./views/BattleInfoContainer";
 import { GuardianQuestionContainer } from "./views/GuardianQuestionContainer";
+import { BattleState } from "./GameStates/BattleState";
+import { GameState } from "./GameStates/GameState";
 
 const MAX_CHARACTERS_WIDTH = 85;
 
@@ -58,26 +60,28 @@ const resetPlayerInput = () => {
 const gameMap = new GameMap();
 const player = new GamePlayer("My player here");
 
-const currentGameState = new ExplorationState(
+const explorationState = new ExplorationState(
   gameMap,
   player,
   mapContainer,
+  legendContainer,
   playerInventoryContainer,
   roomInfoContainer,
   responseContainer,
 );
-
-// mapContainer.renderMap(gameMap, player.position);
-guardianPoseContainer.renderGuardian(GuardianName.DIVID, GuardianPose.INCORRECT);
-// legendContainer.renderMapLegend();
-battleInfoContainer.renderBattleInfo(5, 3);
-playerInventoryContainer.renderPlayerInventory(player);
-// roomInfoContainer.renderRoomInfo(gameMap.getRoomAtPosition(player.position)!);
-guardianQuestionContainer.renderGuardianQuestion(
-  GuardianName.ARTIFACT,
-  "test description",
-  "test ~WQ~cu~be~cs~yt~eion",
+const battleState = new BattleState(
+  player,
+  new MultipGuardian(),
+  guardianPoseContainer,
+  battleInfoContainer,
+  guardianQuestionContainer,
+  responseContainer,
 );
+
+const currentGameState: GameState = battleState;
+currentGameState.updateRendering();
+
+playerInventoryContainer.renderPlayerInventory(player);
 controlsContainer.renderControlType(ControlType.BATTLE);
 
 document.onkeydown = (e) => {
