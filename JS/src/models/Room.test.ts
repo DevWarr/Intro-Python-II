@@ -1,6 +1,6 @@
 import { Room, RoomType } from "./Room";
 import { Shrine } from "./Room";
-import { Guardian, GuardianName } from "./Guardians";
+import { Guardian } from "./Guardians";
 import { Inventory } from "./Inventory";
 import { Item } from "./Item";
 
@@ -16,11 +16,11 @@ describe("Room", () => {
 
 describe("Shrine", () => {
   test("Shrine creation has proper guardian, name, description, type, and inventory assigned", () => {
-    const testGuardian = new Guardian(GuardianName.MULTIP, "desc");
+    const mockGuardian = {} as unknown as Guardian;
     const testInventory = new Inventory([new Item("testItem")]);
-    const testShrine = new Shrine(testGuardian, "testShrine", "testDescription", testInventory);
+    const testShrine = new Shrine(mockGuardian, "testShrine", "testDescription", testInventory);
 
-    expect(testShrine.guardian).toEqual(testGuardian);
+    expect(testShrine.guardian).toEqual(mockGuardian);
     expect(testShrine.name).toEqual("testShrine");
     expect(testShrine.description).toEqual("testDescription");
     expect(testShrine.roomType).toEqual(RoomType.SHRINE);

@@ -1,498 +1,250 @@
 import {
   Guardian,
   MultipGuardian,
-  DividGuardian,
-  SquareGuardian,
-  RadicalGuardian,
-  ArtifactGuardian,
-  GuardianPose,
-  NotImplementedError,
   GuardianName,
+  GuardianQuestion,
+  ArtifactGuardian,
+  DividGuardian,
+  RadicalGuardian,
+  SquareGuardian,
 } from "./Guardians";
 import {
   buildAdditionQuestion,
-  buildSubtractionQuestion,
-  buildMultiplicationQuestion,
-  buildExponentQuestion,
   buildDivisionQuestion,
+  buildExponentQuestion,
+  buildMultiplicationQuestion,
   buildRootQuestion,
+  buildSubtractionQuestion,
 } from "./guardianUtils";
 
 jest.mock("./guardianUtils");
 
-const createTestGuardian = () => new Guardian(GuardianName.ARTIFACT, "testDescription");
+class TestGuardian extends Guardian {
+  public prepareQuestions(): void {
+    this.guardianQuestions = [
+      { mathAnswer: 1, mathQuestion: "question1" },
+      { mathAnswer: 2, mathQuestion: "question2", itemPrerequisite: "item" },
+    ];
+  }
+}
 
-beforeEach(() => {
-  jest.clearAllMocks();
-  (buildAdditionQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
-  (buildSubtractionQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
-  (buildMultiplicationQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
-  (buildExponentQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
-  (buildDivisionQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
-  (buildRootQuestion as jest.Mock).mockReturnValue(["Q", "A"]);
-});
-
-describe("Base Guardian Class", () => {
+describe("Guardian tests", () => {
+  const MOCK_GUARDIAN_QUESTION: GuardianQuestion = { mathAnswer: 1, mathQuestion: "question" };
   let testGuardian: Guardian;
 
   beforeEach(() => {
-    testGuardian = createTestGuardian();
+    jest.clearAllMocks();
+    (buildAdditionQuestion as jest.Mock).mockReturnValue({ ...MOCK_GUARDIAN_QUESTION });
+    (buildSubtractionQuestion as jest.Mock).mockReturnValue({ ...MOCK_GUARDIAN_QUESTION });
+    (buildMultiplicationQuestion as jest.Mock).mockReturnValue({ ...MOCK_GUARDIAN_QUESTION });
+    (buildExponentQuestion as jest.Mock).mockReturnValue({ ...MOCK_GUARDIAN_QUESTION });
+    (buildDivisionQuestion as jest.Mock).mockReturnValue({ ...MOCK_GUARDIAN_QUESTION });
+    (buildRootQuestion as jest.Mock).mockReturnValue({ ...MOCK_GUARDIAN_QUESTION });
+
+    testGuardian = new TestGuardian(GuardianName.ARTIFACT, "Test");
+    testGuardian.prepareQuestions();
   });
 
-  test("prepQuiz() resets the tryCount, questionCount, and requiredItem", () => {
-    const expectedTryCount = 3;
-    const expectedQuestionCount = 5;
-    const expectedRequiredItem = "Calculator";
+  test("decrementTriesLeft decreases the number of tries left", () => {
+    expect(testGuardian.triesLeft).toEqual(3);
 
-    testGuardian.tryCount = 0;
-    testGuardian.questionCount = 2;
-    testGuardian.requiredItem = null;
-    testGuardian.prepQuiz();
+    testGuardian.decrementTriesLeft();
 
-    expect(testGuardian.tryCount).toEqual(expectedTryCount);
-    expect(testGuardian.questionCount).toEqual(expectedQuestionCount);
-    expect(testGuardian.requiredItem).toEqual(expectedRequiredItem);
+    expect(testGuardian.triesLeft).toEqual(2);
   });
-  test("confirm mathQuestion() and nextQuestionPrep() are not implemented for this base class", () => {
-    expect(testGuardian.mathQuestion).toThrow(NotImplementedError);
-    expect(testGuardian.nextQuestionPrep).toThrow(NotImplementedError);
+
+  test("removeCurrentQuestion decreases the number of questions remaining", () => {
+    expect(testGuardian.questionsRemaining).toEqual(2);
+
+    testGuardian.removeCurrentQuestion();
+
+    expect(testGuardian.questionsRemaining).toEqual(1);
   });
-  describe("createQuestion()", () => {
-    test("sets the question to the required item if an item is required", () => {
-      testGuardian.requiredItem = "testItem";
 
-      testGuardian.createQuestion();
-
-      expect(testGuardian.question).toMatch(/\(testItem\)/i);
-    });
-    test("tries calling mathQuestion if no requiredItem is set", () => {
-      testGuardian.requiredItem = null;
-
-      jest.spyOn(testGuardian, "mathQuestion");
-      (testGuardian.mathQuestion as jest.Mock).mockImplementation(() => true);
-
-      testGuardian.createQuestion();
-      expect(testGuardian.mathQuestion).toHaveBeenCalledTimes(1);
-    });
-    test("does not change the question if there already is one", () => {
-      testGuardian.question = "testQuestion";
-
-      testGuardian.createQuestion();
-
-      expect(testGuardian.question).toEqual("testQuestion");
-    });
+  test("getNextQuestion responds with the math question when there's no item prerequisite", () => {
+    expect(testGuardian.getNextQuestion()).toEqual("question1");
   });
-  describe("checkItem()", () => {
-    test("sets the 'CORRECT' pose, resets the requiredItem and question, and returns true if the item matches the requiredItem", () => {
-      testGuardian.requiredItem = "testItem";
 
-      expect(testGuardian.checkItem("testItem")).toEqual(true);
-      expect(testGuardian.answer).toEqual(null);
-      expect(testGuardian.question).toEqual(null);
-      expect(testGuardian.pose).toEqual(GuardianPose.CORRECT);
-    });
-    test("sets the 'INCORRECT' pose, decrements the tryCount, and returns false if the item matches the requiredItem", () => {
-      const expectedTryCount = 2;
-      testGuardian.requiredItem = "testItem";
+  test("getNextQuestion responds with a question for the item prerequisite if it exists", () => {
+    // Removing the current question will give us the second question that DOES have an item pre-req
+    testGuardian.removeCurrentQuestion();
 
-      expect(testGuardian.checkItem("wrongItem")).toEqual(false);
-      expect(testGuardian.tryCount).toEqual(expectedTryCount);
-      expect(testGuardian.pose).toEqual(GuardianPose.INCORRECT);
+    expect(testGuardian.getNextQuestion()).toContain("item");
+  });
+
+  test("die will set isAlive to false", () => {
+    expect(testGuardian.isAlive).toBe(true);
+
+    testGuardian.die();
+
+    expect(testGuardian.isAlive).toBe(false);
+  });
+
+  [
+    { guardian: new MultipGuardian(), expectedNumberOfQuestions: 5 },
+    { guardian: new DividGuardian(), expectedNumberOfQuestions: 5 },
+    { guardian: new SquareGuardian(), expectedNumberOfQuestions: 5 },
+    { guardian: new RadicalGuardian(), expectedNumberOfQuestions: 5 },
+    { guardian: new ArtifactGuardian(), expectedNumberOfQuestions: 10 },
+  ].forEach(({ guardian, expectedNumberOfQuestions }) => {
+    test(`${guardian.name} creates ${expectedNumberOfQuestions} guardian questions`, () => {
+      guardian.prepareQuestions();
+
+      expect(guardian.questionsRemaining).toEqual(expectedNumberOfQuestions);
     });
   });
-  describe("checkAnswer()", () => {
-    test("sets answer and question to null, sets pose to 'CORRECT', calls nextQuestionPrep, and returns true if the answer is correct", () => {
-      testGuardian.answer = 25;
 
-      jest.spyOn(testGuardian, "nextQuestionPrep");
-      (testGuardian.nextQuestionPrep as jest.Mock).mockImplementation(() => null);
+  test("Multip guardian creates the correct questions with the correct difficulty", () => {
+    const guardian = new MultipGuardian();
 
-      expect(testGuardian.checkAnswer(25)).toEqual(true);
+    guardian.prepareQuestions();
 
-      expect(testGuardian.answer).toEqual(null);
-      expect(testGuardian.question).toEqual(null);
-      expect(testGuardian.pose).toEqual(GuardianPose.CORRECT);
-      expect(testGuardian.nextQuestionPrep).toHaveBeenCalledTimes(1);
-    });
-    test("decrements the tryCount, sets pose to 'INCORRECT', and returns false if the answer is wrong", () => {
-      testGuardian.tryCount = 3;
-      testGuardian.answer = 25;
+    expect(buildAdditionQuestion).toHaveBeenCalledTimes(5);
+    const calls = (buildAdditionQuestion as jest.Mock).mock.calls;
+    // Each array is the list of arguments passed into the function when it was called
+    // In our case, we called the function with only one argument, so all of our calls are arrays of 1
+    expect(calls).toEqual([[0], [0], [1], [2], [2]]);
+  });
 
-      expect(testGuardian.checkAnswer(20)).toEqual(false);
+  test("Multip guardian creates the correct itemPrequisites in the correct order", () => {
+    const guardian = new MultipGuardian();
 
-      expect(testGuardian.pose).toEqual(GuardianPose.INCORRECT);
-      expect(testGuardian.tryCount).toEqual(2);
+    guardian.prepareQuestions();
+
+    // Using casting to access the questions
+    const guardianQuestions = (guardian as unknown as Record<string, GuardianQuestion[]>).guardianQuestions;
+    guardianQuestions.forEach((question, index) => {
+      if (index === 0) {
+        expect(question.itemPrerequisite).toBe("Calculator");
+      } else {
+        expect(question.itemPrerequisite).toBe(undefined);
+      }
     });
   });
-  describe("checkVictory()", () => {
-    test("returns false if tryCount is at zero", () => {
-      testGuardian.tryCount = 0;
 
-      expect(testGuardian.checkVictory()).toEqual(false);
-    });
-    test("returns true if questionCount is at zero", () => {
-      testGuardian.questionCount = 0;
+  test("Divid guardian creates the correct questions with the correct difficulty", () => {
+    const guardian = new DividGuardian();
 
-      expect(testGuardian.checkVictory()).toEqual(true);
-    });
-    test("guardian is no longer alive if it loses a battle", () => {
-      testGuardian.questionCount = 0;
+    guardian.prepareQuestions();
 
-      testGuardian.checkVictory();
-
-      expect(testGuardian.isAlive).toEqual(false);
-    });
-    test("returns null if neither the tryCount nor questionCount are at zero", () => {
-      testGuardian.tryCount = 3;
-      testGuardian.questionCount = 5;
-
-      expect(testGuardian.checkVictory()).toEqual(null);
-    });
+    expect(buildSubtractionQuestion).toHaveBeenCalledTimes(5);
+    const calls = (buildSubtractionQuestion as jest.Mock).mock.calls;
+    expect(calls).toEqual([[0], [0], [1], [2], [2]]);
   });
-});
 
-describe("Multip Guardian", () => {
-  describe("mathQuestion()", () => {
-    [
-      {
-        questionCount: 5,
-        expectedDifficulty: 0,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 4,
-        expectedDifficulty: 0,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 3,
-        expectedDifficulty: 1,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 2,
-        expectedDifficulty: 2,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 1,
-        expectedDifficulty: 2,
-        functionToCall: buildAdditionQuestion,
-      },
-    ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
-      test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
-        const testGuardian = new MultipGuardian();
-        testGuardian.questionCount = questionCount;
+  test("Divid guardian creates the correct itemPrequisites in the correct order", () => {
+    const guardian = new DividGuardian();
 
-        testGuardian.mathQuestion();
+    guardian.prepareQuestions();
 
-        expect(functionToCall).toHaveBeenCalled();
-        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
-        expect(testGuardian.question).toEqual("Q");
-        expect(testGuardian.answer).toEqual("A");
-      });
-    });
+    // Using casting to access the questions
+    const guardianQuestions = (guardian as unknown as Record<string, GuardianQuestion[]>).guardianQuestions;
+    const itemPrequisites = guardianQuestions.map((question) => question.itemPrerequisite);
+    expect(itemPrequisites).toEqual(["Calculator", undefined, undefined, undefined, undefined]);
   });
-  test("nextQuestionPrep() decrements the questionCount by 1", () => {
-    const testGuardian = new MultipGuardian();
-    testGuardian.questionCount = 5;
 
-    testGuardian.nextQuestionPrep();
+  test("Square guardian creates the correct questions with the correct difficulty", () => {
+    const guardian = new SquareGuardian();
 
-    expect(testGuardian.questionCount).toEqual(4);
+    guardian.prepareQuestions();
+
+    expect(buildAdditionQuestion).toHaveBeenCalledTimes(3);
+    const additionCalls = (buildAdditionQuestion as jest.Mock).mock.calls;
+    expect(additionCalls).toEqual([[0], [1], [2]]);
+
+    expect(buildMultiplicationQuestion).toHaveBeenCalledTimes(2);
+    const multiplicationCalls = (buildMultiplicationQuestion as jest.Mock).mock.calls;
+    expect(multiplicationCalls).toEqual([[0], [2]]);
   });
-});
 
-describe("Divid Guardian", () => {
-  describe("mathQuestion()", () => {
-    [
-      {
-        questionCount: 5,
-        expectedDifficulty: 0,
-        functionToCall: buildSubtractionQuestion,
-      },
-      {
-        questionCount: 4,
-        expectedDifficulty: 0,
-        functionToCall: buildSubtractionQuestion,
-      },
-      {
-        questionCount: 3,
-        expectedDifficulty: 1,
-        functionToCall: buildSubtractionQuestion,
-      },
-      {
-        questionCount: 2,
-        expectedDifficulty: 2,
-        functionToCall: buildSubtractionQuestion,
-      },
-      {
-        questionCount: 1,
-        expectedDifficulty: 2,
-        functionToCall: buildSubtractionQuestion,
-      },
-    ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
-      test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
-        const testGuardian = new DividGuardian();
-        testGuardian.questionCount = questionCount;
+  test("Square guardian creates the correct itemPrequisites in the correct order", () => {
+    const guardian = new SquareGuardian();
 
-        testGuardian.mathQuestion();
+    guardian.prepareQuestions();
 
-        expect(functionToCall).toHaveBeenCalled();
-        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
-        expect(testGuardian.question).toEqual("Q");
-        expect(testGuardian.answer).toEqual("A");
-      });
-    });
+    // Using casting to access the questions
+    const guardianQuestions = (guardian as unknown as Record<string, GuardianQuestion[]>).guardianQuestions;
+    const itemPrequisites = guardianQuestions.map((question) => question.itemPrerequisite);
+    expect(itemPrequisites).toEqual(["Calculator", undefined, undefined, "Multip", undefined]);
   });
-  test("nextQuestionPrep() decrements the questionCount by 1", () => {
-    const testGuardian = new DividGuardian();
-    testGuardian.questionCount = 5;
 
-    testGuardian.nextQuestionPrep();
+  test("Radical guardian creates the correct questions with the correct difficulty", () => {
+    const guardian = new RadicalGuardian();
 
-    expect(testGuardian.questionCount).toEqual(4);
+    guardian.prepareQuestions();
+
+    expect(buildAdditionQuestion).toHaveBeenCalledTimes(1);
+    expect(buildAdditionQuestion).toHaveBeenCalledWith(1);
+
+    expect(buildSubtractionQuestion).toHaveBeenCalledTimes(1);
+    expect(buildSubtractionQuestion).toHaveBeenCalledWith(2);
+
+    expect(buildExponentQuestion).toHaveBeenCalledTimes(1);
+    expect(buildExponentQuestion).toHaveBeenCalledWith(2);
+
+    expect(buildDivisionQuestion).toHaveBeenCalledTimes(2);
+    expect(buildDivisionQuestion).toHaveBeenCalledWith(1);
+    expect(buildDivisionQuestion).toHaveBeenCalledWith(2);
   });
-});
 
-describe("Square Guardian", () => {
-  describe("mathQuestion()", () => {
-    [
-      {
-        questionCount: 5,
-        expectedDifficulty: 0,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 4,
-        expectedDifficulty: 1,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 3,
-        expectedDifficulty: 2,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 2,
-        expectedDifficulty: 0,
-        functionToCall: buildMultiplicationQuestion,
-      },
-      {
-        questionCount: 1,
-        expectedDifficulty: 1,
-        functionToCall: buildMultiplicationQuestion,
-      },
-    ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
-      test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
-        const testGuardian = new SquareGuardian();
-        testGuardian.questionCount = questionCount;
+  test("Radical guardian creates the correct itemPrequisites in the correct order", () => {
+    const guardian = new RadicalGuardian();
 
-        testGuardian.mathQuestion();
+    guardian.prepareQuestions();
 
-        expect(functionToCall).toHaveBeenCalled();
-        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
-        expect(testGuardian.question).toEqual("Q");
-        expect(testGuardian.answer).toEqual("A");
-      });
-    });
+    // Using casting to access the questions
+    const guardianQuestions = (guardian as unknown as Record<string, GuardianQuestion[]>).guardianQuestions;
+    const itemPrequisites = guardianQuestions.map((question) => question.itemPrerequisite);
+    expect(itemPrequisites).toEqual(["Calculator", undefined, "Square", "Divid", undefined]);
   });
-  describe("nextQuestionPrep()", () => {
-    test("decrements the questionCount by 1", () => {
-      const testGuardian = new SquareGuardian();
-      testGuardian.questionCount = 5;
 
-      testGuardian.nextQuestionPrep();
+  test("Artifact guardian creates the correct questions with the correct difficulty", () => {
+    const guardian = new ArtifactGuardian();
 
-      expect(testGuardian.questionCount).toEqual(4);
-    });
+    guardian.prepareQuestions();
 
-    test("Sets the requiredItem to Multip if the questionCount is 2 after decrementing", () => {
-      const testGuardian = new SquareGuardian();
-      const expectedQuestionCount = 2;
-      testGuardian.questionCount = expectedQuestionCount + 1;
+    expect(buildMultiplicationQuestion).toHaveBeenCalledTimes(2);
+    expect(buildMultiplicationQuestion).toHaveBeenCalledWith(2);
+    expect(buildMultiplicationQuestion).toHaveBeenCalledWith(2);
 
-      testGuardian.nextQuestionPrep();
+    expect(buildExponentQuestion).toHaveBeenCalledTimes(2);
+    expect(buildExponentQuestion).toHaveBeenCalledWith(1);
+    expect(buildExponentQuestion).toHaveBeenCalledWith(2);
 
-      expect(testGuardian.questionCount).toEqual(expectedQuestionCount);
-      expect(testGuardian.requiredItem).toMatch(/Multip/i);
-    });
+    expect(buildDivisionQuestion).toHaveBeenCalledTimes(2);
+    expect(buildDivisionQuestion).toHaveBeenCalledWith(2);
+    expect(buildDivisionQuestion).toHaveBeenCalledWith(2);
+
+    expect(buildRootQuestion).toHaveBeenCalledTimes(2);
+    expect(buildRootQuestion).toHaveBeenCalledWith(1);
+    expect(buildRootQuestion).toHaveBeenCalledWith(2);
+
+    expect(buildAdditionQuestion).toHaveBeenCalledTimes(1);
+    expect(buildAdditionQuestion).toHaveBeenCalledWith(2);
+
+    expect(buildSubtractionQuestion).toHaveBeenCalledTimes(1);
+    expect(buildSubtractionQuestion).toHaveBeenCalledWith(2);
   });
-});
 
-describe("Radical Guardian", () => {
-  describe("mathQuestion()", () => {
-    [
-      {
-        questionCount: 5,
-        expectedDifficulty: 1,
-        functionToCall: buildAdditionQuestion,
-      },
-      {
-        questionCount: 4,
-        expectedDifficulty: 2,
-        functionToCall: buildSubtractionQuestion,
-      },
-      {
-        questionCount: 3,
-        expectedDifficulty: 2,
-        functionToCall: buildExponentQuestion,
-      },
-      {
-        questionCount: 2,
-        expectedDifficulty: 1,
-        functionToCall: buildDivisionQuestion,
-      },
-      {
-        questionCount: 1,
-        expectedDifficulty: 2,
-        functionToCall: buildDivisionQuestion,
-      },
-    ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
-      test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
-        const testGuardian = new RadicalGuardian();
-        testGuardian.questionCount = questionCount;
+  test("Artifact guardian creates the correct itemPrequisites in the correct order", () => {
+    const guardian = new ArtifactGuardian();
 
-        testGuardian.mathQuestion();
+    guardian.prepareQuestions();
 
-        expect(functionToCall).toHaveBeenCalled();
-        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
-        expect(testGuardian.question).toEqual("Q");
-        expect(testGuardian.answer).toEqual("A");
-      });
-    });
-  });
-  describe("nextQuestionPrep()", () => {
-    test("decrements the questionCount by 1", () => {
-      const testGuardian = new RadicalGuardian();
-      testGuardian.questionCount = 5;
-
-      testGuardian.nextQuestionPrep();
-
-      expect(testGuardian.questionCount).toEqual(4);
-    });
-
-    test("Sets the requiredItem to Square if the questionCount is 3 after decrementing", () => {
-      const testGuardian = new RadicalGuardian();
-      const expectedQuestionCount = 3;
-      testGuardian.questionCount = expectedQuestionCount + 1;
-
-      testGuardian.nextQuestionPrep();
-
-      expect(testGuardian.questionCount).toEqual(expectedQuestionCount);
-      expect(testGuardian.requiredItem).toMatch(/square/i);
-    });
-    test("Sets the requiredItem to Divid if the questionCount is 2 after decrementing", () => {
-      const testGuardian = new RadicalGuardian();
-      const expectedQuestionCount = 2;
-      testGuardian.questionCount = expectedQuestionCount + 1;
-
-      testGuardian.nextQuestionPrep();
-
-      expect(testGuardian.questionCount).toEqual(expectedQuestionCount);
-      expect(testGuardian.requiredItem).toMatch(/divid/i);
-    });
-  });
-});
-
-describe("Artifact Guardian", () => {
-  describe("mathQuestion()", () => {
-    [
-      {
-        questionCount: 10,
-        expectedDifficulty: 2,
-        functionToCall: buildSubtractionQuestion,
-      },
-      {
-        questionCount: 8,
-        expectedDifficulty: 2,
-        functionToCall: buildMultiplicationQuestion,
-      },
-      {
-        questionCount: 7,
-        expectedDifficulty: 1,
-        functionToCall: buildExponentQuestion,
-      },
-      {
-        questionCount: 6,
-        expectedDifficulty: 2,
-        functionToCall: buildExponentQuestion,
-      },
-      {
-        questionCount: 4,
-        expectedDifficulty: 2,
-        functionToCall: buildDivisionQuestion,
-      },
-      {
-        questionCount: 3,
-        expectedDifficulty: 1,
-        functionToCall: buildRootQuestion,
-      },
-      {
-        questionCount: 2,
-        expectedDifficulty: 2,
-        functionToCall: buildRootQuestion,
-      },
-      {
-        questionCount: 1,
-        expectedDifficulty: 2,
-        functionToCall: buildAdditionQuestion,
-      },
-    ].forEach(({ expectedDifficulty, questionCount, functionToCall }) => {
-      test(`calls ${functionToCall} with difficulty ${expectedDifficulty} with questionCount ${questionCount}`, () => {
-        const testGuardian = new ArtifactGuardian();
-        testGuardian.questionCount = questionCount;
-
-        testGuardian.mathQuestion();
-
-        expect(functionToCall).toHaveBeenCalled();
-        expect(functionToCall).toHaveBeenCalledWith(expectedDifficulty);
-        expect(testGuardian.question).toEqual("Q");
-        expect(testGuardian.answer).toEqual("A");
-      });
-    });
-  });
-  describe("nextQuestionPrep()", () => {
-    test("decrements the questionCount by 1", () => {
-      const testGuardian = new ArtifactGuardian();
-      testGuardian.questionCount = 5;
-
-      testGuardian.nextQuestionPrep();
-
-      expect(testGuardian.questionCount).toEqual(4);
-    });
-
-    [
-      {
-        requiredItem: "Multip",
-        expectedQuestionCount: 10,
-      },
-      {
-        requiredItem: "Square",
-        expectedQuestionCount: 8,
-      },
-      {
-        requiredItem: "Divid",
-        expectedQuestionCount: 6,
-      },
-      {
-        requiredItem: "Radical",
-        expectedQuestionCount: 4,
-      },
-      {
-        requiredItem: "Calculator",
-        expectedQuestionCount: 2,
-      },
-    ].forEach(({ requiredItem, expectedQuestionCount }) => {
-      test(`Sets the requiredItem to ${requiredItem} if the questionCount is ${expectedQuestionCount} after decrementing`, () => {
-        const testGuardian = new ArtifactGuardian();
-        testGuardian.questionCount = expectedQuestionCount + 1;
-
-        testGuardian.nextQuestionPrep();
-
-        expect(testGuardian.questionCount).toEqual(expectedQuestionCount);
-        expect(testGuardian.requiredItem).toMatch(new RegExp(requiredItem));
-      });
-    });
+    // Using casting to access the questions
+    const guardianQuestions = (guardian as unknown as Record<string, GuardianQuestion[]>).guardianQuestions;
+    const itemPrequisites = guardianQuestions.map((question) => question.itemPrerequisite);
+    expect(itemPrequisites).toEqual([
+      "Multip",
+      undefined,
+      "Square",
+      undefined,
+      "Divid",
+      undefined,
+      "Radical",
+      undefined,
+      "Calculator",
+      undefined,
+    ]);
   });
 });

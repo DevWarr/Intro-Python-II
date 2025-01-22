@@ -43,7 +43,7 @@ describe("Addition function", () => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for ${difficulty} `, () => {
       const testAdditionAnswersArray = Array(1_000)
         .fill(0)
-        .map(() => buildAdditionQuestion(difficulty)[1]);
+        .map(() => buildAdditionQuestion(difficulty).mathAnswer);
 
       checkAnswersBetweenMinAndMax(testAdditionAnswersArray, expectedMin, expectedMax);
     });
@@ -70,7 +70,7 @@ describe("Subtraction function", () => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for difficulty ${difficulty}`, () => {
       const testSubtractionAnswersArray = Array(1_000)
         .fill(0)
-        .map(() => buildSubtractionQuestion(difficulty)[1]);
+        .map(() => buildSubtractionQuestion(difficulty).mathAnswer);
 
       checkAnswersBetweenMinAndMax(testSubtractionAnswersArray, expectedMin, expectedMax);
     });
@@ -97,7 +97,7 @@ describe("Division function", () => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for difficulty ${difficulty}`, () => {
       const testDivisionAnswersArray = Array(1_000)
         .fill(0)
-        .map(() => buildDivisionQuestion(difficulty)[1]);
+        .map(() => buildDivisionQuestion(difficulty).mathAnswer);
 
       checkAnswersBetweenMinAndMax(testDivisionAnswersArray, expectedMin, expectedMax);
     });
@@ -124,7 +124,7 @@ describe("Multiplication function", () => {
     test(`Returns an answer between ${expectedMin} and ${expectedMax} for difficulty ${difficulty}`, () => {
       const testMultiplicationAnswersArray = Array(1_000)
         .fill(0)
-        .map(() => buildMultiplicationQuestion(difficulty)[1]);
+        .map(() => buildMultiplicationQuestion(difficulty).mathAnswer);
 
       checkAnswersBetweenMinAndMax(testMultiplicationAnswersArray, expectedMin, expectedMax);
     });
@@ -137,7 +137,7 @@ describe("Square function", () => {
     const expectedMin = expectedSquares[0];
     const testSquareAnswersArray = Array(1_000)
       .fill(0)
-      .map(() => buildExponentQuestion(0)[1]);
+      .map(() => buildExponentQuestion(0).mathAnswer);
 
     const invalidAnswers = testSquareAnswersArray.filter((num) => !expectedSquares.find((square) => square === num));
     expect(invalidAnswers).toHaveLength(0);
@@ -150,7 +150,7 @@ describe("Square function", () => {
     const expectedMin = expectedSquares[0];
     const testSquareAnswersArray = Array(1_000)
       .fill(0)
-      .map(() => buildExponentQuestion(1)[1]);
+      .map(() => buildExponentQuestion(1).mathAnswer);
 
     const invalidAnswers = testSquareAnswersArray.filter((num) => !expectedSquares.find((square) => square === num));
     expect(invalidAnswers).toHaveLength(0);
@@ -165,7 +165,7 @@ describe("Square function", () => {
     const expectedMin = expectedAnswers[0];
     const testSquareAnswersArray = Array(1_000)
       .fill(0)
-      .map(() => buildExponentQuestion(2)[1]);
+      .map(() => buildExponentQuestion(2).mathAnswer);
 
     const invalidAnswers = testSquareAnswersArray.filter((num) => !expectedAnswers.find((square) => square === num));
     expect(invalidAnswers).toHaveLength(0);
@@ -179,11 +179,11 @@ describe("Square function", () => {
       .fill(0)
       .map(() => buildExponentQuestion(2));
 
-    const invalidAnswers = testSquareArray.filter(([question, answer]) => {
-      if (question.match("cubed") !== null) {
-        return !expectedCubes.find((num) => num === answer);
+    const invalidAnswers = testSquareArray.filter(({ mathAnswer, mathQuestion }) => {
+      if (mathQuestion.match("cubed") !== null) {
+        return !expectedCubes.find((num) => num === mathAnswer);
       } else {
-        return !expectedSquares.find((num) => num === answer);
+        return !expectedSquares.find((num) => num === mathAnswer);
       }
     });
     expect(invalidAnswers).toHaveLength(0);
@@ -195,7 +195,7 @@ describe("Root function", () => {
     const expectedMin = 2;
     const testRootAnswersArray = Array(1_000)
       .fill(0)
-      .map(() => buildRootQuestion(0)[1]);
+      .map(() => buildRootQuestion(0).mathAnswer);
 
     checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax);
   });
@@ -204,7 +204,7 @@ describe("Root function", () => {
     const expectedMin = 8;
     const testRootAnswersArray = Array(1_000)
       .fill(0)
-      .map(() => buildRootQuestion(1)[1]);
+      .map(() => buildRootQuestion(1).mathAnswer);
 
     checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax);
   });
@@ -213,20 +213,20 @@ describe("Root function", () => {
     const expectedMin = 2;
     const testRootAnswersArray = Array(1_000)
       .fill(0)
-      .map(() => buildRootQuestion(2)[1]);
+      .map(() => buildRootQuestion(2).mathAnswer);
 
     checkAnswersBetweenMinAndMax(testRootAnswersArray, expectedMin, expectedMax);
   });
   test("Formats question properly for a cube root or square root answer", () => {
     const difficulty0QuestionsArray = Array(1_000)
       .fill(0)
-      .map(() => buildRootQuestion(0)[0]);
+      .map(() => buildRootQuestion(0).mathQuestion);
     const difficulty1QuestionsArray = Array(1_000)
       .fill(0)
-      .map(() => buildRootQuestion(1)[0]);
+      .map(() => buildRootQuestion(1).mathQuestion);
     const difficulty2QuestionsArray = Array(1_000)
       .fill(0)
-      .map(() => buildRootQuestion(2)[0]);
+      .map(() => buildRootQuestion(2).mathQuestion);
 
     expect(difficulty0QuestionsArray).not.toContain("square");
     expect(difficulty1QuestionsArray).not.toContain("square");
