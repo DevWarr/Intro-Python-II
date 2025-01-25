@@ -20,6 +20,7 @@ export class AnswerMathController {
       };
     }
 
+    guardian.removeCurrentQuestion();
     return {
       guardianPose: GuardianPose.CORRECT,
       responseToPlayer: `~W${mathResponse}~Y is correct!`,

@@ -68,7 +68,7 @@ export class BattleState implements GameState {
     else return BattleWinner.NONE;
   }
 
-  public async processInput(inputString: string, resetInputCallback: () => void) {
+  public async processInput(inputString: string) {
     if (inputString === "run away") {
       await this.responseContainer.renderResponse("~YYou ran away!");
       this.player.runAway();
@@ -91,7 +91,6 @@ export class BattleState implements GameState {
 
     this.guardianPoseContainer.renderGuardian(this.guardian.name, actionResponse.guardianPose);
     if (actionResponse.guardianPose === GuardianPose.CORRECT) {
-      this.guardian.removeCurrentQuestion();
       this.guardianQuestionContainer.renderGuardianQuestion(this.guardian.name, this.guardian.description, "");
     }
     await this.responseContainer.renderResponse(actionResponse.responseToPlayer);
@@ -108,7 +107,5 @@ export class BattleState implements GameState {
     } else {
       this.updateRendering();
     }
-
-    resetInputCallback();
   }
 }

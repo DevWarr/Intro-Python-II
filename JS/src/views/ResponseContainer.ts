@@ -14,8 +14,14 @@ export class ResponseContainer {
   }
 
   public async renderResponse(message: string, secondsToShowMessage?: number) {
+    this.container.removeChildren();
     buildTextListWithColors(message).forEach((text) => this.container.addChild(text));
     await sleep(secondsToShowMessage ?? this.determineSecondsToSleepForMessage(message));
     this.container.removeChildren();
+  }
+
+  public async renderResponseWithoutReset(message: string) {
+    this.container.removeChildren();
+    buildTextListWithColors(message).forEach((text) => this.container.addChild(text));
   }
 }
