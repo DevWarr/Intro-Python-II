@@ -136,7 +136,7 @@ export class ExplorationState implements GameState {
     this.controlsContainer.renderControlType(this.controlsType);
   }
 
-  public async processInput(inputString: string, resetInputCallback: () => void) {
+  public async processInput(inputString: string) {
     const playerInputList = inputString.toLowerCase().split(" ");
     const playerAction = playerInputList[0];
 
@@ -161,7 +161,5 @@ export class ExplorationState implements GameState {
       case "o":
         this.handleMoreControlsAction();
     }
-
-    resetInputCallback();
   }
 }

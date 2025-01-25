@@ -44,9 +44,7 @@ export class GameManager {
   }
 
   private __currentGameState: GameState;
-  get currentGameState() {
-    return this.__currentGameState;
-  }
+  private __isAskingPlayerToQuit: boolean = false;
 
   constructor(
     pixiApp: Application,
@@ -89,6 +87,26 @@ export class GameManager {
     );
     this.__currentGameState.startRendering();
     this.playerInventoryContainer.renderPlayerInventory(this.player);
+  }
+
+  public async processInput(inputString: string, resetInputCallback: () => void) {
+    if (this.__isAskingPlayerToQuit) {
+      if (["y", "yes"].includes(inputString.toLowerCase())) {
+        // TODO: We should probably have a better way of resetting the game
+        window.location.reload();
+      } else {
+        this.__isAskingPlayerToQuit = false;
+        await this.responseContainer.renderResponse("~gYou have chosen to continue.");
+      }
+    } else if (["q", "quit"].includes(inputString.toLowerCase())) {
+      this.__isAskingPlayerToQuit = true;
+      this.responseContainer.renderResponseWithoutReset(
+        "~pAre you sure you want to quit? (Press 'Y' to confirm; any other key to cancel)",
+      );
+    } else {
+      await this.__currentGameState.processInput(inputString);
+    }
+    resetInputCallback();
   }
 
   public changeGameStateType(newStateType: GameStateType) {

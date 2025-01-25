@@ -37,7 +37,7 @@ document.onkeydown = (e) => {
   if (e.key === "Enter") {
     if (playerInput.length > 0) {
       playerCanType = false;
-      gameManager.currentGameState.processInput(playerInput.trim(), resetPlayerInput);
+      gameManager.processInput(playerInput.trim(), resetPlayerInput);
     }
   }
 };

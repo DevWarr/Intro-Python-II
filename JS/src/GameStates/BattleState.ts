@@ -68,7 +68,7 @@ export class BattleState implements GameState {
     else return BattleWinner.NONE;
   }
 
-  public async processInput(inputString: string, resetInputCallback: () => void) {
+  public async processInput(inputString: string) {
     if (inputString === "run away") {
       await this.responseContainer.renderResponse("~YYou ran away!");
       this.player.runAway();
@@ -108,7 +108,5 @@ export class BattleState implements GameState {
     } else {
       this.updateRendering();
     }
-
-    resetInputCallback();
   }
 }
