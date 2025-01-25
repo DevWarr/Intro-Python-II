@@ -91,7 +91,6 @@ export class BattleState implements GameState {
 
     this.guardianPoseContainer.renderGuardian(this.guardian.name, actionResponse.guardianPose);
     if (actionResponse.guardianPose === GuardianPose.CORRECT) {
-      this.guardian.removeCurrentQuestion();
       this.guardianQuestionContainer.renderGuardianQuestion(this.guardian.name, this.guardian.description, "");
     }
     await this.responseContainer.renderResponse(actionResponse.responseToPlayer);

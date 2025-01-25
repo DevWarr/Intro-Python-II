@@ -70,6 +70,7 @@ export class UseItemController {
       };
     }
 
+    guardian.removeCurrentQuestion();
     return {
       guardianPose: GuardianPose.CORRECT,
       responseToPlayer: `~YYou used ~c(${this.capitalizeFirstLetter(itemName)})~Y!`,
