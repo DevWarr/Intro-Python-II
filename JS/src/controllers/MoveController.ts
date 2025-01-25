@@ -3,7 +3,7 @@ import { GameMap } from "../models/GameMap";
 import { Player } from "../models/Player";
 import { ValidDirection } from "../models/PositionVector2";
 
-const NO_ROOM_ERROR_MESSAGE = "~rThere is no room in that direction.~e";
+export const NO_ROOM_ERROR_MESSAGE = "~rThere is no room in that direction.~e";
 
 export class MoveController {
   public movePlayer(directionToMove: ValidDirection, gameMap: GameMap, player: Player): ExplorationStateActionResponse {
