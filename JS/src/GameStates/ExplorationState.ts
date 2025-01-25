@@ -41,10 +41,13 @@ export class ExplorationState implements GameState {
     private roomInfoContainer: RoomInfoContainer,
     private controlsContainer: ControlsContainer,
     private responseContainer: ResponseContainer,
-    private controlsType: ControlType = ControlType.SIMPLE,
     private moveController: MoveController = new MoveController(),
     private inventoryController: InventoryController = new InventoryController(),
     private useItemController: UseItemController = new UseItemController(),
+    // If the room has an item, the controls will be advanced. Otherwise, they will be simple.
+    private controlsType: ControlType = gameMap.getRoomAtPosition(player.position)!.inventory.length > 0
+      ? ControlType.ADVANCED
+      : ControlType.SIMPLE,
   ) {}
 
   public startRendering() {
