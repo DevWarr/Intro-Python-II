@@ -63,7 +63,7 @@ const COLOR_LABEL_TO_UNICODE_COLOR: Record<ColorLabel, Partial<TextOptions>> = {
     y: -1,
   },
   [ColorLabel.GREEN_BOLD]: {
-    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00ff000", fontWeight: "bold" },
+    style: { fontFamily: "monospace", fontSize: FONT_SIZE_PX.h, fill: "#00ff00", fontWeight: "bold" },
     y: -1,
   },
   [ColorLabel.YELLOW_BOLD]: {
