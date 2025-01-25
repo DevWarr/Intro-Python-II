@@ -15,12 +15,14 @@ import { GameState } from "./GameState";
 
 const MOVEMENT_DIRECTION_STRING_TO_VECTOR2: Record<string, PositionVector2> = {
   n: PositionVector2.UP,
+  north: PositionVector2.UP,
   s: PositionVector2.DOWN,
+  south: PositionVector2.DOWN,
   w: PositionVector2.LEFT,
+  west: PositionVector2.LEFT,
   e: PositionVector2.RIGHT,
+  east: PositionVector2.RIGHT,
 };
-
-const INVENTORY_ACTIONS = ["take", "drop"];
 
 export interface ExplorationStateActionResponse {
   actionSuccess: boolean;
@@ -38,6 +40,7 @@ export class ExplorationState implements GameState {
     private roomInfoContainer: RoomInfoContainer,
     private controlsContainer: ControlsContainer,
     private responseContainer: ResponseContainer,
+    private controlsType: ControlType = ControlType.SIMPLE,
     private moveController: MoveController = new MoveController(),
     private inventoryController: InventoryController = new InventoryController(),
   ) {}
@@ -48,7 +51,7 @@ export class ExplorationState implements GameState {
     this.roomInfoContainer.container.alpha = 1;
     this.controlsContainer.container.alpha = 1;
 
-    this.controlsContainer.renderControlType(ControlType.SIMPLE);
+    this.controlsContainer.renderControlType(this.controlsType);
     this.updateRendering();
   }
 
@@ -71,47 +74,75 @@ export class ExplorationState implements GameState {
     );
   }
 
+  private handleMovementAction(playerAction: string) {
+    const controllerResponse = this.moveController.movePlayer(
+      MOVEMENT_DIRECTION_STRING_TO_VECTOR2[playerAction],
+      this.gameMap,
+      this.player,
+    );
+
+    if (controllerResponse.actionSuccess) {
+      this.mapContainer.renderMap(this.gameMap, this.player.position);
+      this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
+      if (this.isGuardianToFight) {
+        return this.gameManager.changeGameStateType(GameStateType.BATTLE);
+      }
+    }
+
+    if (controllerResponse.responseToPlayer) {
+      this.responseContainer.renderResponse(controllerResponse.responseToPlayer, 1);
+    }
+  }
+
+  private handleInventoryAction(playerAction: string, itemName: string) {
+    const currentRoom = this.gameMap.getRoomAtPosition(this.player.position)!;
+
+    const controllerResponse: ExplorationStateActionResponse =
+      playerAction === "take"
+        ? this.inventoryController.takeItem(currentRoom, this.player, itemName)
+        : this.inventoryController.dropItem(currentRoom, this.player, itemName);
+
+    if (controllerResponse.actionSuccess) {
+      this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
+      this.playerInventoryContainer.renderPlayerInventory(this.player);
+    }
+
+    if (controllerResponse?.responseToPlayer) {
+      this.responseContainer.renderResponse(controllerResponse.responseToPlayer, 1);
+    }
+  }
+
+  private handleUseAction(itemName: string) {}
+
+  private handleMoreControlsAction() {
+    this.controlsType = this.controlsType === ControlType.ADVANCED ? ControlType.SIMPLE : ControlType.ADVANCED;
+    this.controlsContainer.renderControlType(this.controlsType);
+  }
+
   public async processInput(inputString: string, resetInputCallback: () => void) {
     const playerInputList = inputString.toLowerCase().split(" ");
     const playerAction = playerInputList[0];
 
-    if (Object.keys(MOVEMENT_DIRECTION_STRING_TO_VECTOR2).includes(playerAction)) {
-      const controllerResponse = this.moveController.movePlayer(
-        MOVEMENT_DIRECTION_STRING_TO_VECTOR2[playerAction],
-        this.gameMap,
-        this.player,
-      );
-
-      if (controllerResponse.actionSuccess) {
-        this.mapContainer.renderMap(this.gameMap, this.player.position);
-        this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
-        if (this.isGuardianToFight) {
-          return this.gameManager.changeGameStateType(GameStateType.BATTLE);
-        }
-      }
-
-      if (controllerResponse.responseToPlayer) {
-        await this.responseContainer.renderResponse(controllerResponse.responseToPlayer, 1);
-      }
-    }
-
-    if (INVENTORY_ACTIONS.includes(playerAction)) {
-      const itemName = playerInputList[1];
-      const currentRoom = this.gameMap.getRoomAtPosition(this.player.position)!;
-
-      const controllerResponse: ExplorationStateActionResponse =
-        playerAction === "take"
-          ? this.inventoryController.takeItem(currentRoom, this.player, itemName)
-          : this.inventoryController.dropItem(currentRoom, this.player, itemName);
-
-      if (controllerResponse.actionSuccess) {
-        this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
-        this.playerInventoryContainer.renderPlayerInventory(this.player);
-      }
-
-      if (controllerResponse?.responseToPlayer) {
-        await this.responseContainer.renderResponse(controllerResponse.responseToPlayer, 1);
-      }
+    switch (playerAction) {
+      case "n":
+      case "north":
+      case "s":
+      case "south":
+      case "w":
+      case "west":
+      case "e":
+      case "east":
+        this.handleMovementAction(playerAction);
+        break;
+      case "take":
+      case "drop":
+        this.handleInventoryAction(playerAction, playerInputList.slice(1).join(" "));
+        break;
+      case "use":
+        this.handleUseAction(playerInputList.slice(1).join(" "));
+        break;
+      case "o":
+        this.handleMoreControlsAction();
     }
 
     resetInputCallback();
