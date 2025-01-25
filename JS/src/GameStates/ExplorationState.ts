@@ -1,5 +1,6 @@
 import { InventoryController } from "../controllers/InventoryController";
 import { MoveController } from "../controllers/MoveController";
+import { UseItemController } from "../controllers/UseItemController";
 import { GameManager, GameStateType } from "../GameManager";
 import { GameMap } from "../models/GameMap";
 import { Player } from "../models/Player";
@@ -43,6 +44,7 @@ export class ExplorationState implements GameState {
     private controlsType: ControlType = ControlType.SIMPLE,
     private moveController: MoveController = new MoveController(),
     private inventoryController: InventoryController = new InventoryController(),
+    private useItemController: UseItemController = new UseItemController(),
   ) {}
 
   public startRendering() {
@@ -112,7 +114,19 @@ export class ExplorationState implements GameState {
     }
   }
 
-  private handleUseAction(itemName: string) {}
+  private handleUseAction(itemName: string) {
+    const controllerResponse = this.useItemController.useItemInRoom(
+      this.player,
+      this.gameMap.getRoomAtPosition(this.player.position)!,
+      itemName,
+    );
+
+    // TODO: if true, end the game
+
+    if (controllerResponse.responseToPlayer) {
+      this.responseContainer.renderResponse(controllerResponse.responseToPlayer);
+    }
+  }
 
   private handleMoreControlsAction() {
     this.controlsType = this.controlsType === ControlType.ADVANCED ? ControlType.SIMPLE : ControlType.ADVANCED;
