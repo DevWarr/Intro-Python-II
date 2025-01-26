@@ -3,7 +3,7 @@ import { BattleState } from "./GameStates/BattleState";
 import { ExplorationState } from "./GameStates/ExplorationState";
 import { GameState } from "./GameStates/GameState";
 import { GameMap } from "./models/GameMap";
-import { GamePlayer, Player } from "./models/Player";
+import { DebugPlayer, GamePlayer, Player } from "./models/Player";
 import { FONT_SIZE_PX } from "./models/SizeVector2";
 import { BattleInfoContainer } from "./views/BattleInfoContainer";
 import { ControlsContainer } from "./views/ControlsContainer";
@@ -16,6 +16,7 @@ import { PlayerInventoryContainer } from "./views/PlayerInventoryContainer";
 import { ResponseContainer } from "./views/ResponseContainer";
 import { RoomInfoContainer } from "./views/RoomInfoContainer";
 import { Shrine } from "./models/Room";
+import { IntroductionState } from "./GameStates/IntroductionState";
 
 export enum GameStateType {
   INTRO,
@@ -38,6 +39,19 @@ export class GameManager {
   get player() {
     return this.__player;
   }
+
+  /**
+   * Creates a new player.
+   *
+   * WARNING: If the player already exists, an error will be thrown.
+   */
+  public createNewPlayer(playerName: string) {
+    if (this.__player instanceof GamePlayer) {
+      throw new Error("Player already exists.");
+    }
+    this.__player = new GamePlayer(playerName);
+  }
+
   private __gameMap: GameMap;
   get gameMap() {
     return this.__gameMap;
@@ -73,12 +87,11 @@ export class GameManager {
     pixiApp.stage.addChild(this.responseContainer.container);
 
     this.__gameMap = new GameMap();
-    this.__player = new GamePlayer("My player here");
-    this.__currentGameState = new ExplorationState(
+    this.__player = new DebugPlayer("Winner");
+    this.__currentGameState = new IntroductionState(
       this,
-      this.__gameMap,
-      this.__player,
       this.mapContainer,
+      this.guardianPoseContainer,
       this.legendContainer,
       this.playerInventoryContainer,
       this.roomInfoContainer,
