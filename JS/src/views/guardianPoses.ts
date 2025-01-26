@@ -207,7 +207,7 @@ export const GUARDIAN_POSES: GuardianPoseStringDictionary = {
 
     [GuardianPose.CORRECT]: [
       " ~W(8~e  *~B//~e*      ",
-      "  ~W\=~X\~W|~e~r##~W|~X--~W9~e\\  ",
+      "  ~W\\=~X\\~W|~e~r##~W|~X--~W9~e\\  ",
       "   ~X`‾~W]~BAA~W[~X‾‾~W97~e  ",
       "     ~W|]~X[|  ~Y^^~e  ",
       "     ~Y^^^^~e      ",
