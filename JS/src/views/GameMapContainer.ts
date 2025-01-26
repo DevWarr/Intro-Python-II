@@ -7,7 +7,7 @@ import { PositionVector2 } from "../models/PositionVector2";
 export class GameMapContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
   ) {}
 
   public renderMap(gameMap: GameMap, playerPosition: PositionVector2) {

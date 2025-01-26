@@ -12,7 +12,7 @@ const MAP_LEGEND = [
 export class MapLegendContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
   ) {}
 
   public renderMapLegend(mapLegendStringList: string[] = MAP_LEGEND) {

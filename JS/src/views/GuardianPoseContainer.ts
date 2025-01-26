@@ -7,7 +7,7 @@ export class GuardianPoseContainer {
   constructor(
     containerOptions: ContainerOptions,
     private guardianPoses: GuardianPoseStringDictionary = GUARDIAN_POSES,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
   ) {}
 
   public renderGuardian(guardianName: GuardianName, guardianPose: GuardianPose) {

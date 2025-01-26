@@ -7,7 +7,7 @@ const ONE_DOT = " .";
 export class ResponseContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
   ) {}
 
   private determineSecondsToSleepForMessage(message: string): number {

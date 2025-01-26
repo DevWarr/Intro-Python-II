@@ -5,7 +5,7 @@ import { GuardianName } from "../models/Guardians";
 export class GuardianQuestionContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
   ) {}
 
   public renderGuardianQuestion(guardianName: GuardianName, guardianDescription: string, guardianQuestion: string) {
