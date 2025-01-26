@@ -133,10 +133,11 @@ export class ExplorationState implements GameState {
       itemName,
     );
 
-    // TODO: if true, end the game
-    this.gameManager.audioManager.playSFX(
-      controllerResponse.actionSuccess ? SFXTrackNumber.RUN_AWAY : SFXTrackNumber.MENU_FAIL,
-    );
+    if (controllerResponse.actionSuccess) {
+      return this.gameManager.endGame();
+    }
+
+    this.gameManager.audioManager.playSFX(SFXTrackNumber.MENU_FAIL);
 
     if (controllerResponse.responseToPlayer) {
       await this.responseContainer.renderResponse(controllerResponse.responseToPlayer);

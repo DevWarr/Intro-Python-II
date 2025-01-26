@@ -75,6 +75,7 @@ export class IntroductionState implements GameState {
       this.gameManager.audioManager.playSFX(SFXTrackNumber.MENU_SOUND);
       this.gameManager.audioManager.stopMusic();
       this.gameManager.createNewPlayer(inputString);
+      this.gameManager.startTimer();
       this.playerInventoryContainer.renderPlayerInventory(this.gameManager.player);
       await this.responseContainer.showStartingMessage();
       await this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
