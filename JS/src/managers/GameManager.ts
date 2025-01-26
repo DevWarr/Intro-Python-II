@@ -18,6 +18,7 @@ import { RoomInfoContainer } from "../views/RoomInfoContainer";
 import { Shrine } from "../models/Room";
 import { IntroductionState } from "../GameStates/IntroductionState";
 import { StateTransitionContainer } from "../views/StateTransitionContainer";
+import { AudioManager } from "./AudioManager";
 
 export enum GameStateType {
   INTRO,
@@ -37,6 +38,7 @@ export class GameManager {
   readonly inputContainer: PlayerInputContainer;
   readonly responseContainer: ResponseContainer;
   readonly transitionContainer: StateTransitionContainer;
+  readonly audioManager: AudioManager = new AudioManager();
   private __player: Player;
   get player() {
     return this.__player;

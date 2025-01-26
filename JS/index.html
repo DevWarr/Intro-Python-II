@@ -45,11 +45,26 @@
       }
 
       #app {
+        display: none;
         margin: 0 auto;
         padding: 0;
         text-align: center;
         border: 16px solid #000000;
         box-shadow: #003300 0 0 8px 8px;
+      }
+
+      #start-game-button {
+        display: block;
+        margin: 0 auto;
+        padding: 0.5em 1em;
+        font-family: monospace;
+        font-size: 1.5em;
+        background-color: #000000;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+        box-shadow: #003300 0 0 8px 8px;
+        border-radius: 0.5em;
+        cursor: pointer;
       }
 
       @media (prefers-color-scheme: light) {
@@ -62,6 +77,7 @@
   </head>
   <body>
     <div id="app"></div>
+    <button id="start-game-button">Play game</button>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
