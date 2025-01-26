@@ -7,7 +7,7 @@ const TRIES_LEFT = "Tries left: ";
 export class BattleInfoContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
   ) {}
 
   public renderBattleInfo(questionsRemaining: number, triesLeft: number) {

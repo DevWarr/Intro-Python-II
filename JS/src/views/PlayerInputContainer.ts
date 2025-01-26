@@ -6,7 +6,7 @@ const TYPE_HERE_LOCATION_STRING = "~W>>  ~e";
 export class PlayerInputContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
     private typeHereLocationString: string = TYPE_HERE_LOCATION_STRING,
   ) {
     this.renderPlayerInput("");

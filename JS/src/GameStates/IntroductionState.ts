@@ -1,6 +1,5 @@
 import { GameManager, GameStateType } from "../GameManager";
 import { GuardianName, GuardianPose } from "../models/Guardians";
-import { GamePlayer } from "../models/Player";
 import { DEBUG_ROOM } from "../models/Room";
 import { ControlsContainer, ControlType } from "../views/ControlsContainer";
 import { GameMapContainer } from "../views/GameMapContainer";
@@ -73,6 +72,7 @@ export class IntroductionState implements GameState {
     } else {
       this.gameManager.createNewPlayer(inputString);
       this.playerInventoryContainer.renderPlayerInventory(this.gameManager.player);
+      await this.responseContainer.showStartingMessage();
       this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
     }
   }

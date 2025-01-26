@@ -69,6 +69,7 @@ export class BattleState implements GameState {
   }
 
   public async processInput(inputString: string) {
+    // If we're running away, just run. EZ
     if (inputString === "run away") {
       await this.responseContainer.renderResponse("~YYou ran away!");
       this.player.runAway();
@@ -76,6 +77,10 @@ export class BattleState implements GameState {
       return;
     }
 
+    // If we're not running away, we're either answering a math question or using an item
+    // If we're answering a math question, we'll get a response from the answerMathController
+    // If we're using an item, we'll get a response from the useItemController
+    // If the input is invalid, we'll get a response from the else block
     let actionResponse: BattleStateActionResponse;
     if (!isNaN(Number(inputString))) {
       actionResponse = this.answerMathController.answerMathQuestion(this.guardian, Number(inputString));
@@ -89,12 +94,22 @@ export class BattleState implements GameState {
       };
     }
 
+    // Update the guardian pose, the guardian question, and the response to the player
+    //    based on the actionResponse
     this.guardianPoseContainer.renderGuardian(this.guardian.name, actionResponse.guardianPose);
     if (actionResponse.guardianPose === GuardianPose.CORRECT) {
       this.guardianQuestionContainer.renderGuardianQuestion(this.guardian.name, this.guardian.description, "");
     }
-    await this.responseContainer.renderResponse(actionResponse.responseToPlayer);
 
+    // MAKE SURE to update the battle info after the response is rendered
+    // This way the battle info will be accurate as soon as the response is removed
+    await this.responseContainer.renderResponse(actionResponse.responseToPlayer);
+    this.battleInfoContainer.renderBattleInfo(this.guardian.questionsRemaining, this.guardian.triesLeft);
+
+    // Determine if the battle is over
+    // If the player wins, the guardian dies and the game goes back to exploration
+    // If the guardian wins, the player runs away and the game goes back to exploration
+    // If the battle is not over, update the rendering and continue the battle
     const battleWinner = this.getWinner();
     if (battleWinner === BattleWinner.GUARDIAN) {
       await this.responseContainer.renderResponse("~YYou lost the battle! You have to run away!");

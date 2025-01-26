@@ -17,6 +17,7 @@ import { ResponseContainer } from "./views/ResponseContainer";
 import { RoomInfoContainer } from "./views/RoomInfoContainer";
 import { Shrine } from "./models/Room";
 import { IntroductionState } from "./GameStates/IntroductionState";
+import { StateTransitionContainer } from "./views/StateTransitionContainer";
 
 export enum GameStateType {
   INTRO,
@@ -35,6 +36,7 @@ export class GameManager {
   readonly controlsContainer: ControlsContainer;
   readonly inputContainer: PlayerInputContainer;
   readonly responseContainer: ResponseContainer;
+  readonly transitionContainer: StateTransitionContainer;
   private __player: Player;
   get player() {
     return this.__player;
@@ -74,6 +76,7 @@ export class GameManager {
     this.controlsContainer = new ControlsContainer({ x: 0, y: 14 * FONT_SIZE_PX.h });
     this.inputContainer = new PlayerInputContainer({ x: 0, y: 15 * FONT_SIZE_PX.h });
     this.responseContainer = new ResponseContainer({ x: 0, y: 16 * FONT_SIZE_PX.h });
+    this.transitionContainer = new StateTransitionContainer({ x: 0, y: 0, width: pixiApp.screen.width });
 
     pixiApp.stage.addChild(this.mapContainer.container);
     pixiApp.stage.addChild(this.guardianPoseContainer.container);
@@ -85,6 +88,7 @@ export class GameManager {
     pixiApp.stage.addChild(this.controlsContainer.container);
     pixiApp.stage.addChild(this.inputContainer.container);
     pixiApp.stage.addChild(this.responseContainer.container);
+    pixiApp.stage.addChild(this.transitionContainer.container);
 
     this.__gameMap = new GameMap();
     this.__player = new DebugPlayer("Winner");
@@ -122,7 +126,9 @@ export class GameManager {
     resetInputCallback();
   }
 
-  public changeGameStateType(newStateType: GameStateType) {
+  public async changeGameStateType(newStateType: GameStateType) {
+    await this.transitionContainer.renderTransition();
+
     this.__currentGameState.stopRendering();
     if (newStateType === GameStateType.EXPLORATION) {
       this.__currentGameState = new ExplorationState(
@@ -148,7 +154,9 @@ export class GameManager {
         this.responseContainer,
       );
     }
+
     this.__currentGameState.startRendering();
+    this.transitionContainer.resetTransitionOverlay();
     this.resetInputCallback();
   }
 }

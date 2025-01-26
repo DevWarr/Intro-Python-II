@@ -22,7 +22,7 @@ const CONTROLS_TEXT: Record<ControlType, string> = {
 export class ControlsContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
 
     private controlsMap: Record<ControlType, Container> = {
       [ControlType.SIMPLE]: new Container(),

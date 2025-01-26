@@ -5,7 +5,7 @@ import { buildTextListWithColors } from "./buildTextListWithColors";
 export class RoomInfoContainer {
   constructor(
     containerOptions: ContainerOptions,
-    public container: Container = new Container(containerOptions),
+    readonly container: Container = new Container(containerOptions),
   ) {}
 
   public renderRoomInfo(room: Room) {
