@@ -1,4 +1,4 @@
-import { GameManager, GameStateType } from "../GameManager";
+import { GameManager, GameStateType } from "../managers/GameManager";
 import { GuardianName, GuardianPose } from "../models/Guardians";
 import { DEBUG_ROOM } from "../models/Room";
 import { ControlsContainer, ControlType } from "../views/ControlsContainer";

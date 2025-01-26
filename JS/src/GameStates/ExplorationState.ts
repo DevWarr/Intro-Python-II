@@ -1,7 +1,7 @@
 import { InventoryController } from "../controllers/InventoryController";
 import { MoveController } from "../controllers/MoveController";
 import { UseItemController } from "../controllers/UseItemController";
-import { GameManager, GameStateType } from "../GameManager";
+import { GameManager, GameStateType } from "../managers/GameManager";
 import { GameMap } from "../models/GameMap";
 import { Player } from "../models/Player";
 import { PositionVector2 } from "../models/PositionVector2";

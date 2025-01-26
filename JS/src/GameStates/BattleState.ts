@@ -1,6 +1,6 @@
 import { AnswerMathController } from "../controllers/AnswerMathController";
 import { UseItemController } from "../controllers/UseItemController";
-import { GameManager, GameStateType } from "../GameManager";
+import { GameManager, GameStateType } from "../managers/GameManager";
 import { Guardian, GuardianPose } from "../models/Guardians";
 import { Player } from "../models/Player";
 import { BattleInfoContainer } from "../views/BattleInfoContainer";

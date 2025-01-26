@@ -1,23 +1,23 @@
 import { Application } from "pixi.js";
-import { BattleState } from "./GameStates/BattleState";
-import { ExplorationState } from "./GameStates/ExplorationState";
-import { GameState } from "./GameStates/GameState";
-import { GameMap } from "./models/GameMap";
-import { DebugPlayer, GamePlayer, Player } from "./models/Player";
-import { FONT_SIZE_PX } from "./models/SizeVector2";
-import { BattleInfoContainer } from "./views/BattleInfoContainer";
-import { ControlsContainer } from "./views/ControlsContainer";
-import { GameMapContainer } from "./views/GameMapContainer";
-import { GuardianPoseContainer } from "./views/GuardianPoseContainer";
-import { GuardianQuestionContainer } from "./views/GuardianQuestionContainer";
-import { MapLegendContainer } from "./views/MapLegendContainer";
-import { PlayerInputContainer } from "./views/PlayerInputContainer";
-import { PlayerInventoryContainer } from "./views/PlayerInventoryContainer";
-import { ResponseContainer } from "./views/ResponseContainer";
-import { RoomInfoContainer } from "./views/RoomInfoContainer";
-import { Shrine } from "./models/Room";
-import { IntroductionState } from "./GameStates/IntroductionState";
-import { StateTransitionContainer } from "./views/StateTransitionContainer";
+import { BattleState } from "../GameStates/BattleState";
+import { ExplorationState } from "../GameStates/ExplorationState";
+import { GameState } from "../GameStates/GameState";
+import { GameMap } from "../models/GameMap";
+import { DebugPlayer, GamePlayer, Player } from "../models/Player";
+import { FONT_SIZE_PX } from "../models/SizeVector2";
+import { BattleInfoContainer } from "../views/BattleInfoContainer";
+import { ControlsContainer } from "../views/ControlsContainer";
+import { GameMapContainer } from "../views/GameMapContainer";
+import { GuardianPoseContainer } from "../views/GuardianPoseContainer";
+import { GuardianQuestionContainer } from "../views/GuardianQuestionContainer";
+import { MapLegendContainer } from "../views/MapLegendContainer";
+import { PlayerInputContainer } from "../views/PlayerInputContainer";
+import { PlayerInventoryContainer } from "../views/PlayerInventoryContainer";
+import { ResponseContainer } from "../views/ResponseContainer";
+import { RoomInfoContainer } from "../views/RoomInfoContainer";
+import { Shrine } from "../models/Room";
+import { IntroductionState } from "../GameStates/IntroductionState";
+import { StateTransitionContainer } from "../views/StateTransitionContainer";
 
 export enum GameStateType {
   INTRO,

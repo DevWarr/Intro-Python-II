@@ -1,6 +1,6 @@
 import { Application } from "pixi.js";
 import { FONT_SIZE_PX } from "./models/SizeVector2";
-import { GameManager } from "./GameManager";
+import { GameManager } from "./managers/GameManager";
 
 const app = new Application();
 await app.init({
