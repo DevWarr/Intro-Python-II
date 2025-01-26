@@ -24,7 +24,6 @@ export class StateTransitionContainer {
 
   public async renderTransition() {
     for (let i = 0; i < this.totalRowsOfTextInContainer; i++) {
-      console.log(this.backgroundSprite);
       this.backgroundSprite.height = i * FONT_SIZE_PX.h;
       await sleep(0.05);
     }

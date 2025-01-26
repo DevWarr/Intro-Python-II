@@ -1,8 +1,10 @@
 import { AnswerMathController } from "../controllers/AnswerMathController";
 import { UseItemController } from "../controllers/UseItemController";
-import { GameManager, GameStateType } from "../GameManager";
+import { SFXTrackNumber } from "../managers/AudioManager";
+import { GameManager, GameStateType } from "../managers/GameManager";
 import { Guardian, GuardianPose } from "../models/Guardians";
 import { Player } from "../models/Player";
+import { sleep } from "../utils/time";
 import { BattleInfoContainer } from "../views/BattleInfoContainer";
 import { ControlsContainer, ControlType } from "../views/ControlsContainer";
 import { GuardianPoseContainer } from "../views/GuardianPoseContainer";
@@ -68,9 +70,22 @@ export class BattleState implements GameState {
     else return BattleWinner.NONE;
   }
 
+  private async loseBattle() {
+    this.responseContainer.renderResponseWithoutReset("~YYou lost the battle! You have to run away!");
+    this.gameManager.audioManager.playSFX(SFXTrackNumber.DAMAGE);
+    await sleep(0.5);
+    this.gameManager.audioManager.playSFX(SFXTrackNumber.DAMAGE);
+    await sleep(0.6);
+    this.gameManager.audioManager.playSFX(SFXTrackNumber.DAMAGE);
+    await sleep(0.8);
+    this.player.runAway();
+    await this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
+  }
+
   public async processInput(inputString: string) {
     // If we're running away, just run. EZ
     if (inputString === "run away") {
+      this.gameManager.audioManager.playSFX(SFXTrackNumber.RUN_AWAY);
       await this.responseContainer.renderResponse("~YYou ran away!");
       this.player.runAway();
       this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
@@ -98,7 +113,11 @@ export class BattleState implements GameState {
     //    based on the actionResponse
     this.guardianPoseContainer.renderGuardian(this.guardian.name, actionResponse.guardianPose);
     if (actionResponse.guardianPose === GuardianPose.CORRECT) {
+      this.gameManager.audioManager.playSFX(SFXTrackNumber.CORRECT);
       this.guardianQuestionContainer.renderGuardianQuestion(this.guardian.name, this.guardian.description, "");
+    }
+    if (actionResponse.guardianPose === GuardianPose.INCORRECT) {
+      this.gameManager.audioManager.playSFX(SFXTrackNumber.INCORRECT);
     }
 
     // MAKE SURE to update the battle info after the response is rendered
@@ -112,10 +131,9 @@ export class BattleState implements GameState {
     // If the battle is not over, update the rendering and continue the battle
     const battleWinner = this.getWinner();
     if (battleWinner === BattleWinner.GUARDIAN) {
-      await this.responseContainer.renderResponse("~YYou lost the battle! You have to run away!");
-      this.player.runAway();
-      this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
+      this.loseBattle();
     } else if (battleWinner === BattleWinner.PLAYER) {
+      this.gameManager.audioManager.playSFX(SFXTrackNumber.MONSTER_DEATH);
       await this.responseContainer.renderResponse(`~YYou defeated the ~W${this.guardian.name}~Y!`);
       this.guardian.die();
       this.gameManager.changeGameStateType(GameStateType.EXPLORATION);

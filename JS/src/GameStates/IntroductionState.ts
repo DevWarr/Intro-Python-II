@@ -1,4 +1,5 @@
-import { GameManager, GameStateType } from "../GameManager";
+import { MusicTrackNumber, SFXTrackNumber } from "../managers/AudioManager";
+import { GameManager, GameStateType } from "../managers/GameManager";
 import { GuardianName, GuardianPose } from "../models/Guardians";
 import { DEBUG_ROOM } from "../models/Room";
 import { ControlsContainer, ControlType } from "../views/ControlsContainer";
@@ -52,6 +53,7 @@ export class IntroductionState implements GameState {
     this.playerInventoryContainer.renderPlayerInventory(this.gameManager.player);
     this.roomInfoContainer.renderRoomInfo(DEBUG_ROOM);
     this.contrtolsContainer.renderControlType(ControlType.INTRO);
+    this.gameManager.audioManager.playMusic(MusicTrackNumber.INTRO);
   }
 
   public stopRendering() {
@@ -70,10 +72,13 @@ export class IntroductionState implements GameState {
         "~RThat name is too long! Please ~Wtype a name~R with fewer than 15 characters.",
       );
     } else {
+      this.gameManager.audioManager.playSFX(SFXTrackNumber.MENU_SOUND);
+      this.gameManager.audioManager.stopMusic();
       this.gameManager.createNewPlayer(inputString);
       this.playerInventoryContainer.renderPlayerInventory(this.gameManager.player);
       await this.responseContainer.showStartingMessage();
-      this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
+      await this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
+      this.gameManager.audioManager.playMusic(MusicTrackNumber.CAVE_ADVENTURE);
     }
   }
 }
