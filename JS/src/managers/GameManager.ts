@@ -17,8 +17,9 @@ import { ResponseContainer } from "../views/ResponseContainer";
 import { RoomInfoContainer } from "../views/RoomInfoContainer";
 import { Shrine } from "../models/Room";
 import { IntroductionState } from "../GameStates/IntroductionState";
-import { StateTransitionContainer } from "../views/StateTransitionContainer";
-import { AudioManager } from "./AudioManager";
+import { OverlayContainer } from "../views/OverlayContainer";
+import { AudioManager, SFXTrackNumber } from "./AudioManager";
+import { sleep } from "../utils/time";
 
 export enum GameStateType {
   INTRO,
@@ -37,7 +38,7 @@ export class GameManager {
   readonly controlsContainer: ControlsContainer;
   readonly inputContainer: PlayerInputContainer;
   readonly responseContainer: ResponseContainer;
-  readonly transitionContainer: StateTransitionContainer;
+  readonly overlayContainer: OverlayContainer;
   readonly audioManager: AudioManager = new AudioManager();
   private __player: Player;
   get player() {
@@ -61,6 +62,14 @@ export class GameManager {
     return this.__gameMap;
   }
 
+  private epochMillisecondsWhenPlayerStarted: number = Date.now();
+  public startTimer() {
+    this.epochMillisecondsWhenPlayerStarted = Date.now();
+  }
+  get currentPlayTime() {
+    return Date.now() - this.epochMillisecondsWhenPlayerStarted;
+  }
+
   private __currentGameState: GameState;
   private __isAskingPlayerToQuit: boolean = false;
 
@@ -78,7 +87,7 @@ export class GameManager {
     this.controlsContainer = new ControlsContainer({ x: 0, y: 14 * FONT_SIZE_PX.h });
     this.inputContainer = new PlayerInputContainer({ x: 0, y: 15 * FONT_SIZE_PX.h });
     this.responseContainer = new ResponseContainer({ x: 0, y: 16 * FONT_SIZE_PX.h });
-    this.transitionContainer = new StateTransitionContainer({ x: 0, y: 0, width: pixiApp.screen.width });
+    this.overlayContainer = new OverlayContainer({ x: 0, y: 0, width: pixiApp.screen.width });
 
     pixiApp.stage.addChild(this.mapContainer.container);
     pixiApp.stage.addChild(this.guardianPoseContainer.container);
@@ -90,7 +99,7 @@ export class GameManager {
     pixiApp.stage.addChild(this.controlsContainer.container);
     pixiApp.stage.addChild(this.inputContainer.container);
     pixiApp.stage.addChild(this.responseContainer.container);
-    pixiApp.stage.addChild(this.transitionContainer.container);
+    pixiApp.stage.addChild(this.overlayContainer.container);
 
     this.__gameMap = new GameMap();
     this.__player = new DebugPlayer("Winner");
@@ -129,7 +138,7 @@ export class GameManager {
   }
 
   public async changeGameStateType(newStateType: GameStateType) {
-    await this.transitionContainer.renderTransition();
+    await this.overlayContainer.renderTransition();
 
     this.__currentGameState.stopRendering();
     if (newStateType === GameStateType.EXPLORATION) {
@@ -159,7 +168,18 @@ export class GameManager {
 
     this.responseContainer.renderResponseWithoutReset("");
     this.__currentGameState.startRendering();
-    this.transitionContainer.resetTransitionOverlay();
+    this.overlayContainer.resetForeground();
     this.resetInputCallback();
+  }
+
+  public async endGame() {
+    this.audioManager.stopMusic();
+    this.audioManager.playSFX(SFXTrackNumber.RUN_AWAY);
+    this.overlayContainer.renderFullForeground();
+
+    await sleep(1);
+
+    this.audioManager.playSFX(SFXTrackNumber.CORRECT);
+    this.overlayContainer.renderEndCredits(this.currentPlayTime);
   }
 }

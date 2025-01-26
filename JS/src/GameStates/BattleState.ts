@@ -2,7 +2,7 @@ import { AnswerMathController } from "../controllers/AnswerMathController";
 import { UseItemController } from "../controllers/UseItemController";
 import { SFXTrackNumber } from "../managers/AudioManager";
 import { GameManager, GameStateType } from "../managers/GameManager";
-import { Guardian, GuardianPose } from "../models/Guardians";
+import { Guardian, GuardianName, GuardianPose } from "../models/Guardians";
 import { Player } from "../models/Player";
 import { sleep } from "../utils/time";
 import { BattleInfoContainer } from "../views/BattleInfoContainer";
@@ -111,13 +111,15 @@ export class BattleState implements GameState {
 
     // Update the guardian pose, the guardian question, and the response to the player
     //    based on the actionResponse
+    // Also plays the appropriate sound effect
     this.guardianPoseContainer.renderGuardian(this.guardian.name, actionResponse.guardianPose);
     if (actionResponse.guardianPose === GuardianPose.CORRECT) {
       this.gameManager.audioManager.playSFX(SFXTrackNumber.CORRECT);
       this.guardianQuestionContainer.renderGuardianQuestion(this.guardian.name, this.guardian.description, "");
-    }
-    if (actionResponse.guardianPose === GuardianPose.INCORRECT) {
+    } else if (actionResponse.guardianPose === GuardianPose.INCORRECT) {
       this.gameManager.audioManager.playSFX(SFXTrackNumber.INCORRECT);
+    } else {
+      this.gameManager.audioManager.playSFX(SFXTrackNumber.MENU_FAIL);
     }
 
     // MAKE SURE to update the battle info after the response is rendered
@@ -136,6 +138,7 @@ export class BattleState implements GameState {
       this.gameManager.audioManager.playSFX(SFXTrackNumber.MONSTER_DEATH);
       await this.responseContainer.renderResponse(`~YYou defeated the ~W${this.guardian.name}~Y!`);
       this.guardian.die();
+      if (this.guardian.name === GuardianName.ARTIFACT) this.gameManager.audioManager.stopMusic();
       this.gameManager.changeGameStateType(GameStateType.EXPLORATION);
     } else {
       this.updateRendering();
