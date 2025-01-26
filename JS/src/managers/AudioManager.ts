@@ -66,7 +66,14 @@ export class AudioManager {
     }
   }
 
+  /**
+   * Creates a copy of the SFX track and plays it.
+   *
+   * This copy allows us to play the same SFX track multiple times in quick succession.
+   */
   public playSFX(track: SFXTrackNumber) {
-    SFX_FILES[track].play();
+    const trackToPlay = new Audio(SFX_FILES[track].src);
+    trackToPlay.currentTime = 0;
+    trackToPlay.play();
   }
 }

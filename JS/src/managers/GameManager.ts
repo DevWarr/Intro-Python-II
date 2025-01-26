@@ -157,6 +157,7 @@ export class GameManager {
       );
     }
 
+    this.responseContainer.renderResponseWithoutReset("");
     this.__currentGameState.startRendering();
     this.transitionContainer.resetTransitionOverlay();
     this.resetInputCallback();

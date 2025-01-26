@@ -1,6 +1,7 @@
 import { InventoryController } from "../controllers/InventoryController";
 import { MoveController } from "../controllers/MoveController";
 import { UseItemController } from "../controllers/UseItemController";
+import { SFXTrackNumber } from "../managers/AudioManager";
 import { GameManager, GameStateType } from "../managers/GameManager";
 import { GameMap } from "../models/GameMap";
 import { Player } from "../models/Player";
@@ -79,27 +80,31 @@ export class ExplorationState implements GameState {
     );
   }
 
-  private handleMovementAction(playerAction: string) {
+  private async handleMovementAction(playerAction: string): Promise<void> {
     const controllerResponse = this.moveController.movePlayer(
       MOVEMENT_DIRECTION_STRING_TO_VECTOR2[playerAction],
       this.gameMap,
       this.player,
+    );
+    this.gameManager.audioManager.playSFX(
+      controllerResponse.actionSuccess ? SFXTrackNumber.MENU_SOUND : SFXTrackNumber.MENU_FAIL,
     );
 
     if (controllerResponse.actionSuccess) {
       this.mapContainer.renderMap(this.gameMap, this.player.position);
       this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
       if (this.isGuardianToFight) {
+        this.gameManager.audioManager.playSFX(SFXTrackNumber.MONSTER_SPAWN);
         return this.gameManager.changeGameStateType(GameStateType.BATTLE);
       }
     }
 
     if (controllerResponse.responseToPlayer) {
-      this.responseContainer.renderResponse(controllerResponse.responseToPlayer, 1);
+      await this.responseContainer.renderResponse(controllerResponse.responseToPlayer);
     }
   }
 
-  private handleInventoryAction(playerAction: string, itemName: string) {
+  private async handleInventoryAction(playerAction: string, itemName: string) {
     const currentRoom = this.gameMap.getRoomAtPosition(this.player.position)!;
 
     const controllerResponse: ExplorationStateActionResponse =
@@ -107,17 +112,21 @@ export class ExplorationState implements GameState {
         ? this.inventoryController.takeItem(currentRoom, this.player, itemName)
         : this.inventoryController.dropItem(currentRoom, this.player, itemName);
 
+    this.gameManager.audioManager.playSFX(
+      controllerResponse.actionSuccess ? SFXTrackNumber.MENU_SOUND : SFXTrackNumber.MENU_FAIL,
+    );
+
     if (controllerResponse.actionSuccess) {
       this.roomInfoContainer.renderRoomInfo(this.gameMap.getRoomAtPosition(this.player.position)!);
       this.playerInventoryContainer.renderPlayerInventory(this.player);
     }
 
     if (controllerResponse?.responseToPlayer) {
-      this.responseContainer.renderResponse(controllerResponse.responseToPlayer, 1);
+      await this.responseContainer.renderResponse(controllerResponse.responseToPlayer, 1);
     }
   }
 
-  private handleUseAction(itemName: string) {
+  private async handleUseAction(itemName: string) {
     const controllerResponse = this.useItemController.useItemInRoom(
       this.player,
       this.gameMap.getRoomAtPosition(this.player.position)!,
@@ -125,13 +134,17 @@ export class ExplorationState implements GameState {
     );
 
     // TODO: if true, end the game
+    this.gameManager.audioManager.playSFX(
+      controllerResponse.actionSuccess ? SFXTrackNumber.RUN_AWAY : SFXTrackNumber.MENU_FAIL,
+    );
 
     if (controllerResponse.responseToPlayer) {
-      this.responseContainer.renderResponse(controllerResponse.responseToPlayer);
+      await this.responseContainer.renderResponse(controllerResponse.responseToPlayer);
     }
   }
 
   private handleMoreControlsAction() {
+    this.gameManager.audioManager.playSFX(SFXTrackNumber.MENU_SOUND);
     this.controlsType = this.controlsType === ControlType.ADVANCED ? ControlType.SIMPLE : ControlType.ADVANCED;
     this.controlsContainer.renderControlType(this.controlsType);
   }
@@ -149,17 +162,22 @@ export class ExplorationState implements GameState {
       case "west":
       case "e":
       case "east":
-        this.handleMovementAction(playerAction);
+        await this.handleMovementAction(playerAction);
         break;
       case "take":
       case "drop":
-        this.handleInventoryAction(playerAction, playerInputList.slice(1).join(" "));
+        await this.handleInventoryAction(playerAction, playerInputList.slice(1).join(" "));
         break;
       case "use":
-        this.handleUseAction(playerInputList.slice(1).join(" "));
+        await this.handleUseAction(playerInputList.slice(1).join(" "));
         break;
       case "o":
-        this.handleMoreControlsAction();
+        await this.handleMoreControlsAction();
+        break;
+      default:
+        this.gameManager.audioManager.playSFX(SFXTrackNumber.MENU_FAIL);
+        await this.responseContainer.renderResponse("~RInvalid input. Please try again.");
+        break;
     }
   }
 }

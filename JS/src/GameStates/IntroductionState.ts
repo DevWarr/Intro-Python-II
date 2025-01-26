@@ -1,4 +1,4 @@
-import { MusicTrackNumber } from "../managers/AudioManager";
+import { MusicTrackNumber, SFXTrackNumber } from "../managers/AudioManager";
 import { GameManager, GameStateType } from "../managers/GameManager";
 import { GuardianName, GuardianPose } from "../models/Guardians";
 import { DEBUG_ROOM } from "../models/Room";
@@ -72,6 +72,7 @@ export class IntroductionState implements GameState {
         "~RThat name is too long! Please ~Wtype a name~R with fewer than 15 characters.",
       );
     } else {
+      this.gameManager.audioManager.playSFX(SFXTrackNumber.MENU_SOUND);
       this.gameManager.audioManager.stopMusic();
       this.gameManager.createNewPlayer(inputString);
       this.playerInventoryContainer.renderPlayerInventory(this.gameManager.player);
