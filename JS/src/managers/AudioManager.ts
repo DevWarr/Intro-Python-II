@@ -9,7 +9,7 @@ import {
   monsterDeath,
   monsterSpawn,
   runAway,
-} from "../assets/WAV/audioExports";
+} from "../assets/audioExports";
 
 export enum MusicTrackNumber {
   INTRO,
