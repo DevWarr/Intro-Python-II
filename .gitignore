@@ -10,3 +10,4 @@ adv.spec
 
 # JS ignores
 node_modules/
+*.zip
